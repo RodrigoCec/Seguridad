@@ -25,7 +25,11 @@ import javafx.util.Duration;
  * @author Rodrigo
  */
 public class VentanaHorariosController implements Initializable {
-
+    
+    
+    
+    
+    //---------> Objetos <---------
     @FXML
     private TextField txtGrupo;
     @FXML
@@ -192,7 +196,7 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private MenuItem txtPuericulturaViernes;
     
-   
+   //---------------->
 
     /**
      * Initializes the controller class.
