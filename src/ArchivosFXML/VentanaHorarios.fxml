@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.VentanaHorariosController">
+    <children>
+      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="383.0" layoutY="28.0" prefHeight="44.0" prefWidth="79.0" text="1">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosSalidaLunes" layoutX="776.0" layoutY="111.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraSalidaLunes" layoutX="696.0" layoutY="111.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoSalidaLunes" layoutX="825.0" layoutY="111.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+        <items>
+          <MenuItem fx:id="txtAmSalidaLunes" mnemonicParsing="false" onAction="#AmSalidaLunes" text="AM" />
+          <MenuItem fx:id="txtPmSalidaLunes" mnemonicParsing="false" onAction="#PmSalidaLunes" text="PM" />
+        </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="745.0" layoutY="111.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="575.0" layoutY="26.0" prefHeight="44.0" prefWidth="79.0" text="A">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <Label layoutX="501.0" layoutY="33.0" text="Grupo:">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label layoutX="311.0" layoutY="33.0" text="Grado:">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <TextField fx:id="txtMinutosEntradaLunes" layoutX="502.0" layoutY="111.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraEntradaLunes" layoutX="422.0" layoutY="111.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoEntradaLunes" layoutX="551.0" layoutY="111.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmEntradaLunes" mnemonicParsing="false" onAction="#AmEntradaLunes" text="AM" />
+            <MenuItem fx:id="txtPmEntradaLunes" mnemonicParsing="false" onAction="#PmEntradaLunes" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="471.0" layoutY="111.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="btnUniformeLunes" layoutX="199.0" layoutY="111.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" text="Oficial">
+         <items>
+            <MenuItem fx:id="txtOficialLunes" mnemonicParsing="false" onAction="#btnOficialLunes" style="-fx-background-radius: 10;" text="Oficial" />
+            <MenuItem fx:id="txtDeportivoLunes" mnemonicParsing="false" onAction="#btnDeportivoLunes" style="-fx-background-radius: 15;" text="Deportivo" />
+            <MenuItem fx:id="txtAlimentosLunes" mnemonicParsing="false" onAction="#btnAlimentosLunes" style="-fx-background-radius: 15;" text="Alimentos" />
+            <MenuItem fx:id="txtEnfermeriaLunes" mnemonicParsing="false" onAction="#btnEnfermeriaLunes" style="-fx-background-radius: 15;" text="Enfermeria" />
+            <MenuItem fx:id="txtPuericulturaLunes" mnemonicParsing="false" onAction="#btnPuericulturaLunes" style="-fx-background-radius: 15;" text="Puericultura" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <Label layoutX="73.0" layoutY="113.0" text="Lunes">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label layoutX="62.0" layoutY="184.0" text="Martes">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label layoutX="45.0" layoutY="255.0" text="Miercoles">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label layoutX="64.0" layoutY="326.0" text="Jueves">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label layoutX="60.0" layoutY="397.0" text="Viernes">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <TextField fx:id="txtMinutosSalidaMartes" layoutX="776.0" layoutY="182.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraSalidaMartes" layoutX="696.0" layoutY="182.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoSalidaMartes" layoutX="825.0" layoutY="182.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmSalidaMartes" mnemonicParsing="false" onAction="#AmSalidaMartes" text="AM" />
+            <MenuItem fx:id="txtPmSalidaMartes" mnemonicParsing="false" onAction="#PmSalida" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="745.0" layoutY="182.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosEntradaMartes" layoutX="502.0" layoutY="182.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraEntradaMartes" layoutX="422.0" layoutY="182.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoEntradaMartes" layoutX="551.0" layoutY="182.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmEntradaMartes" mnemonicParsing="false" onAction="#AmEntradaMartes" text="AM" />
+            <MenuItem fx:id="txtPmEntradaMartes" mnemonicParsing="false" onAction="#PmEntradaMartes" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="471.0" layoutY="182.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosSalidaMiercoles" layoutX="776.0" layoutY="253.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraSalidaMiercoles" layoutX="696.0" layoutY="253.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoSalidaMiercoles" layoutX="825.0" layoutY="253.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmSalidaMiercoles" mnemonicParsing="false" onAction="#AmSalidaMiercoles" text="AM" />
+            <MenuItem fx:id="txtPmSalidaMiercoles" mnemonicParsing="false" onAction="#PmSalidaMiercoles" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="745.0" layoutY="253.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosEntradaMiercoles" layoutX="502.0" layoutY="253.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraEntradaMiercoles" layoutX="422.0" layoutY="253.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoEntradaMiercoles" layoutX="551.0" layoutY="253.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmEntradaMiercoles" mnemonicParsing="false" onAction="#txtAmEntradaMiercoles" text="AM" />
+            <MenuItem fx:id="txtPmEntradaMiercoles" mnemonicParsing="false" onAction="#PmEntradaMiercoles" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="471.0" layoutY="253.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosSalidaJueves" layoutX="776.0" layoutY="324.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraSalidaJueves" layoutX="696.0" layoutY="324.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoSalidaJueves" layoutX="825.0" layoutY="324.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmSalidaJueves" mnemonicParsing="false" onAction="#txtAmSalidaJueves" text="AM" />
+            <MenuItem fx:id="txtPmSalidaJueves" mnemonicParsing="false" onAction="#PmSalidaJueves" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="745.0" layoutY="324.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosEntradaJueves" layoutX="502.0" layoutY="324.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraEntradaJueves" layoutX="422.0" layoutY="324.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoEntradaJueves" layoutX="551.0" layoutY="324.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmEntradaJueves" mnemonicParsing="false" onAction="#txtAmEntradaJueves" text="AM" />
+            <MenuItem fx:id="txtPmEntradaJueves" mnemonicParsing="false" onAction="#PmEntradaJueves" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="471.0" layoutY="324.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosSalidaViernes" layoutX="776.0" layoutY="395.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraSalidaViernes" layoutX="696.0" layoutY="395.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoSalidaViernes" layoutX="825.0" layoutY="395.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmSalidaViernes" mnemonicParsing="false" onAction="#AmSalidaViernes" text="AM" />
+            <MenuItem fx:id="txtPmSalidaViernes" mnemonicParsing="false" onAction="#PmSalidaViernes" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <TextField editable="false" layoutX="745.0" layoutY="395.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtMinutosEntradaViernes" layoutX="502.0" layoutY="395.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <TextField fx:id="txtHoraEntradaViernes" layoutX="422.0" layoutY="395.0" prefHeight="44.0" prefWidth="48.0" text="12">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="txtTurnoEntradaViernes" layoutX="551.0" layoutY="395.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
+         <items>
+            <MenuItem fx:id="txtAmEntradaViernes" mnemonicParsing="false" onAction="#txtAmEntradaViernes" text="AM" />
+            <MenuItem fx:id="txtPmEntradaViernes" mnemonicParsing="false" onAction="#PmEntradaViernes" text="PM" />
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+         
+      </MenuButton>
+      <TextField editable="false" layoutX="471.0" layoutY="395.0" prefHeight="44.0" prefWidth="30.0" text=":">
+         <font>
+            <Font size="20.0" />
+         </font></TextField>
+      <MenuButton fx:id="btnUniformeJueves" layoutX="199.0" layoutY="324.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" text="Oficial">
+         <items>
+            <MenuItem fx:id="txtOficialJueves" mnemonicParsing="false" onAction="#btnOficialJueves" style="-fx-background-radius: 10;" text="Oficial" />
+            <MenuItem fx:id="txtDeportivoJueves" mnemonicParsing="false" onAction="#btnDeportivoJueves" style="-fx-background-radius: 15;" text="Deportivo" />
+            <MenuItem fx:id="txtAlimentosJueves" mnemonicParsing="false" onAction="#btnAlimentosJueves" style="-fx-background-radius: 15;" text="Alimentos" />
+            <MenuItem fx:id="txtEnfermeriaJueves" mnemonicParsing="false" onAction="#btnEnfermeriaJueves" style="-fx-background-radius: 15;" text="Enfermeria" />
+            <MenuItem fx:id="txtPuericulturaJueves" mnemonicParsing="false" onAction="#btnPuericulturaJueves" style="-fx-background-radius: 15;" text="Puericultura" />
+
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <MenuButton fx:id="btnUniformeMiercoles" layoutX="199.0" layoutY="253.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" text="Oficial">
+         <items>
+            <MenuItem fx:id="txtOficialMiercoles" mnemonicParsing="false" onAction="#btnOficialMiercoles" style="-fx-background-radius: 10;" text="Oficial" />
+            <MenuItem fx:id="txtDeportivoMiercoles" mnemonicParsing="false" onAction="#btnDeportivoMiercoles" style="-fx-background-radius: 15;" text="Deportivo" />
+            <MenuItem fx:id="txtAlimentosMiercoles" mnemonicParsing="false" onAction="#btnAlimentosMiercoles" style="-fx-background-radius: 15;" text="Alimentos" />
+            <MenuItem fx:id="txtEnfermeriaMiercoles" mnemonicParsing="false" onAction="#btnEnfermeriaMiercoles" style="-fx-background-radius: 15;" text="Enfermeria" />
+            <MenuItem fx:id="txtPuericulturaMiercoles" mnemonicParsing="false" onAction="#btnPuericulturaMiercoles" style="-fx-background-radius: 15;" text="Puericultura" />
+
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <MenuButton fx:id="btnUniformeMartes" layoutX="199.0" layoutY="177.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" text="Oficial">
+         <items>
+            <MenuItem fx:id="txtOficialMartes" mnemonicParsing="false" onAction="#btnOficialMartes" style="-fx-background-radius: 10;" text="Oficial" />
+            <MenuItem fx:id="txtDeportivoMartes" mnemonicParsing="false" onAction="#btnDeportivoMartes" style="-fx-background-radius: 15;" text="Deportivo" />
+            <MenuItem fx:id="txtAlimentosMartes" mnemonicParsing="false" onAction="#btnAlimentosMartes" style="-fx-background-radius: 15;" text="Alimentos" />
+            <MenuItem fx:id="txtEnfermeriaMartes" mnemonicParsing="false" onAction="#btnEnfermeriaMartes" style="-fx-background-radius: 15;" text="Enfermeria" />
+            <MenuItem fx:id="txtPuericulturaMartes" mnemonicParsing="false" onAction="#btnPuericulturaMartes" style="-fx-background-radius: 15;" text="Puericultura" />
+
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+      <MenuButton fx:id="btnUniformeViernes" layoutX="199.0" layoutY="395.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" text="Oficial">
+         <items>
+            <MenuItem fx:id="txtOficialViernes" mnemonicParsing="false" onAction="#btnOficialViernes" style="-fx-background-radius: 10;" text="Oficial" />
+            <MenuItem fx:id="txtDeportivoViernes" mnemonicParsing="false" onAction="#btnDeportivoViernes" style="-fx-background-radius: 15;" text="Deportivo" />
+            <MenuItem fx:id="txtAlimentosViernes" mnemonicParsing="false" onAction="#btnAlimentosViernes" style="-fx-background-radius: 15;" text="Alimentos" />
+            <MenuItem fx:id="txtEnfermeriaViernes" mnemonicParsing="false" onAction="#btnEnfermeriaViernes" style="-fx-background-radius: 15;" text="Enfermeria" />
+            <MenuItem fx:id="txtPuericulturaViernes" mnemonicParsing="false" onAction="#btnPuericulturaViernes" style="-fx-background-radius: 15;" text="Puericultura" />
+
+         </items>
+         <font>
+            <Font size="20.0" />
+         </font>
+      </MenuButton>
+   </children>
+</AnchorPane>

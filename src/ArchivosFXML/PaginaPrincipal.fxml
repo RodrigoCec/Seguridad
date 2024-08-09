@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="1000.0" prefWidth="1920.0" style="-fx-padding: 5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorDePaginaPrincipal">
+   <children>
+      <Label layoutX="600.0" layoutY="96.0" prefWidth="324.0" text="Nombre: ">
+         <font>
+            <Font name="System Bold" size="64.0" />
+         </font>
+      </Label>
+      <Label layoutX="563.0" layoutY="202.0" prefHeight="93.0" prefWidth="314.0" text="Apellidos:">
+         <font>
+            <Font name="System Bold" size="64.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtCodigo" alignment="CENTER" layoutX="132.0" layoutY="493.0" prefHeight="65.0" prefWidth="353.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtNombre" editable="false" layoutX="877.0" layoutY="102.0" prefHeight="62.0" prefWidth="509.0">
+         <font>
+            <Font size="38.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextField>
+      <Label layoutX="654.0" layoutY="313.0" prefHeight="93.0" prefWidth="223.0" text="Grado:">
+         <font>
+            <Font name="System Bold" size="64.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtGrado" alignment="CENTER" editable="false" layoutX="877.0" layoutY="319.0" prefHeight="81.0" prefWidth="108.0">
+         <font>
+            <Font size="38.0" />
+         </font>
+      </TextField>
+      <Label layoutX="1029.0" layoutY="310.0" prefHeight="93.0" prefWidth="223.0" text="Grupo:">
+         <font>
+            <Font name="System Bold" size="64.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtGrupo" alignment="CENTER" editable="false" layoutX="1269.0" layoutY="316.0" prefHeight="81.0" prefWidth="117.0">
+         <font>
+            <Font size="38.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtApellido" editable="false" layoutX="882.0" layoutY="208.0" prefHeight="81.0" prefWidth="509.0">
+         <font>
+            <Font size="38.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="imgFotoPerfil" fitHeight="342.0" fitWidth="285.0" layoutX="166.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/UbisoftConnect/WhatsApp%20Image%202024-05-22%20at%2011.50.50%20PM%20(1).jpeg" />
+         </image>
+      </ImageView>
+      <Label fx:id="txtHora" layoutX="1705.0" layoutY="912.0" text="10:20">
+         <font>
+            <Font name="System Bold" size="32.0" />
+         </font>
+      </Label>
+      <MenuBar layoutY="-1.0" prefHeight="30.0" prefWidth="1920.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Opciones">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#btnAgregarAlumno" text="Agregar Alumno" />
+                  <MenuItem mnemonicParsing="false" onAction="#btnAsignarHorarios" text="Asignar Horarios" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <ImageView fx:id="imgMarco" fitHeight="361.0" fitWidth="425.0" layoutX="128.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/rec/1x/Recurso%203.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgAlerta" fitHeight="113.0" fitWidth="285.0" layoutX="170.0" layoutY="378.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/rec/1x/Recurso%202.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
