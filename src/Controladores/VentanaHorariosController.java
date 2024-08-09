@@ -29,7 +29,7 @@ public class VentanaHorariosController implements Initializable {
     
     
     
-    //---------> Objetos <---------
+    
     @FXML
     private TextField txtGrupo;
     @FXML
@@ -196,12 +196,6 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private MenuItem txtPuericulturaViernes;
     
-   //---------------->
-
-    /**
-     * Initializes the controller class.
-     */
-    
     
     // Datos de la Conexion a Base de datos
     private static final String bd = "basedatosprueba";
@@ -212,7 +206,7 @@ public class VentanaHorariosController implements Initializable {
     // Conexión a la base de datos
     private static Connection conexion;
 
-    // Código de conexión
+            // Código de conexión
     public static Connection ConexionBd() {
         try {
         if (conexion == null || conexion.isClosed()) {
@@ -226,35 +220,8 @@ public class VentanaHorariosController implements Initializable {
     }
     @FXML
     private TextField txtMinutosEntradaMartes;
-    
-    
   
-     //Metodos para obtener datos
-     
-    public String DatosDeBD(String Dia,String Grupo){
-         String CodigoHorario =  "";
-         
-            
-        String query = "SELECT " + Dia + " FROM primersemestre WHERE Grupo = '" + Grupo + "'";
-        try (Connection connection = ConexionBd();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    CodigoHorario = resultSet.getString(Dia);
-                    
-                    
-                    //System.out.println(CodigoHorario);
-                }
-                
-            }
-        } catch (SQLException error) {
-            System.out.println("Error de obtencion de datos: " + error);
-        }
-        
-        return CodigoHorario;
-     }
-    
+            //Metodos para obtener datos   
     public String DatosDeBD(String Dia, String Semestre, String Grupo) {
         String CodigoHorario = "";
         
@@ -277,7 +244,19 @@ public class VentanaHorariosController implements Initializable {
         return CodigoHorario;
     }
 
-     
+            //MetodoActualizador De Base de datos;
+    private void ActualizarCodigoHorabd(String dia, String newValue, String grupo) {
+        String query = "UPDATE primersemestre SET " + dia + " = ? WHERE Grupo = ?";
+        try (Connection connection = ConexionBd();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, newValue);
+            preparedStatement.setString(2, grupo);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
      
      
      
@@ -321,19 +300,7 @@ public class VentanaHorariosController implements Initializable {
     }
     
     
-    //MetodoActualizador De Base de datos;
-    private void ActualizarCodigoHorabd(String dia, String newValue, String grupo) {
-        String query = "UPDATE primersemestre SET " + dia + " = ? WHERE Grupo = ?";
-        try (Connection connection = ConexionBd();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, newValue);
-            preparedStatement.setString(2, grupo);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     
     public String Desconvertidor(String Hora, String Horario){
@@ -393,71 +360,7 @@ public class VentanaHorariosController implements Initializable {
         
         return Codigo;
     }
-    
-    
-    
-    
-    public void ControladorDePrueba() {
-        String Grupo = txtGrupo.getText();
-        String Datos = DatosDeBD("Lunes", Grupo); // Se tiene que Automatizar ///Creo que ya
-
-        // Verificar que los datos no son nulos ni vacíos
-        if (Datos == null || Datos.isEmpty()) {
-            System.err.println("Error: Datos de la base de datos son nulos o vacíos");
-            return;
-        }
-
-        // Verificar que los datos tienen el formato esperado antes de separarlos
-        String[] Fechas;
-        try {
-            Fechas = SeparadorHoraMinutos(Datos);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
-            return;
-        }
-
-        if (Fechas[0] == null || Fechas[0].isEmpty() || Fechas[1] == null || Fechas[1].isEmpty()) {
-            System.err.println("Error: Las fechas separadas son nulas o vacías");
-            return;
-        }
-
-        FormatoAmyPm(Fechas[0]);
-        MostradorEnPantalla(txtHoraEntradaLunes, CambioDeFormatoHorario(Fechas[0]));
-        MostradorEnPantalla(txtMinutosEntradaLunes, Fechas[1]);
-        
-        
-        
-        
-        //MetodoDeActualizacion
-         txtHoraEntradaLunes.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() == 2) {
-               
-                String filteredValue = extractorDeCodigoSeparado(newValue, Tipo.HORA_ENTRADA, Datos, txtTurnoEntradaLunes);
-                ActualizarCodigoHorabd("Lunes", filteredValue, "A");
-            } else if (newValue.length() == 1) {
-                System.out.println("No es de dos digitos pa");
-            }
-        });
-         
-        
-    }
-    
-    
-    
-    
-   
-    
-    
   
-    
-    
-    
-    
-    
-    
-    
-    
-
   
     //Metodo para sacar el semestre segun el grupo
     public String AsignadorDeSemestre(){
@@ -491,7 +394,7 @@ public class VentanaHorariosController implements Initializable {
     
     
     
-    //------> Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)
+    //Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)
     
     
      public String[] SeparadorHoraMinutos(String Codigo){
@@ -513,7 +416,7 @@ public class VentanaHorariosController implements Initializable {
         
         return new String[]{Hora, Minutos};
         
-        //-------) Codigo Obsoleto Falta Temas de Reconocimiento
+      
         //Este metodo Al obtener el codigo: "123456789" lo que hace es 
         //separar la hora y despues lo devuelve
     }
@@ -654,80 +557,19 @@ public class VentanaHorariosController implements Initializable {
         VIERNES
     }
     
-    public void ActualizadorDeRecuadroMinutos(DiasSemana dia, TextField TextMinutos){
-        
-        String Grupo = txtGrupo.getText();
-        
-        String Dias = "";
-        String Datos = "";
-        
-        switch (dia) {
-            case LUNES:
-                Datos = DatosDeBD("Lunes", Grupo);
-                Dias = "Lunes";
-                break;
-            case MARTES:
-                Datos = DatosDeBD("Martes", Grupo);
-                Dias = "Martes";
-                break;
-            case MIERCOLES:
-                Datos = DatosDeBD("Miercoles", Grupo);
-                Dias = "Miercoles";
-                break;
-            case JUEVES:
-                Datos = DatosDeBD("Jueves", Grupo);
-                Dias = "Jueves";
-                break;
-            case VIERNES:
-                Datos = DatosDeBD("Viernes", Grupo);
-                Dias = "Viernes";
-                break;
-        }
-        
-        String DatosFinales = Datos;
-        String DiasFinales = Dias;
-        
-        TextMinutos.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() == 2) {
-                String filteredValue = extractorDeCodigoSeparado(newValue, Tipo.MINUTOS_ENTRADA, DatosFinales, txtTurnoEntradaLunes);
-                ActualizarCodigoHorabd(DiasFinales, filteredValue, Grupo);
-            } else if (newValue.length() == 1) {
-                System.out.println("No es de dos digitos pa");
-            }
-        });
-        
-    
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
     
     //Funciones de Asignacion de Am y Pm para cada Boton
     
-    //---->Hora entrada Lunes
+
     @FXML
     private void AmEntradaLunes(ActionEvent event) {
         
         txtTurnoEntradaLunes.setText(txtAmEntradaLunes.getText());
         
         
-        
-        ///---->Purebas
-        String Grupo = txtGrupo.getText();
-        String Datos = DatosDeBD("Lunes", Grupo);
-        String dev = extractorDeCodigoSeparado(txtHoraEntradaLunes, Tipo.HORA_ENTRADA, Datos, txtAmEntradaLunes);
        
-        System.out.println("con el boton Am se manda esto: " + dev);
-        ActualizarCodigoHorabd("Lunes", dev, Grupo);
         //String xd = txtTurnoEntradaLunes.getText();
         //CambiadorDeHorarios(txtHoraEntradaLunes, xd);
     }
@@ -735,60 +577,12 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private void PmEntradaLunes(ActionEvent event) {
         
-        ///---->Purebas
-        
-        
-        String Grupo = txtGrupo.getText();
-        String Datos = DatosDeBD("Lunes", Grupo);
-        String dev = extractorDeCodigoSeparado(txtHoraEntradaLunes, Tipo.HORA_ENTRADA, Datos, txtPmEntradaLunes);
-        System.out.println("con el boton Am se manda esto: " + dev);
-        
-        ActualizarCodigoHorabd("Lunes", dev, Grupo);
-        
+    
         
         txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());
     
     }
     
-    
-    public void gestionarHorario(String dia, TextField txtHoraEntrada, TextField txtMinutosEntrada, TextField txtTurnoEntrada, TextField txtGrupo) {
-        String grupo = txtGrupo.getText();
-        String datos = DatosDeBD(dia, grupo);
-
-        // Verificar que los datos no son nulos ni vacíos
-        if (datos == null || datos.isEmpty()) {
-            System.err.println("Error: Datos de la base de datos son nulos o vacíos");
-            return;
-        }
-
-        // Verificar que los datos tienen el formato esperado antes de separarlos
-        String[] fechas;
-        try {
-            fechas = SeparadorHoraMinutos(datos);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
-            return;
-        }
-
-        if (fechas[0] == null || fechas[0].isEmpty() || fechas[1] == null || fechas[1].isEmpty()) {
-            System.err.println("Error: Las fechas separadas son nulas o vacías");
-            return;
-        }
-
-        FormatoAmyPm(fechas[0]);
-        MostradorEnPantalla(txtHoraEntrada, CambioDeFormatoHorario(fechas[0]));
-        MostradorEnPantalla(txtMinutosEntrada, fechas[1]);
-
-        // Método de actualización
-        txtHoraEntrada.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() == 2) {//public String extractorDeCodigoSeparado(String time, Tipo tipo, String codigo, MenuButton amPmButton)
-                //String filteredValue = extractorDeCodigoSeparado(txtHoraEntrada, Tipo.HORA_ENTRADA, datos, txtTurnoEntrada);
-               // ActualizarCodigoHorabd(dia, filteredValue, "A");
-            } else if (newValue.length() == 1) {
-                System.out.println("No es de dos dígitos");
-            }
-        });
-    }
     
     
     //MetodosParaTodosLosRecuadrosDeLunes
@@ -813,11 +607,7 @@ public class VentanaHorariosController implements Initializable {
    
     
     
-    
-    
-    
    
-    //------> Limitadores de gestion  <-----
    
     private void restringirAPatron(TextField textField, String patron) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -1162,22 +952,20 @@ public class VentanaHorariosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        ControladorDePrueba();
-        ActualizadorDeRecuadroMinutos(DiasSemana.LUNES, txtMinutosEntradaLunes);
-       
+    
         
         
         System.out.println("Supuesto nuevo: " + DatosDeBD("Lunes","primersemestre","A"));
         
         
         
-        //--->Metodos Finales <-----
+       
         LimitadoresDeHoras();
         limitadoresParaGradoYGrupo();
         
-        //---Lunes
+       
         MetodosLunes();
-        //---> --- <-----
+     
         
     
         //Conexion a base de datos
