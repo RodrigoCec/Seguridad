@@ -726,30 +726,20 @@ public class VentanaHorariosController implements Initializable {
     
     
     //--------> Sistema de gestion y control de asignacion de semtres
-    
-    public String RecuperadorConFiltroDeSemestre(String Dia, String Grupo){
-        
-        String Semestre = AsignadorDeSemestre();
-        
-        String Codigo = DatosDeBD(Dia, Semestre, Grupo);
-        
-        return Codigo;
-        
-    }
-    
-    
-    
+
     
     public void ActualizadorDeCodigosParaSemestre(){
         
-        txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
-            
-            if(newValue != oldValue){
-            
-            
-            }
-        });
-        
+        String SemestreInicial = AsignadorDeSemestre();
+           ActualizadorDeHoras(SemestreInicial);
+
+           // Listener para detectar cambios en txtGrado
+           txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
+               if (!newValue.equals(oldValue)) {
+                   String Semestre = AsignadorDeSemestre();
+                   ActualizadorDeHoras(Semestre);
+               }
+           });
     }
     
     
@@ -800,8 +790,7 @@ public class VentanaHorariosController implements Initializable {
         MostradorEnPantalla(txtMinutosSalida, fechasSalida[1]);
     }
 
-    
-    
+
     public void ActualizadorDeHoras(String Semestre){
         String Grupo = txtGrupo.getText();
    
@@ -832,11 +821,10 @@ public class VentanaHorariosController implements Initializable {
         
         
     }
+    
+    
    
-    
-    
-    
-    
+
     //Acciones sin asignar:
      @FXML
     private void AmEntradaLunes(ActionEvent event) {
@@ -1055,10 +1043,8 @@ public class VentanaHorariosController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
-        ActualizadorDeHoras("primersemestre");
-        
-        
+   
+        ActualizadorDeCodigosParaSemestre();
         
         //--->Metodos Finales <-----
         LimitadoresDeHoras();
