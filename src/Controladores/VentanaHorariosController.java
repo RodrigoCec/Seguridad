@@ -258,11 +258,17 @@ public class VentanaHorariosController implements Initializable {
         }
     }
      
-     
-     
-     
-     
-    //Convertidores de tiempo
+    
+    
+    
+    
+    
+    
+    
+    // Empiezan convertidores
+    
+    
+            //Convertidores de tiempo
     public String CambioDeFormatoHorario(String Hora){
         boolean cero = false;
 
@@ -292,12 +298,7 @@ public class VentanaHorariosController implements Initializable {
      
     
      
-    //Metodo para mostrar datos en los recuadros de la ventana
-    public void MostradorEnPantalla(TextField Campo, String time){
-        
-        Campo.setText(time);       
     
-    }
     
     
     
@@ -391,13 +392,19 @@ public class VentanaHorariosController implements Initializable {
         return BaseDatos;
     }
     
+            //Metodo para mostrar datos en los recuadros de la ventana
+    public void MostradorEnPantalla(TextField Campo, String time){
+        
+        Campo.setText(time);       
+    
+    }
     
     
     
     //Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)
     
     
-     public String[] SeparadorHoraMinutos(String Codigo){
+    public String[] SeparadorHoraMinutos(String Codigo){
         
         if (Codigo == null || Codigo.length() < 5) {
             throw new IllegalArgumentException("El código proporcionado es inválido: " + Codigo);
@@ -421,10 +428,7 @@ public class VentanaHorariosController implements Initializable {
         //separar la hora y despues lo devuelve
     }
 
-    
-     
-     
-    //Supuesto Metodo De Separacion y reconocimiento de codigo para su remplazo y actualizacion
+            //Supuesto Metodo De Separacion y reconocimiento de codigo para su remplazo y actualizacion
     public enum Tipo {
         
         HORA_ENTRADA,
@@ -433,7 +437,8 @@ public class VentanaHorariosController implements Initializable {
         MINUTOS_SALIDA  
     }
     
-    public String extractorDeCodigoSeparado(TextField time, Tipo tipo, String codigo, MenuItem amPmButton) {
+    
+    public String extractorDeCodigoSeparadoParaBotones(TextField time, Tipo tipo, String codigo, MenuItem amPmButton) {
         String anterior = "";
         String editor = "";
         String posterior = "";
@@ -488,7 +493,7 @@ public class VentanaHorariosController implements Initializable {
         return codigoCompleto;
     }
     
-    public String extractorDeCodigoSeparado(String time, Tipo tipo, String codigo, MenuButton amPmButton) {
+    public String extractorDeCodigoSeparadoParaHoras(String time, Tipo tipo, String codigo, MenuButton amPmButton) {
         
         String anterior = "";
         String editor = "";
@@ -544,6 +549,9 @@ public class VentanaHorariosController implements Initializable {
         return codigoCompleto;
     }
 
+  
+    
+    
     
     
     
@@ -563,25 +571,7 @@ public class VentanaHorariosController implements Initializable {
     //Funciones de Asignacion de Am y Pm para cada Boton
     
 
-    @FXML
-    private void AmEntradaLunes(ActionEvent event) {
-        
-        txtTurnoEntradaLunes.setText(txtAmEntradaLunes.getText());
-        
-        
-       
-        //String xd = txtTurnoEntradaLunes.getText();
-        //CambiadorDeHorarios(txtHoraEntradaLunes, xd);
-    }
-
-    @FXML
-    private void PmEntradaLunes(ActionEvent event) {
-        
-    
-        
-        txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());
-    
-    }
+   
     
     
     
@@ -730,7 +720,24 @@ public class VentanaHorariosController implements Initializable {
         });
     }
    
+    
+    
+    
+    
     //Acciones sin asignar:
+     @FXML
+    private void AmEntradaLunes(ActionEvent event) {
+        
+        txtTurnoEntradaLunes.setText(txtAmEntradaLunes.getText());
+        
+    }
+
+    @FXML
+    private void PmEntradaLunes(ActionEvent event) {
+        
+        txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());    
+        
+    }
     @FXML
     private void AmSalidaLunes(ActionEvent event) {
     }
@@ -952,19 +959,19 @@ public class VentanaHorariosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-    
-        
-        
-        System.out.println("Supuesto nuevo: " + DatosDeBD("Lunes","primersemestre","A"));
-        
-        
-        
        
+        
+        
+        
+        
+        //--->Metodos Finales <-----
         LimitadoresDeHoras();
         limitadoresParaGradoYGrupo();
         
-       
+        //---Lunes
         MetodosLunes();
+        //---> --- <-----
+        
      
         
     
