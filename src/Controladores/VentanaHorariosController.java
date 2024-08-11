@@ -295,15 +295,7 @@ public class VentanaHorariosController implements Initializable {
         }
     }
      
-     
-    
-     
-    
-    
-    
-    
-
-    
+  
     public String Desconvertidor(String Hora, String Horario){
         
         int hora = Integer.parseInt(Hora);
@@ -331,15 +323,15 @@ public class VentanaHorariosController implements Initializable {
     
     
     
-    public void FormatoAmyPm(String Hora){
+    public void FormatoAmyPm(String Hora, MenuButton txtTurno){
         //Ayuda a identificar y colocar Am o pm segun el horario devido a las diferencias de 12 y 24 horas que se trabajan
         //Solo muestra apartir de iniciar el programa no cambia de acuerdo a intereacciones
         int hora = Integer.parseInt(Hora);
         
         if(hora < 12){
-            txtTurnoEntradaLunes.setText("AM");
+            txtTurno.setText("AM");
         }else{
-            txtTurnoEntradaLunes.setText("PM");
+            txtTurno.setText("PM");
         }
     }
     
@@ -401,21 +393,31 @@ public class VentanaHorariosController implements Initializable {
     
     
     
+    
+
     //Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)
     
-    
-    public String[] SeparadorHoraMinutos(String Codigo){
+    public String[] SeparadorHoraMinutos(String Codigo, Tipo tipo){
         
         if (Codigo == null || Codigo.length() < 5) {
             throw new IllegalArgumentException("El código proporcionado es inválido: " + Codigo);
         }
 
-        String Hora;
-        String Minutos;
+        String Hora = "";
+        String Minutos = "";
+        
 
         try {
-            Hora = Codigo.substring(1, 3);
-            Minutos = Codigo.substring(3, 5);
+            switch(tipo){
+            case HORA_ENTRADA :
+                Hora = Codigo.substring(1, 3);
+                Minutos = Codigo.substring(3, 5);
+                break;
+            case HORA_SALIDA :
+                Hora = Codigo.substring(5, 7);
+                Minutos = Codigo.substring(7, 9);
+                break;
+        }
         } catch (StringIndexOutOfBoundsException e) {
             System.err.println("Error al separar hora y minutos: " + e.getMessage());
             return new String[]{"00", "00"}; // o cualquier valor por defecto que consideres adecuado
@@ -423,9 +425,6 @@ public class VentanaHorariosController implements Initializable {
         
         return new String[]{Hora, Minutos};
         
-      
-        //Este metodo Al obtener el codigo: "123456789" lo que hace es 
-        //separar la hora y despues lo devuelve
     }
 
             //Supuesto Metodo De Separacion y reconocimiento de codigo para su remplazo y actualizacion
@@ -694,7 +693,7 @@ public class VentanaHorariosController implements Initializable {
         });
     }
     
-    public void restringirA1A6(TextField textField) {
+    public void LimitadorDeGrados(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 textField.setText(oldValue);
@@ -718,6 +717,120 @@ public class VentanaHorariosController implements Initializable {
                 Editable = true;
             }
         });
+    }
+   
+    
+    
+    
+    
+    
+    
+    //--------> Sistema de gestion y control de asignacion de semtres
+    
+    public String RecuperadorConFiltroDeSemestre(String Dia, String Grupo){
+        
+        String Semestre = AsignadorDeSemestre();
+        
+        String Codigo = DatosDeBD(Dia, Semestre, Grupo);
+        
+        return Codigo;
+        
+    }
+    
+    
+    
+    
+    public void ActualizadorDeCodigosParaSemestre(){
+        
+        txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
+            
+            if(newValue != oldValue){
+            
+            
+            }
+        });
+        
+    }
+    
+    
+    private boolean verificarDatosNoNulosNiVacios(String datos) {
+        if (datos == null || datos.isEmpty()) {
+            System.err.println("Error: Datos de la base de datos son nulos o vacíos");
+            return false;
+        }
+        return true;
+    }
+    
+    private String[] obtenerFechasSeparadas(String datos, Tipo tipo) {
+        try {
+            String[] fechas = SeparadorHoraMinutos(datos, tipo);
+
+            if (fechas == null || fechas.length < 2 || fechas[0] == null || fechas[0].isEmpty() || fechas[1] == null || fechas[1].isEmpty()) {
+                System.err.println("Error: Las fechas separadas son nulas o vacías");
+                return null;
+            }
+
+            return fechas; // Devuelve todo el array, no solo los elementos individuales
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    private void procesarHorario(String dia, String semestre, String grupo,TextField txtHoraEntrada, TextField txtMinutosEntrada, MenuButton txtTurnoEntrada, Tipo tipoEntrada, TextField txtHoraSalida, TextField txtMinutosSalida, MenuButton txtTurnoSalida, Tipo tipoSalida) {
+        // Obtener datos para la entrada
+        String datosEntrada = DatosDeBD(dia, semestre, grupo);
+        if (!verificarDatosNoNulosNiVacios(datosEntrada)) {
+            return;
+        }
+        String[] fechasEntrada = obtenerFechasSeparadas(datosEntrada, tipoEntrada);
+        FormatoAmyPm(fechasEntrada[0], txtTurnoEntrada);
+        MostradorEnPantalla(txtHoraEntrada, CambioDeFormatoHorario(fechasEntrada[0]));
+        MostradorEnPantalla(txtMinutosEntrada, fechasEntrada[1]);
+
+        // Obtener datos para la salida
+        String datosSalida = DatosDeBD(dia, semestre, grupo);
+        if (!verificarDatosNoNulosNiVacios(datosSalida)) {
+            return;
+        }
+        String[] fechasSalida = obtenerFechasSeparadas(datosSalida, tipoSalida);
+        FormatoAmyPm(fechasSalida[0], txtTurnoSalida);
+        MostradorEnPantalla(txtHoraSalida, CambioDeFormatoHorario(fechasSalida[0]));
+        MostradorEnPantalla(txtMinutosSalida, fechasSalida[1]);
+    }
+
+    
+    
+    public void ActualizadorDeHoras(String Semestre){
+        String Grupo = txtGrupo.getText();
+   
+        // Lunes
+        procesarHorario("Lunes", Semestre, Grupo, txtHoraEntradaLunes, txtMinutosEntradaLunes, txtTurnoEntradaLunes, Tipo.HORA_ENTRADA, 
+                        txtHoraSalidaLunes, txtMinutosSalidaLunes, txtTurnoSalidaLunes, Tipo.HORA_SALIDA);
+
+        // Martes
+        procesarHorario("Martes", Semestre, Grupo, txtHoraEntradaMartes, txtMinutosEntradaMartes, txtTurnoEntradaMartes, Tipo.HORA_ENTRADA, 
+                        txtHoraSalidaMartes, txtMinutosSalidaMartes, txtTurnoSalidaMartes, Tipo.HORA_SALIDA);
+
+        // Miércoles
+        procesarHorario("Miercoles", Semestre, Grupo, txtHoraEntradaMiercoles, txtMinutosEntradaMiercoles, txtTurnoEntradaMiercoles, Tipo.HORA_ENTRADA, 
+                        txtHoraSalidaMiercoles, txtMinutosSalidaMiercoles, txtTurnoSalidaMiercoles, Tipo.HORA_SALIDA);
+
+        // Jueves
+        procesarHorario("Jueves", Semestre, Grupo, txtHoraEntradaJueves, txtMinutosEntradaJueves, txtTurnoEntradaJueves, Tipo.HORA_ENTRADA, 
+                        txtHoraSalidaJueves, txtMinutosSalidaJueves, txtTurnoSalidaJueves, Tipo.HORA_SALIDA);
+
+        // Viernes
+        procesarHorario("Viernes", Semestre, Grupo, txtHoraEntradaViernes, txtMinutosEntradaViernes, txtTurnoEntradaViernes, Tipo.HORA_ENTRADA, 
+                        txtHoraSalidaViernes, txtMinutosSalidaViernes, txtTurnoSalidaViernes, Tipo.HORA_SALIDA);
+
+        
+        
+        
+        
+        
+        
     }
    
     
@@ -935,38 +1048,22 @@ public class VentanaHorariosController implements Initializable {
         LimitadorLongutid(txtHoraSalidaViernes, 2);
         LimitadorLongutid(txtHoraEntradaViernes, 2);
         LimitadorLongutid(txtMinutosEntradaLunes, 2);
+        
    }
    
-   
-   public void metodoPruebaxd(){
-   
-   
-   }
-   
-   
-   public void limitadoresParaGradoYGrupo(){
-        
-        restringirANumeros(txtGrado);
-        LimitadorLongutid(txtGrado, 1);
-        restringirA1A6(txtGrado);
-        
-        LimitadorLongutid(txtGrupo, 1);
-        restringirALetras(txtGrupo);
-        convertirAMayusculas(txtGrupo);
-    }
-    
+ 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-       
-        
+      
+        ActualizadorDeHoras("primersemestre");
         
         
         
         //--->Metodos Finales <-----
         LimitadoresDeHoras();
-        limitadoresParaGradoYGrupo();
+        
+        
         
         //---Lunes
         MetodosLunes();
