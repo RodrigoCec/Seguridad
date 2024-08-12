@@ -211,7 +211,7 @@ public class VentanaHorariosController implements Initializable {
         try {
         if (conexion == null || conexion.isClosed()) {
             conexion = DriverManager.getConnection(direccion, usuario, password);
-            System.out.println("Conexión exitosa");
+            //System.out.println("Conexión exitosa");
         }
     } catch (SQLException e) {
         Logger.getLogger(VentanaHorariosController.class.getName()).log(Level.SEVERE, "Error de conexión", e);
@@ -1039,6 +1039,25 @@ public class VentanaHorariosController implements Initializable {
         
    }
    
+   public void limitadoresDeDatos(){
+       
+       RestrictorDeGrupo();
+       RestrictorDeGrado();
+   }
+   
+   public void RestrictorDeGrupo(){
+       
+       restringirALetras(txtGrupo);
+       convertirAMayusculas(txtGrupo);
+       LimitadorLongutid(txtGrupo, 1);
+   }
+   
+   public void RestrictorDeGrado(){
+       
+       LimitadorDeGrados(txtGrado);
+       restringirANumeros(txtGrado);
+       LimitadorLongutid(txtGrado, 1);
+   }
  
     
     @Override
@@ -1048,7 +1067,7 @@ public class VentanaHorariosController implements Initializable {
         
         //--->Metodos Finales <-----
         LimitadoresDeHoras();
-        
+        limitadoresDeDatos();
         
         
         //---Lunes
