@@ -225,7 +225,8 @@ public class VentanaHorariosController implements Initializable {
     public String DatosDeBD(String Dia, String Semestre, String Grupo) {
         String CodigoHorario = "";
         
-        String query = "SELECT " + Dia + " FROM " + Semestre + " WHERE Grupo = ?";
+        String query = "SELECT `" + Dia + "` FROM `" + Semestre + "` WHERE Grupo = ?";
+
 
         try (Connection connection = ConexionBd();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -729,19 +730,41 @@ public class VentanaHorariosController implements Initializable {
 
     
     public void ActualizadorDeCodigosParaSemestre(){
-        
+        String grupo = txtGrupo.getText();
         String SemestreInicial = AsignadorDeSemestre();
-           ActualizadorDeHoras(SemestreInicial);
+        ActualizadorDeHoras(SemestreInicial, grupo);
 
-           // Listener para detectar cambios en txtGrado
-           txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
-               if (!newValue.equals(oldValue)) {
-                   String Semestre = AsignadorDeSemestre();
-                   ActualizadorDeHoras(Semestre);
-               }
-           });
+       // Listener para detectar cambios en txtGrado
+        txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
+               
+            if (!newValue.equals(oldValue) & newValue.length() == 1) {
+               String Semestre = AsignadorDeSemestre();
+               ActualizadorDeHoras(Semestre, grupo);
+            }
+        });
     }
     
+     //CodigoDeActualizacion de Grupo
+    
+    public void ActualizadorDeGrupo(){
+        String grupo = txtGrupo.getText();
+        String grado = AsignadorDeSemestre();
+        ActualizadorDeHoras(grado, grupo);
+        
+        txtGrupo.textProperty().addListener((observable, oldValue, newValue) -> {
+           
+            if (!newValue.equals(oldValue) & newValue.length() == 1) {               
+                
+                String grupoSub = txtGrupo.getText();
+                String gradoSub  = AsignadorDeSemestre();
+                ActualizadorDeHoras(gradoSub, grupoSub);
+            
+            }
+            
+        
+        });
+    }
+   
     
     private boolean verificarDatosNoNulosNiVacios(String datos) {
         if (datos == null || datos.isEmpty()) {
@@ -767,7 +790,7 @@ public class VentanaHorariosController implements Initializable {
         }
     }
 
-
+    
     private void procesarHorario(String dia, String semestre, String grupo,TextField txtHoraEntrada, TextField txtMinutosEntrada, MenuButton txtTurnoEntrada, Tipo tipoEntrada, TextField txtHoraSalida, TextField txtMinutosSalida, MenuButton txtTurnoSalida, Tipo tipoSalida) {
         // Obtener datos para la entrada
         String datosEntrada = DatosDeBD(dia, semestre, grupo);
@@ -791,9 +814,8 @@ public class VentanaHorariosController implements Initializable {
     }
 
 
-    public void ActualizadorDeHoras(String Semestre){
-        String Grupo = txtGrupo.getText();
-   
+    public void ActualizadorDeHoras(String Semestre, String Grupo){
+       
         // Lunes
         procesarHorario("Lunes", Semestre, Grupo, txtHoraEntradaLunes, txtMinutosEntradaLunes, txtTurnoEntradaLunes, Tipo.HORA_ENTRADA, 
                         txtHoraSalidaLunes, txtMinutosSalidaLunes, txtTurnoSalidaLunes, Tipo.HORA_SALIDA);
@@ -1064,6 +1086,9 @@ public class VentanaHorariosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
    
         ActualizadorDeCodigosParaSemestre();
+        ActualizadorDeGrupo();
+        
+        
         
         //--->Metodos Finales <-----
         LimitadoresDeHoras();
