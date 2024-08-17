@@ -246,28 +246,23 @@ public class VentanaHorariosController implements Initializable {
     }
 
             //MetodoActualizador De Base de datos;
-    private void ActualizarCodigoHorabd(String dia, String newValue, String grupo) {
-        String query = "UPDATE primersemestre SET " + dia + " = ? WHERE Grupo = ?";
+    private void ActualizarCodigoHorabd(String Semestre,String dia, String newValue, String grupo) {
+        String query = "UPDATE " + Semestre +" SET " + dia + " = ? WHERE Grupo = ?";
         try (Connection connection = ConexionBd();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newValue);
             preparedStatement.setString(2, grupo);
+            System.out.println("Se actualizo el: " + Semestre);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-     
-    
-    
-    
-    
-    
+
     
     
     // Empiezan convertidores
-    
     
             //Convertidores de tiempo
     public String CambioDeFormatoHorario(String Hora){
@@ -338,27 +333,13 @@ public class VentanaHorariosController implements Initializable {
     
     
     
-    //Compurueba que sea de dos digitos si no no hace empieza nada
-    public String ComprobadorDeLongitud(TextField textField){
-        
-        String Codigo = "";
-        
-        textField.textProperty().addListener((observable, ContAnterior, ContActual) -> {
-            if (ContActual.length() == 2) {
-                
-                
-            }else {
-                System.out.println("El textfiel no tiene 2 digitos, No empieza nada");
-            }
-        });
-        
-        return Codigo;
-    }
+  
   
   
     //Metodo para sacar el semestre segun el grupo
     public String AsignadorDeSemestre(){
         String Semestre = txtGrado.getText(); 
+        
         String BaseDatos = "";
         switch(Semestre){
             case "1":
@@ -381,7 +362,7 @@ public class VentanaHorariosController implements Initializable {
                 break;
                  
         }
-        System.out.println(BaseDatos);
+        System.out.println("Se supone que es: " + BaseDatos);
         return BaseDatos;
     }
     
@@ -494,7 +475,7 @@ public class VentanaHorariosController implements Initializable {
     }
     
     public String extractorDeCodigoSeparadoParaHoras(String time, Tipo tipo, String codigo, MenuButton amPmButton) {
-        
+        System.out.println("------>");
         String anterior = "";
         String editor = "";
         String posterior = "";
@@ -522,38 +503,50 @@ public class VentanaHorariosController implements Initializable {
                 break;
         }
 
-        //String codigoRemplazar = time.getText();
+        
         String amPm = amPmButton.getText().toUpperCase();
-
         int hora = Integer.parseInt(time);
         if (amPm.equals("PM") && hora != 12) {
+            System.out.println("Se sumo 12");//Coment?
             hora += 12;
         } else if (amPm.equals("AM") && hora == 12) {
-            hora = 0;
+            hora = 00;
+            System.out.println("se dejo normal o en 00");//Coment?
         }
-
+        
+        System.out.println("Hora :" + hora);//Coment?
+        
         String horaConvertida = String.format("%02d", hora);
-
-        // Reconstrucción del código completo
-        String codigoCompleto = anterior + horaConvertida;
-        if (tipo != Tipo.MINUTOS_SALIDA) {
-            codigoCompleto += posterior;
+        
+        
+        System.out.println("Hora convertida: " + horaConvertida);//Coment?
+        
+        String codigoCompleto = "";
+            
+        if(tipo == Tipo.HORA_ENTRADA || tipo == Tipo.HORA_SALIDA){
+            System.out.println("Horas");
+            codigoCompleto = anterior + horaConvertida + posterior;
+            System.out.println("aqui anterior es: " + anterior);
+        }else if (tipo == Tipo.MINUTOS_ENTRADA || tipo == Tipo.MINUTOS_SALIDA){
+            
+            codigoCompleto = anterior + time;
+            System.out.println("Minutos");
+            System.out.println("aqui minutos anterior es: " + anterior + posterior);
+            if (tipo != Tipo.MINUTOS_SALIDA) {
+                codigoCompleto += posterior;
+            }
         }
+        
 
         System.out.println("En este caso el anterior es: " + anterior);
         System.out.println("En este caso el editado es: " + editor);
         System.out.println("En este caso el posterior es: " + posterior);
         System.out.println("Codigo Remplazar: " + time);
         System.out.println("Codigo Completo: " + codigoCompleto);
+        System.out.println("------>");
 
         return codigoCompleto;
     }
-
-  
-    
-    
-    
-    
     
     
     public enum DiasSemana {
@@ -565,35 +558,115 @@ public class VentanaHorariosController implements Initializable {
         VIERNES
     }
     
-   
+  
     
-    
-    //Funciones de Asignacion de Am y Pm para cada Boton
-    
-
-   
-    
-    
-    
-    //MetodosParaTodosLosRecuadrosDeLunes
-    public void HoraEntradaLunes(){
+    public void RestriccionesGeneralesDeNumeros(){
         
-        //Horas
-        
-        
-        
+        restringirANumeros(txtMinutosEntradaViernes);
+        restringirANumeros(txtMinutosSalidaLunes);
+        restringirANumeros(txtHoraSalidaLunes);
+        restringirANumeros(txtHoraEntradaLunes);
+        restringirANumeros(txtMinutosSalidaMartes);
+        restringirANumeros(txtHoraSalidaMartes);
+        restringirANumeros(txtMinutosEntradaMartes);
+        restringirANumeros(txtHoraEntradaMartes);
+        restringirANumeros(txtMinutosSalidaMiercoles);
+        restringirANumeros(txtHoraSalidaMiercoles);
+        restringirANumeros(txtMinutosEntradaMiercoles);
+        restringirANumeros(txtHoraEntradaMiercoles);
+        restringirANumeros(txtMinutosSalidaJueves);
+        restringirANumeros(txtHoraSalidaJueves);
+        restringirANumeros(txtMinutosEntradaJueves);
+        restringirANumeros(txtHoraEntradaJueves);
+        restringirANumeros(txtMinutosSalidaViernes);
+        restringirANumeros(txtHoraSalidaViernes);
+        restringirANumeros(txtHoraEntradaViernes);
+        restringirANumeros(txtMinutosEntradaLunes);
+    }
     
-        //Restricciones
+    public void RestriccionesMinutos(){
+        
+        //Lunes
         RestriccionMinutos(txtMinutosEntradaLunes);
-        RestriccionHoras(txtHoraEntradaLunes);
-    }
-    
-    public void MetodosLunes(){
+        RestriccionMinutos(txtMinutosSalidaLunes);
         
-        HoraEntradaLunes();
-    
+        // Martes
+        RestriccionMinutos(txtMinutosEntradaMartes);
+        RestriccionMinutos(txtMinutosSalidaMartes);
+
+        // Miércoles
+        RestriccionMinutos(txtMinutosEntradaMiercoles);
+        RestriccionMinutos(txtMinutosSalidaMiercoles);
+
+        // Jueves
+        RestriccionMinutos(txtMinutosEntradaJueves);
+        RestriccionMinutos(txtMinutosSalidaJueves);
+
+        // Viernes
+        RestriccionMinutos(txtMinutosEntradaViernes);
+        RestriccionMinutos(txtMinutosSalidaViernes);
+        
     }
     
+    public void RestriccionesHoras(){
+        
+        //Lunes
+        RestriccionHoras(txtHoraEntradaLunes);
+        RestriccionHoras(txtHoraSalidaLunes);
+        
+        // Martes
+        RestriccionHoras(txtHoraEntradaMartes);
+        RestriccionHoras(txtHoraSalidaMartes);
+
+        // Miércoles
+        RestriccionHoras(txtHoraEntradaMiercoles);
+        RestriccionHoras(txtHoraSalidaMiercoles);
+
+        // Jueves
+        RestriccionHoras(txtHoraEntradaJueves);
+        RestriccionHoras(txtHoraSalidaJueves);
+
+        // Viernes
+        RestriccionHoras(txtHoraEntradaViernes);
+        RestriccionHoras(txtHoraSalidaViernes);
+        
+        
+    }
+    
+      public void LimitadoresDeLongitudGeneral(){
+       
+        LimitadorLongutid(txtMinutosEntradaViernes, 2);
+        LimitadorLongutid(txtMinutosSalidaLunes, 2);
+        LimitadorLongutid(txtHoraSalidaLunes, 2);
+        LimitadorLongutid(txtHoraEntradaLunes, 2);
+        LimitadorLongutid(txtMinutosSalidaMartes, 2);
+        LimitadorLongutid(txtHoraSalidaMartes, 2);
+        LimitadorLongutid(txtMinutosEntradaMartes, 2);
+        LimitadorLongutid(txtHoraEntradaMartes, 2);
+        LimitadorLongutid(txtMinutosSalidaMiercoles, 2);
+        LimitadorLongutid(txtHoraSalidaMiercoles, 2);
+        LimitadorLongutid(txtMinutosEntradaMiercoles, 2);
+        LimitadorLongutid(txtHoraEntradaMiercoles, 2);
+        LimitadorLongutid(txtMinutosSalidaJueves, 2);
+        LimitadorLongutid(txtHoraSalidaJueves, 2);
+        LimitadorLongutid(txtMinutosEntradaJueves, 2);
+        LimitadorLongutid(txtHoraEntradaJueves, 2);
+        LimitadorLongutid(txtMinutosSalidaViernes, 2);
+        LimitadorLongutid(txtHoraSalidaViernes, 2);
+        LimitadorLongutid(txtHoraEntradaViernes, 2);
+        LimitadorLongutid(txtMinutosEntradaLunes, 2);
+        
+   }
+    
+    
+    public void LimitadoresGeneralesDeEscritura(){
+        
+        LimitadoresDeLongitudGeneral();
+        RestriccionesGeneralesDeNumeros();
+        RestriccionesHoras();
+        RestriccionesMinutos();
+        
+    }
    
     
     
@@ -843,6 +916,101 @@ public class VentanaHorariosController implements Initializable {
         
         
     }
+  
+    
+    
+    
+    //Gestionador De actualizadores de horas
+
+    /**
+     *
+     * @param textfield Selecciona el textfield del que se obtienen lo datos
+     * @param dia Dia de la semana del que se esta registrando
+     * @param tipo Selecciona el tipo de filtro que se usa(Entrada[Hora y minutos], Salida[Hora y minutos] )
+     * @param Turno Seleciona el boton del que se obtendra el turno (AM o PM) para filtrar y poner en formato 24 horas
+     */
+    public void ActualizadorHorasEnBaseDeDatos(TextField textfield, String dia, Tipo tipo, MenuButton Turno){
+        
+        String Grupo = txtGrupo.getText();
+        String SemestreInicial = AsignadorDeSemestre();
+        
+        String Datos = DatosDeBD(dia, SemestreInicial, Grupo);
+        
+        //MetodoDeActualizacion
+        
+         textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != oldValue){
+                if (newValue.length() == 2) {
+
+                    String filteredValue = extractorDeCodigoSeparadoParaHoras(newValue, tipo , Datos, Turno);
+                    if(filteredValue.length() > 8){ 
+                        String SemestreFinal = AsignadorDeSemestre();
+                        System.out.println("Se envia: " + SemestreFinal);
+                        ActualizarCodigoHorabd(SemestreFinal , dia, filteredValue, Grupo);
+                    }else{
+                        System.err.println("Tas mal mijo, te salve");
+                    }
+
+                } else if (newValue.length() == 1) {
+                    System.out.println("No es de dos digitos pa");
+                }
+            }
+        });   
+    }
+    
+    
+    
+    public void ActualizadoresHorasEntrada(){
+        
+        ActualizadorHorasEnBaseDeDatos(txtHoraEntradaLunes, "Lunes", Tipo.HORA_ENTRADA, txtTurnoEntradaLunes);
+        ActualizadorHorasEnBaseDeDatos(txtHoraEntradaMartes, "Martes", Tipo.HORA_ENTRADA, txtTurnoEntradaMartes);
+        ActualizadorHorasEnBaseDeDatos(txtHoraEntradaMiercoles, "Miercoles", Tipo.HORA_ENTRADA, txtTurnoEntradaMiercoles);
+        ActualizadorHorasEnBaseDeDatos(txtHoraEntradaJueves, "Jueves", Tipo.HORA_ENTRADA, txtTurnoEntradaJueves);
+        ActualizadorHorasEnBaseDeDatos(txtHoraEntradaViernes, "Viernes", Tipo.HORA_ENTRADA, txtTurnoEntradaViernes);
+        
+    }
+    
+    public void ActualizadoresHorasSalida(){
+        
+        ActualizadorHorasEnBaseDeDatos(txtHoraSalidaLunes, "Lunes", Tipo.HORA_SALIDA, txtTurnoSalidaLunes);
+        ActualizadorHorasEnBaseDeDatos(txtHoraSalidaMartes, "Martes", Tipo.HORA_SALIDA, txtTurnoSalidaMartes);
+        ActualizadorHorasEnBaseDeDatos(txtHoraSalidaMiercoles, "Miercoles", Tipo.HORA_SALIDA, txtTurnoSalidaMiercoles);
+        ActualizadorHorasEnBaseDeDatos(txtHoraSalidaJueves, "Jueves", Tipo.HORA_SALIDA, txtTurnoSalidaJueves);
+        ActualizadorHorasEnBaseDeDatos(txtHoraSalidaViernes, "Viernes", Tipo.HORA_SALIDA, txtTurnoSalidaViernes);
+    
+    }
+    
+    public void ActualizadoresMinutosEntrada(){
+        
+        ActualizadorHorasEnBaseDeDatos(txtMinutosEntradaLunes, "Lunes", Tipo.MINUTOS_ENTRADA, txtTurnoEntradaLunes);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosEntradaMartes, "Martes", Tipo.HORA_SALIDA, txtTurnoEntradaMartes);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosEntradaMiercoles, "Miercoles", Tipo.HORA_SALIDA, txtTurnoEntradaMiercoles);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosEntradaJueves, "Jueves", Tipo.HORA_SALIDA, txtTurnoEntradaJueves);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosEntradaViernes, "Viernes", Tipo.HORA_SALIDA, txtTurnoEntradaViernes);
+    
+    }
+    
+    
+     public void ActualizadoresMinutosSalida(){
+        
+        ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaLunes, "Lunes", Tipo.MINUTOS_SALIDA, txtTurnoSalidaLunes);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaMartes, "Martes", Tipo.HORA_SALIDA, txtTurnoSalidaMartes);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaMiercoles, "Miercoles", Tipo.HORA_SALIDA, txtTurnoSalidaMiercoles);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaJueves, "Jueves", Tipo.HORA_SALIDA, txtTurnoSalidaJueves);
+        ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaViernes, "Viernes", Tipo.HORA_SALIDA, txtTurnoSalidaViernes);
+    
+    }
+     
+     
+     public void GestionadorDeActualizadores(){
+     
+            ActualizadoresHorasEntrada();
+            ActualizadoresHorasSalida();
+            ActualizadoresMinutosEntrada();
+            ActualizadoresMinutosSalida();
+     }
+    
+    
     
     
    
@@ -1034,38 +1202,7 @@ public class VentanaHorariosController implements Initializable {
     }
     
     
-   
-   //LLamado de limitadores
-   public void LimitadoresDeHoras(){
-       
-        LimitadorLongutid(txtMinutosEntradaViernes, 2);
-        LimitadorLongutid(txtMinutosSalidaLunes, 2);
-        LimitadorLongutid(txtHoraSalidaLunes, 2);
-        LimitadorLongutid(txtHoraEntradaLunes, 2);
-        LimitadorLongutid(txtMinutosSalidaMartes, 2);
-        LimitadorLongutid(txtHoraSalidaMartes, 2);
-        LimitadorLongutid(txtMinutosEntradaMartes, 2);
-        LimitadorLongutid(txtHoraEntradaMartes, 2);
-        LimitadorLongutid(txtMinutosSalidaMiercoles, 2);
-        LimitadorLongutid(txtHoraSalidaMiercoles, 2);
-        LimitadorLongutid(txtMinutosEntradaMiercoles, 2);
-        LimitadorLongutid(txtHoraEntradaMiercoles, 2);
-        LimitadorLongutid(txtMinutosSalidaJueves, 2);
-        LimitadorLongutid(txtHoraSalidaJueves, 2);
-        LimitadorLongutid(txtMinutosEntradaJueves, 2);
-        LimitadorLongutid(txtHoraEntradaJueves, 2);
-        LimitadorLongutid(txtMinutosSalidaViernes, 2);
-        LimitadorLongutid(txtHoraSalidaViernes, 2);
-        LimitadorLongutid(txtHoraEntradaViernes, 2);
-        LimitadorLongutid(txtMinutosEntradaLunes, 2);
-        
-   }
-   
-   public void limitadoresDeDatos(){
-       
-       RestrictorDeGrupo();
-       RestrictorDeGrado();
-   }
+  
    
    public void RestrictorDeGrupo(){
        
@@ -1080,23 +1217,29 @@ public class VentanaHorariosController implements Initializable {
        restringirANumeros(txtGrado);
        LimitadorLongutid(txtGrado, 1);
    }
+   
+   public void limitadoresDeDatos(){
+       
+       RestrictorDeGrupo();
+       RestrictorDeGrado();
+   
+   }
  
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
    
-        ActualizadorDeCodigosParaSemestre();
-        ActualizadorDeGrupo();
+       
         
         
         
         //--->Metodos Finales <-----
-        LimitadoresDeHoras();
         limitadoresDeDatos();
+        LimitadoresGeneralesDeEscritura();
+        GestionadorDeActualizadores();
+        ActualizadorDeCodigosParaSemestre();
+        ActualizadorDeGrupo();
         
-        
-        //---Lunes
-        MetodosLunes();
         //---> --- <-----
         
      
