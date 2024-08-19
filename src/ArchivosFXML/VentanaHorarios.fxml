@@ -172,7 +172,7 @@
          </font></TextField>
       <MenuButton fx:id="txtTurnoEntradaMiercoles" layoutX="551.0" layoutY="253.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
          <items>
-            <MenuItem fx:id="txtAmEntradaMiercoles" mnemonicParsing="false" onAction="#txtAmEntradaMiercoles" text="AM" />
+            <MenuItem fx:id="txtAmEntradaMiercoles" mnemonicParsing="false" onAction="#AmEntradaMiercoles" text="AM" />
             <MenuItem fx:id="txtPmEntradaMiercoles" mnemonicParsing="false" onAction="#PmEntradaMiercoles" text="PM" />
          </items>
          <font>
@@ -193,7 +193,7 @@
          </font></TextField>
       <MenuButton fx:id="txtTurnoSalidaJueves" layoutX="825.0" layoutY="324.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="95.0" text="PM">
          <items>
-            <MenuItem fx:id="txtAmSalidaJueves" mnemonicParsing="false" onAction="#txtAmSalidaJueves" text="AM" />
+            <MenuItem fx:id="txtAmSalidaJueves" mnemonicParsing="false" onAction="#AmSalidaJueves" text="AM" />
             <MenuItem fx:id="txtPmSalidaJueves" mnemonicParsing="false" onAction="#PmSalidaJueves" text="PM" />
          </items>
          <font>
