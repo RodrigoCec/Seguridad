@@ -19,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
+
 /**
  * FXML Controller class
  *
@@ -26,81 +27,58 @@ import javafx.util.Duration;
  */
 public class VentanaHorariosController implements Initializable {
     
+    //---------> Organizacion de Etiquetas
     
-    
-    
+        //Datos
     
     @FXML
     private TextField txtGrupo;
     @FXML
     private TextField txtGrado;
-    @FXML
-    private TextField txtMinutosEntradaViernes;
-    @FXML
-    private TextField txtMinutosSalidaLunes;
-    @FXML
-    private TextField txtHoraSalidaLunes;
+    
+    
+    // Lunes
+
+        //----------> Horas
+    
     @FXML
     private TextField txtHoraEntradaLunes;
-    private MenuButton txtTurnoEntrada;
-    @FXML
-    private MenuButton btnUniformeLunes;
-    @FXML
-    private TextField txtMinutosSalidaMartes;
-    @FXML
-    private TextField txtHoraSalidaMartes;
-    @FXML
-    private TextField txtHoraEntradaMartes;
-    @FXML
-    private MenuButton txtTurnoEntradaMartes;
-    @FXML
-    private MenuButton btnUniformeMartes;
-    @FXML
-    private TextField txtMinutosSalidaMiercoles;
-    @FXML
-    private TextField txtHoraSalidaMiercoles;
-    private TextField txtMInutosEntradaMiercoles;
-    @FXML
-    private TextField txtHoraEntradaMiercoles;
-    @FXML
-    private MenuButton txtTurnoEntradaMiercoles;
-    @FXML
-    private MenuButton btnUniformeMiercoles;
-    @FXML
-    private TextField txtMinutosSalidaJueves;
-    @FXML
-    private TextField txtHoraSalidaJueves;
-    private TextField txtMInutosEntradaJueves;
-    @FXML
-    private TextField txtHoraEntradaJueves;
-    @FXML
-    private MenuButton txtTurnoEntradaJueves;
-    @FXML
-    private MenuButton btnUniformeJueves;
-    @FXML
-    private TextField txtMinutosSalidaViernes;
-    @FXML
-    private TextField txtHoraSalidaViernes;
-    @FXML
-    private TextField txtHoraEntradaViernes;
-    @FXML
-    private MenuButton txtTurnoEntradaViernes;
-    @FXML
-    private MenuButton btnUniformeViernes;
     @FXML
     private TextField txtMinutosEntradaLunes;
     @FXML
+    private TextField txtHoraSalidaLunes;
+    @FXML
+    private TextField txtMinutosSalidaLunes;
+
+        //----------> Horarios
+    
+            // Mostradores de horario
+    
+    @FXML
     private MenuButton txtTurnoEntradaLunes;
+    @FXML
+    private MenuButton txtTurnoSalidaLunes;
+    
+            // Selectores de horario
+    
     @FXML
     private MenuItem txtAmEntradaLunes;
     @FXML
     private MenuItem txtPmEntradaLunes;
     @FXML
-    private MenuButton txtTurnoSalidaLunes;
-    @FXML
     private MenuItem txtAmSalidaLunes;
     @FXML
     private MenuItem txtPmSalidaLunes;
+
+        //----------> Uniformes
+    
+            // Mostrador de Uniformes
+    
+    @FXML
+    private MenuButton btnUniformeLunes;
+    
+            // Selector de uniformes
+    
     @FXML
     private MenuItem txtOficialLunes;
     @FXML
@@ -111,70 +89,50 @@ public class VentanaHorariosController implements Initializable {
     private MenuItem txtEnfermeriaLunes;
     @FXML
     private MenuItem txtPuericulturaLunes;
+
+
+    // Martes
+
+        //----------> Horas
+
+    @FXML
+    private TextField txtHoraEntradaMartes;
+    @FXML
+    private TextField txtMinutosEntradaMartes;
+    @FXML
+    private TextField txtHoraSalidaMartes;
+    @FXML
+    private TextField txtMinutosSalidaMartes;
+
+        //----------> Horarios
+    
+            // Mostradores de horario
+    
+    @FXML
+    private MenuButton txtTurnoEntradaMartes;
     @FXML
     private MenuButton txtTurnoSalidaMartes;
-    @FXML
-    private MenuItem txtAmSalidaMartes;
-    @FXML
-    private MenuItem txtPmSalidaMartes;
+    
+            // Selectores de horario
+    
     @FXML
     private MenuItem txtAmEntradaMartes;
     @FXML
     private MenuItem txtPmEntradaMartes;
     @FXML
-    private MenuButton txtTurnoSalidaMiercoles;
+    private MenuItem txtAmSalidaMartes;
     @FXML
-    private MenuItem txtAmSalidaMiercoles;
+    private MenuItem txtPmSalidaMartes;
+
+        //----------> Uniformes
+    
+            // Mostrador de Uniformes
+    
     @FXML
-    private MenuItem txtPmSalidaMiercoles;
-    @FXML
-    private TextField txtMinutosEntradaMiercoles;
-    @FXML
-    private MenuItem txtAmEntradaMiercoles;
-    @FXML
-    private MenuItem txtPmEntradaMiercoles;
-    @FXML
-    private MenuButton txtTurnoSalidaJueves;
-    @FXML
-    private MenuItem txtAmSalidaJueves;
-    @FXML
-    private MenuItem txtPmSalidaJueves;
-    @FXML
-    private TextField txtMinutosEntradaJueves;
-    @FXML
-    private MenuItem txtAmEntradaJueves;
-    @FXML
-    private MenuItem txtPmEntradaJueves;
-    @FXML
-    private MenuButton txtTurnoSalidaViernes;
-    @FXML
-    private MenuItem txtAmSalidaViernes;
-    @FXML
-    private MenuItem txtPmSalidaViernes;
-    @FXML
-    private MenuItem txtAmEntradaViernes;
-    @FXML
-    private MenuItem txtPmEntradaViernes;
-    @FXML
-    private MenuItem txtOficialJueves;
-    @FXML
-    private MenuItem txtDeportivoJueves;
-    @FXML
-    private MenuItem txtAlimentosJueves;
-    @FXML
-    private MenuItem txtEnfermeriaJueves;
-    @FXML
-    private MenuItem txtPuericulturaJueves;
-    @FXML
-    private MenuItem txtOficialMiercoles;
-    @FXML
-    private MenuItem txtDeportivoMiercoles;
-    @FXML
-    private MenuItem txtAlimentosMiercoles;
-    @FXML
-    private MenuItem txtEnfermeriaMiercoles;
-    @FXML
-    private MenuItem txtPuericulturaMiercoles;
+    private MenuButton btnUniformeMartes;
+    
+            // Selector de uniformes
+    
     @FXML
     private MenuItem txtOficialMartes;
     @FXML
@@ -185,6 +143,158 @@ public class VentanaHorariosController implements Initializable {
     private MenuItem txtEnfermeriaMartes;
     @FXML
     private MenuItem txtPuericulturaMartes;
+
+
+// Miércoles
+
+        //----------> Horas
+
+    @FXML
+    private TextField txtHoraEntradaMiercoles;
+    @FXML
+    private TextField txtMinutosEntradaMiercoles;
+    @FXML
+    private TextField txtHoraSalidaMiercoles;
+    @FXML
+    private TextField txtMinutosSalidaMiercoles;
+
+        //----------> Horarios
+    
+            // Mostradores de horario
+    
+    @FXML
+    private MenuButton txtTurnoEntradaMiercoles;
+    @FXML
+    private MenuButton txtTurnoSalidaMiercoles;
+    
+            // Selectores de horario
+    
+    @FXML
+    private MenuItem txtAmEntradaMiercoles;
+    @FXML
+    private MenuItem txtPmEntradaMiercoles;
+    @FXML
+    private MenuItem txtAmSalidaMiercoles;
+    @FXML
+    private MenuItem txtPmSalidaMiercoles;
+
+        //----------> Uniformes
+    
+            // Mostrador de Uniformes
+    
+    @FXML
+    private MenuButton btnUniformeMiercoles;
+    
+            // Selector de uniformes
+    
+    @FXML
+    private MenuItem txtOficialMiercoles;
+    @FXML
+    private MenuItem txtDeportivoMiercoles;
+    @FXML
+    private MenuItem txtAlimentosMiercoles;
+    @FXML
+    private MenuItem txtEnfermeriaMiercoles;
+    @FXML
+    private MenuItem txtPuericulturaMiercoles;
+
+
+// Jueves
+
+        //----------> Horas
+
+    @FXML
+    private TextField txtHoraEntradaJueves;
+    @FXML
+    private TextField txtMinutosEntradaJueves;
+    @FXML
+    private TextField txtHoraSalidaJueves;
+    @FXML
+    private TextField txtMinutosSalidaJueves;
+
+        //----------> Horarios
+    
+            // Mostradores de horario
+    
+    @FXML
+    private MenuButton txtTurnoEntradaJueves;
+    @FXML
+    private MenuButton txtTurnoSalidaJueves;
+    
+            // Selectores de horario
+    
+    @FXML
+    private MenuItem txtAmEntradaJueves;
+    @FXML
+    private MenuItem txtPmEntradaJueves;
+    @FXML
+    private MenuItem txtAmSalidaJueves;
+    @FXML
+    private MenuItem txtPmSalidaJueves;
+
+        //----------> Uniformes
+    
+            // Mostrador de Uniformes
+    
+    @FXML
+    private MenuButton btnUniformeJueves;
+    
+            // Selector de uniformes
+    
+    @FXML
+    private MenuItem txtOficialJueves;
+    @FXML
+    private MenuItem txtDeportivoJueves;
+    @FXML
+    private MenuItem txtAlimentosJueves;
+    @FXML
+    private MenuItem txtEnfermeriaJueves;
+    @FXML
+    private MenuItem txtPuericulturaJueves;
+
+
+// Viernes
+
+        //----------> Horas
+
+    @FXML
+    private TextField txtHoraEntradaViernes;
+    @FXML
+    private TextField txtMinutosEntradaViernes;
+    @FXML
+    private TextField txtHoraSalidaViernes;
+    @FXML
+    private TextField txtMinutosSalidaViernes;
+
+        //----------> Horarios
+    
+            // Mostradores de horario
+    
+    @FXML
+    private MenuButton txtTurnoEntradaViernes;
+    @FXML
+    private MenuButton txtTurnoSalidaViernes;
+    
+            // Selectores de horario
+    
+    @FXML
+    private MenuItem txtAmEntradaViernes;
+    @FXML
+    private MenuItem txtPmEntradaViernes;
+    @FXML
+    private MenuItem txtAmSalidaViernes;
+    @FXML
+    private MenuItem txtPmSalidaViernes;
+
+        //----------> Uniformes
+    
+            // Mostrador de Uniformes
+    
+    @FXML
+    private MenuButton btnUniformeViernes;
+    
+            // Selector de uniformes
+    
     @FXML
     private MenuItem txtOficialViernes;
     @FXML
@@ -192,10 +302,8 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private MenuItem txtAlimentosViernes;
     @FXML
-    private MenuItem txtEnfermeriaViernes;
-    @FXML
-    private MenuItem txtPuericulturaViernes;
-    
+
+
     
     // Datos de la Conexion a Base de datos
     private static final String bd = "basedatosprueba";
@@ -218,8 +326,7 @@ public class VentanaHorariosController implements Initializable {
     }
     return conexion;
     }
-    @FXML
-    private TextField txtMinutosEntradaMartes;
+    
   
             //Metodos para obtener datos   
     public String DatosDeBD(String Dia, String Semestre, String Grupo) {
@@ -244,9 +351,9 @@ public class VentanaHorariosController implements Initializable {
 
         return CodigoHorario;
     }
-
+    
             //MetodoActualizador De Base de datos;
-    private void ActualizarCodigoHorabd(String Semestre,String dia, String newValue, String grupo) {
+    private void ActualizarCodigoHorabd(String Semestre, String dia, String newValue, String grupo) {
         String query = "UPDATE " + Semestre +" SET " + dia + " = ? WHERE Grupo = ?";
         try (Connection connection = ConexionBd();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -260,10 +367,7 @@ public class VentanaHorariosController implements Initializable {
         }
     }
 
-    
-    
     // Empiezan convertidores
-    
             //Convertidores de tiempo
     public String CambioDeFormatoHorario(String Hora){
         boolean cero = false;
@@ -290,8 +394,7 @@ public class VentanaHorariosController implements Initializable {
             return "00"; // valor por defecto en caso de error
         }
     }
-     
-  
+
     public String Desconvertidor(String Hora, String Horario){
         
         int hora = Integer.parseInt(Hora);
@@ -316,9 +419,6 @@ public class VentanaHorariosController implements Initializable {
        
     }
     
-    
-    
-    
     public void FormatoAmyPm(String Hora, MenuButton txtTurno){
         //Ayuda a identificar y colocar Am o pm segun el horario devido a las diferencias de 12 y 24 horas que se trabajan
         //Solo muestra apartir de iniciar el programa no cambia de acuerdo a intereacciones
@@ -330,13 +430,8 @@ public class VentanaHorariosController implements Initializable {
             txtTurno.setText("PM");
         }
     }
-    
-    
-    
-  
-  
-  
-    //Metodo para sacar el semestre segun el grupo
+
+            //Metodo para sacar el semestre segun el grupo
     public String AsignadorDeSemestre(){
         String Semestre = txtGrado.getText(); 
         
@@ -372,13 +467,9 @@ public class VentanaHorariosController implements Initializable {
         Campo.setText(time);       
     
     }
-    
-    
-    
-    
 
-    //Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)
-    
+
+            //Metodos de Logica(Que separan, asignan y gestionan Cosas que no se ven graficamente)    
     public String[] SeparadorHoraMinutos(String Codigo, Tipo tipo){
         
         if (Codigo == null || Codigo.length() < 5) {
@@ -408,7 +499,6 @@ public class VentanaHorariosController implements Initializable {
         return new String[]{Hora, Minutos};
         
     }
-
             //Supuesto Metodo De Separacion y reconocimiento de codigo para su remplazo y actualizacion
     public enum Tipo {
         
@@ -417,8 +507,7 @@ public class VentanaHorariosController implements Initializable {
         HORA_SALIDA,
         MINUTOS_SALIDA  
     }
-    
-    
+
     public String extractorDeCodigoSeparadoParaBotones(TextField time, Tipo tipo, String codigo, MenuItem amPmButton) {
         String anterior = "";
         String editor = "";
@@ -547,8 +636,7 @@ public class VentanaHorariosController implements Initializable {
 
         return codigoCompleto;
     }
-    
-    
+
     public enum DiasSemana {
         
         LUNES,
@@ -557,9 +645,7 @@ public class VentanaHorariosController implements Initializable {
         JUEVES,
         VIERNES
     }
-    
-  
-    
+
     public void RestriccionesGeneralesDeNumeros(){
         
         restringirANumeros(txtMinutosEntradaViernes);
@@ -633,7 +719,7 @@ public class VentanaHorariosController implements Initializable {
         
     }
     
-      public void LimitadoresDeLongitudGeneral(){
+    public void LimitadoresDeLongitudGeneral(){
        
         LimitadorLongutid(txtMinutosEntradaViernes, 2);
         LimitadorLongutid(txtMinutosSalidaLunes, 2);
@@ -658,7 +744,6 @@ public class VentanaHorariosController implements Initializable {
         
    }
     
-    
     public void LimitadoresGeneralesDeEscritura(){
         
         LimitadoresDeLongitudGeneral();
@@ -667,10 +752,6 @@ public class VentanaHorariosController implements Initializable {
         RestriccionesMinutos();
         
     }
-   
-    
-    
-   
    
     private void restringirAPatron(TextField textField, String patron) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -792,16 +873,11 @@ public class VentanaHorariosController implements Initializable {
             }
         });
     }
-   
-    
-    
-    
-    
-    
-    
-    //--------> Sistema de gestion y control de asignacion de semtres
 
     
+    
+        //--------> Sistema de gestion y control de asignacion de semtres
+
     public void ActualizadorDeCodigosParaSemestre(){
         String grupo = txtGrupo.getText();
         String SemestreInicial = AsignadorDeSemestre();
@@ -817,8 +893,7 @@ public class VentanaHorariosController implements Initializable {
         });
     }
     
-     //CodigoDeActualizacion de Grupo
-    
+            //CodigoDeActualizacion de Grupo
     public void ActualizadorDeGrupo(){
         String grupo = txtGrupo.getText();
         String grado = AsignadorDeSemestre();
@@ -838,7 +913,6 @@ public class VentanaHorariosController implements Initializable {
         });
     }
    
-    
     private boolean verificarDatosNoNulosNiVacios(String datos) {
         if (datos == null || datos.isEmpty()) {
             System.err.println("Error: Datos de la base de datos son nulos o vacíos");
@@ -862,7 +936,6 @@ public class VentanaHorariosController implements Initializable {
             return null;
         }
     }
-
     
     private void procesarHorario(String dia, String semestre, String grupo,TextField txtHoraEntrada, TextField txtMinutosEntrada, MenuButton txtTurnoEntrada, Tipo tipoEntrada, TextField txtHoraSalida, TextField txtMinutosSalida, MenuButton txtTurnoSalida, Tipo tipoSalida) {
         // Obtener datos para la entrada
@@ -886,7 +959,6 @@ public class VentanaHorariosController implements Initializable {
         MostradorEnPantalla(txtMinutosSalida, fechasSalida[1]);
     }
 
-
     public void ActualizadorDeHoras(String Semestre, String Grupo){
        
         // Lunes
@@ -909,19 +981,10 @@ public class VentanaHorariosController implements Initializable {
         procesarHorario("Viernes", Semestre, Grupo, txtHoraEntradaViernes, txtMinutosEntradaViernes, txtTurnoEntradaViernes, Tipo.HORA_ENTRADA, 
                         txtHoraSalidaViernes, txtMinutosSalidaViernes, txtTurnoSalidaViernes, Tipo.HORA_SALIDA);
 
-        
-        
-        
-        
-        
-        
     }
-  
-    
-    
-    
-    //Gestionador De actualizadores de horas
 
+    
+        //Gestionador De actualizadores de horas
     /**
      *
      * @param textfield Selecciona el textfield del que se obtienen lo datos
@@ -958,8 +1021,6 @@ public class VentanaHorariosController implements Initializable {
         });   
     }
     
-    
-    
     public void ActualizadoresHorasEntrada(){
         
         ActualizadorHorasEnBaseDeDatos(txtHoraEntradaLunes, "Lunes", Tipo.HORA_ENTRADA, txtTurnoEntradaLunes);
@@ -990,7 +1051,6 @@ public class VentanaHorariosController implements Initializable {
     
     }
     
-    
      public void ActualizadoresMinutosSalida(){
         
         ActualizadorHorasEnBaseDeDatos(txtMinutosSalidaLunes, "Lunes", Tipo.MINUTOS_SALIDA, txtTurnoSalidaLunes);
@@ -1001,7 +1061,6 @@ public class VentanaHorariosController implements Initializable {
     
     }
      
-     
      public void GestionadorDeActualizadores(){
      
             ActualizadoresHorasEntrada();
@@ -1010,35 +1069,140 @@ public class VentanaHorariosController implements Initializable {
             ActualizadoresMinutosSalida();
      }
     
-    
-    
-    
-   
+     
+     
+    //ReorganizadorDeFormatos
+     public void ActualizacionDeHorariosPorTurnos(String Dia, TextField Hora, Tipo tipo, MenuItem Turnos){
+         
+        String Grupo = txtGrupo.getText();
+        String semestre = AsignadorDeSemestre();
+        String Datos = DatosDeBD(Dia, semestre, Grupo);
+        String Codigo = extractorDeCodigoSeparadoParaBotones(Hora, tipo, Datos, Turnos);
+        System.out.println("con el boton Am se manda esto: " + Codigo);
+        ActualizarCodigoHorabd(semestre, "Lunes", Codigo, Grupo);
+     }
 
-    //Acciones sin asignar:
-     @FXML
+  
+    //---------> Botones de turnos
+        
+        //Lunes
+    
+    @FXML
     private void AmEntradaLunes(ActionEvent event) {
+        
+        
+        
         
         txtTurnoEntradaLunes.setText(txtAmEntradaLunes.getText());
         
     }
-
+    
     @FXML
     private void PmEntradaLunes(ActionEvent event) {
+      
         
-        txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());    
+        txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());  
         
     }
+    
     @FXML
     private void AmSalidaLunes(ActionEvent event) {
+        
+        txtTurnoSalidaLunes.setText(txtPmSalidaLunes.getText());  
+        
     }
 
     @FXML
     private void PmSalidaLunes(ActionEvent event) {
+        
+        txtTurnoSalidaLunes.setText(txtPmSalidaLunes.getText()); 
+        
+    }
+
+   
+        
+        //Martes
+    
+    @FXML
+    private void AmEntradaMartes(ActionEvent event) {
     }
 
     @FXML
-    private void btnOficialLunes(ActionEvent event) {
+    private void PmEntradaMartes(ActionEvent event) {
+    }
+    
+    @FXML
+    private void AmSalidaMartes(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmSalidaMartes(ActionEvent event) {
+    }
+    
+        //Miercoles
+    
+    @FXML
+    private void txtAmEntradaMiercoles(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmEntradaMiercoles(ActionEvent event) {
+    }
+    
+    @FXML
+    private void AmSalidaMiercoles(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmSalidaMiercoles(ActionEvent event) {
+    }
+    
+    
+        //Jueves
+    
+    @FXML
+    private void AmEntradaJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmEntradaJueves(ActionEvent event) {
+    }
+    
+    @FXML
+    private void txtAmSalidaJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmSalidaJueves(ActionEvent event) {
+    }
+    
+    
+        //Viernes
+    
+    @FXML
+    private void AmEntradaViernes(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmEntradaViernes(ActionEvent event) {
+    }
+    
+    @FXML
+    private void AmSalidaViernes(ActionEvent event) {
+    }
+
+    @FXML
+    private void PmSalidaViernes(ActionEvent event) {
+    }
+
+
+    
+    //---------> Uniformes
+        
+        //Lunes
+    
+    @FXML
+    private void btnOficialLunes(ActionEvent event) { 
     }
 
     @FXML
@@ -1056,111 +1220,9 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private void btnPuericulturaLunes(ActionEvent event) {
     }
-
-    @FXML
-    private void AmSalidaMartes(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmSalida(ActionEvent event) {
-    }
-
-    @FXML
-    private void AmEntradaMartes(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmEntradaMartes(ActionEvent event) {
-    }
-
-    @FXML
-    private void AmSalidaMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmSalidaMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void txtAmEntradaMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmEntradaMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void txtAmSalidaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmSalidaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void txtAmEntradaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmEntradaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void AmSalidaViernes(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmSalidaViernes(ActionEvent event) {
-    }
-
-    @FXML
-    private void txtAmEntradaViernes(ActionEvent event) {
-    }
-
-    @FXML
-    private void PmEntradaViernes(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnOficialJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnDeportivoJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnAlimentosJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnEnfermeriaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnPuericulturaJueves(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnOficialMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnDeportivoMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnAlimentosMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnEnfermeriaMiercoles(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnPuericulturaMiercoles(ActionEvent event) {
-    }
-
+        
+        //Martes
+    
     @FXML
     private void btnOficialMartes(ActionEvent event) {
     }
@@ -1180,7 +1242,53 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private void btnPuericulturaMartes(ActionEvent event) {
     }
+    
+        //Miercoles
+    
+    @FXML
+    private void btnOficialMiercoles(ActionEvent event) {
+    }
 
+    @FXML
+    private void btnDeportivoMiercoles(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnAlimentosMiercoles(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnEnfermeriaMiercoles(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnPuericulturaMiercoles(ActionEvent event) {
+    }
+    
+        //Jueves
+    
+    @FXML
+    private void btnOficialJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnDeportivoJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnAlimentosJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnEnfermeriaJueves(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnPuericulturaJueves(ActionEvent event) {
+    }
+    
+        //Viernes
+    
     @FXML
     private void btnOficialViernes(ActionEvent event) {
     }
@@ -1202,7 +1310,9 @@ public class VentanaHorariosController implements Initializable {
     }
     
     
-  
+    
+    
+    
    
    public void RestrictorDeGrupo(){
        
@@ -1241,9 +1351,6 @@ public class VentanaHorariosController implements Initializable {
         ActualizadorDeGrupo();
         
         //---> --- <-----
-        
-     
-        
     
         //Conexion a base de datos
         ConexionBd();
