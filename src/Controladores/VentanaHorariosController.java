@@ -302,6 +302,9 @@ public class VentanaHorariosController implements Initializable {
     @FXML
     private MenuItem txtAlimentosViernes;
     @FXML
+    private MenuItem txtEnfermeriaViernes;
+    @FXML
+    private MenuItem txtPuericulturaViernes; 
 
 
     
@@ -1072,50 +1075,190 @@ public class VentanaHorariosController implements Initializable {
      
      
     //ReorganizadorDeFormatos
-     public void ActualizacionDeHorariosPorTurnos(String Dia, TextField Hora, Tipo tipo, MenuItem Turnos){
+    public void ActualizacionDeHorariosPorTurnos(String Dia, TextField Hora, Tipo tipo, MenuItem Turnos){
          
         String Grupo = txtGrupo.getText();
         String semestre = AsignadorDeSemestre();
         String Datos = DatosDeBD(Dia, semestre, Grupo);
         String Codigo = extractorDeCodigoSeparadoParaBotones(Hora, tipo, Datos, Turnos);
         System.out.println("con el boton Am se manda esto: " + Codigo);
-        ActualizarCodigoHorabd(semestre, "Lunes", Codigo, Grupo);
+        
+        if(Codigo.length() > 8){
+            ActualizarCodigoHorabd(semestre, "Lunes", Codigo, Grupo);
+        }else {
+            System.out.println("Error no cuenta con la longitud necesaria no se actualizo");
+        }
+        
      }
 
-  
-    //---------> Botones de turnos
+    public void MostradorDeRespuestasBotones(MenuButton Asignador, MenuItem Seleccionador){
+    
+        Asignador.setText(Seleccionador.getText());
+    }
+    
+    
+    //Gestionador De Uniformes
+    
+    
+    public void ActualizadorDeCodigoParaUniformes(String Dia, MenuItem SelectorUniforme){
+        String Grupo = txtGrupo.getText();
+        String semestre = AsignadorDeSemestre();
+        String Datos = DatosDeBD(Dia, semestre, Grupo);
         
+        String codigoRestante = Datos.substring(1);       
+        String tipoUniforme = SelectorUniforme.getText();      
+        
+        System.out.println("Codigo Restante: " + codigoRestante);
+        
+        
+        String CodigoAsignado = "1";   
+        switch(tipoUniforme){
+            
+            case "Oficial":
+                
+                CodigoAsignado = "1";
+                break;
+            case "Deportivo":
+                
+                CodigoAsignado = "2";
+                break;
+            case "Alimentos":
+                
+                CodigoAsignado = "3";
+                break;
+            case "Enfermeria":
+                
+                CodigoAsignado = "4";
+                break;
+            case "Puericultura":
+                
+                CodigoAsignado = "5";
+                break;
+        }
+        
+        String CodigoGeneral = CodigoAsignado + codigoRestante;
+        
+        
+        
+        if(CodigoGeneral.length() >= 9){
+            ActualizarCodigoHorabd(semestre, Dia, CodigoGeneral, Grupo);
+        }else{
+        
+            System.err.println("El codigo no es mayor a 9 ");
+        }
+    }
+    
+    public void ActualizadorDeUniformes(String Dia, MenuButton Asignador, String Grado){
+        
+        String Grupo = txtGrupo.getText();
+        String Datos = DatosDeBD(Dia, Grado, Grupo);
+        
+        char codigoUniforme = Datos.charAt(0);   
+        
+        String CodigoAsignado = "1";   
+        switch(codigoUniforme){
+            
+            case '1':
+                
+                CodigoAsignado = "Oficial";
+                break;
+            case '2':
+                
+                CodigoAsignado = "Deportivo";
+                break;
+            case '3':
+                
+                CodigoAsignado = "Alimentos";
+                break;
+            case '4':
+                
+                CodigoAsignado = "Enfermeria";
+                break;
+            case '5':
+                
+                CodigoAsignado = "Puericultura";
+                
+                break;
+        }
+        
+        System.err.println("Se le asigna: " + CodigoAsignado);
+        Asignador.setText(CodigoAsignado);
+    }
+    
+    public void AsigadorDeActualizacionUnifrmes(){
+        
+        String Grado = AsignadorDeSemestre();
+        
+        ActualizadorDeUniformes("Lunes", btnUniformeLunes, Grado);
+        ActualizadorDeUniformes("Martes", btnUniformeMartes, Grado);
+        ActualizadorDeUniformes("Miercoles", btnUniformeMiercoles, Grado);
+        ActualizadorDeUniformes("Jueves", btnUniformeJueves, Grado);
+        ActualizadorDeUniformes("Viernes", btnUniformeViernes, Grado);
+        
+        txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
+            
+            if(oldValue != newValue){
+                String GradoFinal = AsignadorDeSemestre();
+                
+                ActualizadorDeUniformes("Lunes", btnUniformeLunes, GradoFinal);
+                ActualizadorDeUniformes("Martes", btnUniformeMartes, GradoFinal);
+                ActualizadorDeUniformes("Miercoles", btnUniformeMiercoles, GradoFinal);
+                ActualizadorDeUniformes("Jueves", btnUniformeJueves, GradoFinal);
+                ActualizadorDeUniformes("Viernes", btnUniformeViernes, GradoFinal);
+            }
+        });
+        
+        txtGrupo.textProperty().addListener((observable, oldValue, newValue) -> {
+            
+            if(oldValue != newValue){
+                String GradoFinal = AsignadorDeSemestre();
+                
+                ActualizadorDeUniformes("Lunes", btnUniformeLunes, GradoFinal);
+                ActualizadorDeUniformes("Martes", btnUniformeMartes, GradoFinal);
+                ActualizadorDeUniformes("Miercoles", btnUniformeMiercoles, GradoFinal);
+                ActualizadorDeUniformes("Jueves", btnUniformeJueves, GradoFinal);
+                ActualizadorDeUniformes("Viernes", btnUniformeViernes, GradoFinal);
+            }
+        });
+        
+    }
+    
+    
+    
+    
+    //---------> Botones de turnos
+    
+    
         //Lunes
     
     @FXML
     private void AmEntradaLunes(ActionEvent event) {
         
-        
-        
-        
-        txtTurnoEntradaLunes.setText(txtAmEntradaLunes.getText());
-        
+        ActualizacionDeHorariosPorTurnos("Lunes", txtHoraEntradaLunes, Tipo.HORA_ENTRADA, txtAmEntradaLunes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaLunes, txtAmEntradaLunes);
     }
     
     @FXML
     private void PmEntradaLunes(ActionEvent event) {
       
-        
-        txtTurnoEntradaLunes.setText(txtPmEntradaLunes.getText());  
+        ActualizacionDeHorariosPorTurnos("Lunes", txtHoraEntradaLunes, Tipo.HORA_ENTRADA, txtPmEntradaLunes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaLunes, txtPmEntradaLunes);
         
     }
     
     @FXML
     private void AmSalidaLunes(ActionEvent event) {
         
-        txtTurnoSalidaLunes.setText(txtPmSalidaLunes.getText());  
+        ActualizacionDeHorariosPorTurnos("Lunes", txtHoraSalidaLunes, Tipo.HORA_SALIDA, txtAmSalidaLunes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaLunes, txtAmSalidaLunes); 
         
     }
 
     @FXML
     private void PmSalidaLunes(ActionEvent event) {
         
-        txtTurnoSalidaLunes.setText(txtPmSalidaLunes.getText()); 
+        ActualizacionDeHorariosPorTurnos("Lunes", txtHoraSalidaLunes, Tipo.HORA_SALIDA, txtPmSalidaLunes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaLunes, txtPmSalidaLunes); 
         
     }
 
@@ -1125,36 +1268,67 @@ public class VentanaHorariosController implements Initializable {
     
     @FXML
     private void AmEntradaMartes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Martes", txtHoraEntradaMartes, Tipo.HORA_ENTRADA, txtAmEntradaMartes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaMartes, txtAmEntradaMartes);
+        
     }
 
     @FXML
     private void PmEntradaMartes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Martes", txtHoraEntradaMartes, Tipo.HORA_ENTRADA, txtPmEntradaMartes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaMartes, txtPmEntradaMartes);
+        
     }
     
     @FXML
     private void AmSalidaMartes(ActionEvent event) {
+    
+        ActualizacionDeHorariosPorTurnos("Martes", txtHoraSalidaMartes, Tipo.HORA_SALIDA, txtAmSalidaMartes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaMartes, txtAmSalidaMartes);
+        
     }
 
     @FXML
     private void PmSalidaMartes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Martes", txtHoraSalidaMartes,Tipo.HORA_SALIDA, txtPmSalidaMartes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaMartes, txtPmSalidaMartes);
+        
     }
     
         //Miercoles
     
     @FXML
-    private void txtAmEntradaMiercoles(ActionEvent event) {
+    private void AmEntradaMiercoles(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Miercoles", txtHoraEntradaMiercoles, Tipo.HORA_ENTRADA, txtAmEntradaMiercoles);
+        MostradorDeRespuestasBotones(txtTurnoEntradaMiercoles, txtAmEntradaMiercoles);
     }
 
     @FXML
     private void PmEntradaMiercoles(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Miercoles", txtHoraEntradaMiercoles, Tipo.HORA_ENTRADA, txtPmEntradaMiercoles);
+        MostradorDeRespuestasBotones(txtTurnoEntradaMiercoles, txtPmEntradaMiercoles);
+    
     }
     
     @FXML
     private void AmSalidaMiercoles(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Miercoles", txtHoraSalidaMiercoles, Tipo.HORA_SALIDA, txtAmSalidaMiercoles);
+        MostradorDeRespuestasBotones(txtTurnoSalidaMiercoles, txtAmSalidaMiercoles);
+        
     }
 
     @FXML
     private void PmSalidaMiercoles(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Miercoles", txtHoraSalidaMiercoles, Tipo.HORA_SALIDA, txtPmSalidaMiercoles);
+        MostradorDeRespuestasBotones(txtTurnoSalidaMiercoles, txtPmSalidaMiercoles);
+        
     }
     
     
@@ -1162,18 +1336,33 @@ public class VentanaHorariosController implements Initializable {
     
     @FXML
     private void AmEntradaJueves(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Jueves", txtHoraEntradaJueves, Tipo.HORA_ENTRADA, txtAmEntradaJueves);
+        MostradorDeRespuestasBotones(txtTurnoEntradaJueves, txtAmEntradaJueves);
+        
     }
 
     @FXML
     private void PmEntradaJueves(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Jueves", txtHoraEntradaJueves, Tipo.HORA_ENTRADA, txtPmEntradaJueves);
+        MostradorDeRespuestasBotones(txtTurnoEntradaJueves, txtPmEntradaJueves);
+        
     }
     
     @FXML
-    private void txtAmSalidaJueves(ActionEvent event) {
+    private void AmSalidaJueves(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Jueves", txtHoraSalidaJueves, Tipo.HORA_SALIDA, txtAmSalidaJueves);
+        MostradorDeRespuestasBotones(txtTurnoSalidaJueves, txtAmSalidaJueves);
     }
 
     @FXML
     private void PmSalidaJueves(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Jueves", txtHoraSalidaJueves, Tipo.HORA_SALIDA, txtPmSalidaJueves);
+        MostradorDeRespuestasBotones(txtTurnoSalidaJueves, txtPmSalidaJueves);
+        
     }
     
     
@@ -1181,18 +1370,34 @@ public class VentanaHorariosController implements Initializable {
     
     @FXML
     private void AmEntradaViernes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Viernes", txtHoraEntradaViernes, Tipo.HORA_ENTRADA, txtAmEntradaViernes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaViernes, txtAmEntradaViernes);
+        
     }
 
     @FXML
     private void PmEntradaViernes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Viernes", txtHoraEntradaViernes, Tipo.HORA_ENTRADA, txtPmEntradaViernes);
+        MostradorDeRespuestasBotones(txtTurnoEntradaViernes, txtPmEntradaViernes);
+        
     }
     
     @FXML
     private void AmSalidaViernes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Viernes", txtHoraSalidaViernes, Tipo.HORA_SALIDA, txtAmSalidaViernes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaViernes, txtAmSalidaViernes);
+        
     }
 
     @FXML
     private void PmSalidaViernes(ActionEvent event) {
+        
+        ActualizacionDeHorariosPorTurnos("Viernes", txtHoraSalidaViernes, Tipo.HORA_SALIDA, txtPmSalidaViernes);
+        MostradorDeRespuestasBotones(txtTurnoSalidaViernes, txtPmSalidaViernes);
+        
     }
 
 
@@ -1203,110 +1408,199 @@ public class VentanaHorariosController implements Initializable {
     
     @FXML
     private void btnOficialLunes(ActionEvent event) { 
+        
+        ActualizadorDeCodigoParaUniformes("Lunes", txtOficialLunes);
+        MostradorDeRespuestasBotones(btnUniformeLunes, txtOficialLunes);
+        
     }
 
     @FXML
     private void btnDeportivoLunes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Lunes", txtDeportivoLunes);
+        MostradorDeRespuestasBotones(btnUniformeLunes, txtDeportivoLunes);
     }
 
     @FXML
     private void btnAlimentosLunes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Lunes", txtAlimentosLunes);
+        MostradorDeRespuestasBotones(btnUniformeLunes, txtAlimentosLunes);
     }
 
     @FXML
     private void btnEnfermeriaLunes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Lunes", txtEnfermeriaLunes);
+        MostradorDeRespuestasBotones(btnUniformeLunes, txtEnfermeriaLunes);
     }
 
     @FXML
     private void btnPuericulturaLunes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Lunes", txtPuericulturaLunes);
+        MostradorDeRespuestasBotones(btnUniformeLunes, txtPuericulturaLunes);
     }
         
         //Martes
     
     @FXML
     private void btnOficialMartes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Martes", txtOficialMartes);
+        MostradorDeRespuestasBotones(btnUniformeMartes, txtOficialMartes);
+        
     }
 
     @FXML
     private void btnDeportivoMartes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Martes", txtDeportivoMartes);
+        MostradorDeRespuestasBotones(btnUniformeMartes, txtDeportivoMartes);
     }
 
     @FXML
     private void btnAlimentosMartes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Martes", txtAlimentosMartes);
+        MostradorDeRespuestasBotones(btnUniformeMartes, txtAlimentosMartes);
     }
 
     @FXML
     private void btnEnfermeriaMartes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Martes", txtEnfermeriaMartes);
+        MostradorDeRespuestasBotones(btnUniformeMartes, txtEnfermeriaMartes);
     }
 
     @FXML
     private void btnPuericulturaMartes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Martes", txtPuericulturaMartes);
+        MostradorDeRespuestasBotones(btnUniformeMartes, txtPuericulturaMartes);
+        
     }
     
         //Miercoles
     
     @FXML
     private void btnOficialMiercoles(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Miercoles", txtOficialMiercoles);
+        MostradorDeRespuestasBotones(btnUniformeMiercoles, txtOficialMiercoles);
     }
 
     @FXML
     private void btnDeportivoMiercoles(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Miercoles", txtDeportivoMiercoles);
+        MostradorDeRespuestasBotones(btnUniformeMiercoles, txtDeportivoMiercoles);
+        
     }
 
     @FXML
     private void btnAlimentosMiercoles(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Miercoles", txtAlimentosMiercoles);
+        MostradorDeRespuestasBotones(btnUniformeMiercoles, txtAlimentosMiercoles);
+        
     }
 
     @FXML
     private void btnEnfermeriaMiercoles(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Miercoles", txtEnfermeriaMiercoles);
+        MostradorDeRespuestasBotones(btnUniformeMiercoles, txtEnfermeriaMiercoles);
+        
     }
 
     @FXML
     private void btnPuericulturaMiercoles(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Miercoles", txtPuericulturaMiercoles);
+        MostradorDeRespuestasBotones(btnUniformeMiercoles, txtPuericulturaMiercoles);
+        
     }
     
         //Jueves
     
     @FXML
     private void btnOficialJueves(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Jueves", txtOficialJueves);
+        MostradorDeRespuestasBotones(btnUniformeJueves, txtOficialJueves);
+        
     }
 
     @FXML
     private void btnDeportivoJueves(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Jueves", txtDeportivoJueves);
+        MostradorDeRespuestasBotones(btnUniformeJueves, txtDeportivoJueves);
+        
     }
 
     @FXML
     private void btnAlimentosJueves(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Jueves", txtAlimentosJueves);
+        MostradorDeRespuestasBotones(btnUniformeJueves, txtAlimentosJueves);
+        
     }
 
     @FXML
     private void btnEnfermeriaJueves(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Jueves", txtEnfermeriaJueves);
+        MostradorDeRespuestasBotones(btnUniformeJueves, txtEnfermeriaJueves);
+        
     }
 
     @FXML
     private void btnPuericulturaJueves(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Jueves", txtPuericulturaJueves);
+        MostradorDeRespuestasBotones(btnUniformeJueves, txtPuericulturaJueves);
+        
     }
     
         //Viernes
     
     @FXML
     private void btnOficialViernes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Viernes", txtOficialViernes);
+        MostradorDeRespuestasBotones(btnUniformeViernes, txtOficialViernes);
     }
 
     @FXML
     private void btnDeportivoViernes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Viernes", txtDeportivoViernes);
+        MostradorDeRespuestasBotones(btnUniformeViernes, txtDeportivoViernes);
     }
 
     @FXML
     private void btnAlimentosViernes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Viernes", txtAlimentosViernes);
+        MostradorDeRespuestasBotones(btnUniformeViernes, txtAlimentosViernes);
+        
     }
 
     @FXML
     private void btnEnfermeriaViernes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Viernes", txtEnfermeriaViernes);
+        MostradorDeRespuestasBotones(btnUniformeViernes, txtEnfermeriaViernes);
     }
 
     @FXML
     private void btnPuericulturaViernes(ActionEvent event) {
+        
+        ActualizadorDeCodigoParaUniformes("Viernes", txtPuericulturaViernes);
+        MostradorDeRespuestasBotones(btnUniformeViernes, txtPuericulturaViernes);
+        
     }
     
     
@@ -1343,12 +1637,14 @@ public class VentanaHorariosController implements Initializable {
         
         
         
+        
         //--->Metodos Finales <-----
         limitadoresDeDatos();
         LimitadoresGeneralesDeEscritura();
         GestionadorDeActualizadores();
         ActualizadorDeCodigosParaSemestre();
         ActualizadorDeGrupo();
+        AsigadorDeActualizacionUnifrmes();
         
         //---> --- <-----
     
