@@ -1155,7 +1155,7 @@ public class VentanaHorariosController implements Initializable {
         
         char codigoUniforme = Datos.charAt(0);   
         
-        String CodigoAsignado = "1";   
+        String CodigoAsignado = "Oficial";   
         switch(codigoUniforme){
             
             case '1':
@@ -1181,7 +1181,7 @@ public class VentanaHorariosController implements Initializable {
                 break;
         }
         
-        System.err.println("Se le asigna: " + CodigoAsignado);
+        System.err.println("Se le asigna: " + CodigoAsignado + " Por: " + codigoUniforme + " el codigo fue: " + Datos);
         Asignador.setText(CodigoAsignado);
     }
     
