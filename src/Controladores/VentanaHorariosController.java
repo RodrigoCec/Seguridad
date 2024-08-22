@@ -1654,10 +1654,3 @@ public class VentanaHorariosController implements Initializable {
 
     
 }
-
-
-
-
-
-
-
