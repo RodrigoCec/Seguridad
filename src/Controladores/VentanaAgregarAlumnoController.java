@@ -51,7 +51,7 @@ public class VentanaAgregarAlumnoController implements Initializable {
     @FXML
     private TextField txtGrupo;
     @FXML
-    private TextField txtCodigo;
+    private TextField txtMatricula;
 
     /**
      * Initializes the controller class.
@@ -89,7 +89,7 @@ public class VentanaAgregarAlumnoController implements Initializable {
     String ApellidoMat;
     String Grado;
     String Grupo;
-    String Codigo;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+    String Matricula;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     int numerodeGrupo;
     String gradoEnNum;
     
@@ -100,90 +100,10 @@ public class VentanaAgregarAlumnoController implements Initializable {
         ApellidoMat = txtApellidoMaterno.getText();
         Grado = txtGrado.getText();
         Grupo = txtGrupo.getText();
+        Matricula = txtMatricula.getText();
     }
     
-    
-    public void generadorCodQr(){
-        recuperarDatos();
-      
-        char InName = Character.toUpperCase(Nombre.charAt(0));
-        char InAp = Character.toUpperCase(ApellidoPat.charAt(0));
-        char InAm = Character.toUpperCase(ApellidoMat.charAt(0));
-        char InGrad = Character.toUpperCase(Grado.charAt(0));
-        char Group = Character.toUpperCase(Grupo.charAt(0));
-        
-        
-        int i = 0;
-        int LetA = 65;
-        char PrefijoGrup = 'A';
-        
-        
-        if(Group >= 'J' && Group < 'S'){
-            PrefijoGrup = 'B';
-        }else if(Group >= 'S'){
-            PrefijoGrup = 'C';
-        }
-        
-        do{
-            i += 1;
-            if(i > 9){
-                i = 1;
-            }
-            
-            LetA += 1;
-            
-        }while(LetA <= Group);
-        
-        //char codGrado;
-        
-        int numeroLonP;
-        int numeroLonM;
-        int ultDigito;
-
-        numeroLonP = ApellidoPat.length();
-        numeroLonM = ApellidoMat.length();
-
-        Random rand = new Random();
-        ultDigito = rand.nextInt(9);
-
-        numeroLonP += ultDigito;
-        numeroLonM += ultDigito;
-
-        if (numeroLonP > 9) {
-            int rest = numeroLonP - 9;
-            do {
-                rest -= 9;
-            } while (rest > 9);
-    
-            while (rest < 0) {
-                rest += 9;
-            }
-    
-            numeroLonP = rest;
-        }
-
-        if (numeroLonM > 9) {
-        
-        int rest = numeroLonM - 9;
-            do {
-                rest -= 9;
-            } while (rest > 9);
-    
-            while (rest < 0) {
-                rest += 9;
-            }
-    
-           numeroLonM = rest;
-        }
-
-        
-        Codigo = ("F" + InGrad + "E" + i + PrefijoGrup + InAp + numeroLonM + InAm+ numeroLonP + InName + ultDigito);
-        
-        System.out.println(Codigo);
-    }
-    
-    
-    
+  
     
     
     //Metodo Generador de codigo Qr
@@ -218,12 +138,14 @@ public class VentanaAgregarAlumnoController implements Initializable {
     //Metodos con base de datos para subir datos de alumno
     
     public void subirDatos(){
-        //               
+        //
+        recuperarDatos();
+        
         try (Connection connection = ConexionBd();
              Statement statement = connection.createStatement()) {
 
-            String sql = "INSERT INTO alumnos (Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo, codigo) "
-                + "VALUES ('" + Nombre +  "', '" + ApellidoPat +  "', '" + ApellidoMat + "', '" + Grado + "', '" + Grupo +  "', '" + Codigo + "')";
+            String sql = "INSERT INTO alumnos (Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo, matricula) "
+                + "VALUES ('" + Nombre +  "', '" + ApellidoPat +  "', '" + ApellidoMat + "', '" + Grado + "', '" + Grupo +  "', '" + Matricula + "')";
 
             int filasAfectadas = statement.executeUpdate(sql);
 
@@ -240,18 +162,19 @@ public class VentanaAgregarAlumnoController implements Initializable {
     
     
     //Metodo para limitar codigos repetidos
-     public void alerta(Alert.AlertType tipo,String titulo, String texto){
+    public void alerta(Alert.AlertType tipo,String titulo, String texto){
     
         Alert alerta = new Alert(tipo);   
         alerta.setTitle(titulo);
         alerta.setContentText(texto);
         alerta.showAndWait();
+        
     }
     
     
     public void MetodoCodigoRepetido(String valorAverificar) throws SQLException{
         
-        String Consulta = "SELECT codigo FROM alumnos WHERE codigo = '"+ valorAverificar +"'";
+        String Consulta = "SELECT matricula FROM alumnos WHERE matricula = '"+ valorAverificar +"'";
         
         try(Connection connection = ConexionBd();
             PreparedStatement DatosDeConsulta = connection.prepareStatement(Consulta)){
@@ -375,20 +298,18 @@ public class VentanaAgregarAlumnoController implements Initializable {
     
     @FXML
     private void bntRegistrarAllumno(ActionEvent event) {
-        
-        generadorCodQr();
-        
-        txtCodigo.setText(Codigo);
-        
-      
-        String filePath = "C:/Users/Rodrigo/Pictures/sas/" + Codigo + ".png";
-        
         try {
-            generateQRCode(Codigo, filePath);
-        } catch (IOException | WriterException e) {
+            recuperarDatos();
+            
+            
+            String filePath = "C:/Users/Rodrigo/Pictures/sas/" + Matricula + ".png";
+            
+            generateQRCode(Matricula, filePath);
+            
+            subirDatos();
+        } catch (IOException | WriterException ex) {
+            Logger.getLogger(VentanaAgregarAlumnoController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        subirDatos();
         
     }
 
@@ -400,7 +321,7 @@ public class VentanaAgregarAlumnoController implements Initializable {
         txtApellidoMaterno.setText("");
         txtGrado.setText("");
         txtGrupo.setText("");
-        txtCodigo.setText("");
+        txtMatricula.setText("");
     
     }
     

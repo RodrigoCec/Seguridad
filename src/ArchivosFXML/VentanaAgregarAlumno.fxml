@@ -53,17 +53,27 @@
             <Font size="18.0" />
          </font>
       </TextField>
-      <Label layoutX="240.0" layoutY="141.0" text="Grupo">
+      <Label layoutX="369.0" layoutY="141.0">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtCodigo" editable="false" layoutX="356.0" layoutY="170.0" promptText="Codigo">
+      <TextField fx:id="txtMatricula" layoutX="356.0" layoutY="170.0">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
       <Button layoutX="600.0" layoutY="169.0" mnemonicParsing="false" onAction="#bntRegistrarAllumno" prefHeight="39.0" prefWidth="96.0" text="Registrar" />
       <Button layoutX="708.0" layoutY="168.0" mnemonicParsing="false" onAction="#bntLimpiarDatos" prefHeight="39.0" prefWidth="96.0" text="Limpiar" />
+      <Label layoutX="229.0" layoutY="141.0" text="Grupo">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="371.0" layoutY="141.0" text="Matricula">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

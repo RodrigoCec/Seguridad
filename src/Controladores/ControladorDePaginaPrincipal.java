@@ -88,7 +88,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     private void Buscador(String codigo) throws ClassNotFoundException {
 
-        String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE codigo = ?";
+        String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE matricula = ?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(query)) {
             preparedStatement.setString(1, codigo);
