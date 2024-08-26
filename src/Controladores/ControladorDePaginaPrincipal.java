@@ -56,7 +56,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     @FXML
     private ImageView imgAlerta;
     
-    
+    //Puerba de seguridad
 
     // Datos de la Conexion a Base de datos
     private static final String bd = "basedatosprueba";
