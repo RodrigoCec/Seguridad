@@ -1,5 +1,6 @@
 package Controladores;
 
+import static Controladores.VentanaAgregarAlumnoController.ConexionBd;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -7,7 +8,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +59,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
     @FXML
     private ImageView imgAlerta;
     
-    //Puerba de seguridad
 
     // Datos de la Conexion a Base de datos
     private static final String bd = "basedatosprueba";
@@ -80,13 +82,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
         return conexion;
     }
     
-    
-    // Método De Consulta Con base de datos para Alumno
-    
-    String grupo;
-    
-    
-    private void Buscador(String codigo) throws ClassNotFoundException {
+    private String[] BuscadorDeAlumno (String codigo){
 
         String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE matricula = ?";
 
@@ -95,102 +91,43 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String nombre = resultSet.getString("Nombre");
+                    String Nombre = resultSet.getString("Nombre");
                     String apellidoP = resultSet.getString("apellidoPaterno");
                     String apellidoM = resultSet.getString("apellidoMaterno");
-                    grupo = resultSet.getString("Grupo");
-                    String grado = resultSet.getString("Grado");
+                    String Grupo = resultSet.getString("Grupo");
+                    String Grado = resultSet.getString("Grado");
 
                     String Apellidos = apellidoP + " " + apellidoM;
-
-                    txtNombre.setText(nombre);
+                    
+                    txtNombre.setText(Nombre);
                     txtApellido.setText(Apellidos);
-                    txtGrado.setText(grado);
-                    txtGrupo.setText(grupo);
+                    txtGrado.setText(Grado);
+                    txtGrupo.setText(Grupo);
+        
+                    return new String[]{Nombre, Apellidos, Grado, Grupo};
                 }
             }
         } catch (SQLException error) {
-            System.out.println(error);
+            System.out.println("La extraccion de datos del alumno tuvo los errores: " + error);
         }
+        return null;
     }
+  
 
-    // Métodos Limitadores
-    public String Codigo() {
-        String codigo = "";
-        codigo = txtCodigo.getText();
-        return codigo;
-    }
-
-    public Boolean VerificadorDeContenido(String codigo) {
-        if (codigo.length() >= 3 && codigo.charAt(0) == 'F' && codigo.charAt(2) == 'E') {
-            System.out.println("Código contiene F y E");
-            return true;
-        } else {
-            System.out.println("El código no cumple con F y E");
-            return false;
-        }
-    }
-
-    public Boolean VerificacionDeLongitud(String codigo) {
-        if (codigo.length() == 11) {
-            System.out.println("El contenido de codigo es de 11 caracteres");
-            return true;
-        } else {
-            System.out.println("Codigo es de menos de 11 caracteres");
-            return false;
-        }
-    }
-
-    public Boolean VerificacionDeTerminacion(String codigo) {
-        if (codigo.matches(".*\\d$")) {
-            System.out.println("El codigo termina en numero");
-            return true;
-        } else {
-            System.out.println("El codigo no termina en numero");
-            return false;
-        }
-    }
-
-    public void AprobacionDeBusqueda() {
+    public void VerificacionDeLongitud(){
+        
         txtCodigo.textProperty().addListener((observable, oldValue, newValue) -> {
-            boolean Verificacion1 = VerificadorDeContenido(newValue);
-            boolean Verificacion2 = VerificacionDeLongitud(newValue);
-            boolean Verificacion3 = VerificacionDeTerminacion(newValue);
-
-            if (Verificacion1) {
-                if (Verificacion2 && Verificacion3) {
-                    
-                    try {
-                        
-                        try {//Bloque de codigo
-                            Buscador(newValue);///Bloque de codigo
-                        } catch (ClassNotFoundException ex) {///Bloque de codigo
-                            Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, null, ex);//Bloque de codigo
-                        }//Bloque de codigo
-                        
-                        HoraDelAlumno();
-                        
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    VerificadorDeHorarios();
-                    
-                } else {
-                    System.out.println("El codigo No cumple con criterios");
-                }
-            } else {
-                System.out.println("El codigo No cumple con criterios");
+            
+            if(newValue.length() == 14){
+               String[] Datos = BuscadorDeAlumno(newValue);
+               ComparadorDeEntrada(newValue);
+               EnvioDeregistro(Datos[0], Datos[1], Datos[2], Datos[3], newValue);
             }
         });
     }
-    
-    
-    
-    
 
     // Limitador Basico
-    private final int Maximo = 11;
+    private final int Maximo = 15;
     private boolean Editable = true;
 
     public void LimitadorLongutid() {
@@ -235,7 +172,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     }
     
     
-    public String AsignacionDeDia() {
+    public String SelectorDeDiaSemana() {
         String dia = null;
          LocalDateTime fechaHoraActual = LocalDateTime.now();
         LocalDateTime fechaHoraRetrasada = fechaHoraActual.minus(1, ChronoUnit.HOURS);
@@ -263,59 +200,68 @@ public class ControladorDePaginaPrincipal implements Initializable {
         return dia;
     }
     
-    String CodigoDeHorario;
+    public String AsignadorDeSemestre(String Codigo){
+        String[] Datos =  BuscadorDeAlumno(Codigo); 
+        
+        String BaseDatos = "";
+        switch(Datos[2]){
+            case "1":
+                BaseDatos = "primersemestre";
+                break;
+            case "2":
+                BaseDatos = "segundosemestre";
+                break;
+            case "3":
+                BaseDatos = "tercersemestre";
+                break;
+            case "4":
+                BaseDatos = "cuartosemestre";
+                break;
+            case "5":
+                BaseDatos = "quintosemestre";
+                break;
+            case "6":
+                BaseDatos = "sextosemestre";
+                break;
+                 
+        }
+        System.out.println("Se supone que es: " + BaseDatos);
+        return BaseDatos;
+    }
     
-    public void HoraDelAlumno() throws SQLException{
-        
-        String dia = AsignacionDeDia();
-        System.out.println("Dia de Busqueda: " + dia);
-        System.out.println("Grupo de Busqueda: " + grupo);
-        
-        
-        
-        String query = "SELECT " + dia + " FROM primersemestre WHERE Grupo = '"+ grupo +"'";
-        
+    public String BusquedaHoraDelAlumno(String dia, String grado, String grupo) {
+        String query = "SELECT " + dia + " FROM " + grado + " WHERE Grupo = ?";
+
         try (PreparedStatement preparedStatement = conexion.prepareStatement(query)) {
-            
-            try(ResultSet resultSet = preparedStatement.executeQuery()){
-                if(resultSet.next()){
-                    CodigoDeHorario = resultSet.getString(dia);
-                    
-                    System.out.println("Codigode dia: " + CodigoDeHorario);
-                    
+            preparedStatement.setString(1, grupo);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String codigoDeHorario = resultSet.getString(dia);
+                    System.out.println("Código del día: " + codigoDeHorario);
+                    return codigoDeHorario;
                 }
             }
-       
-        }catch (SQLException error) {
-            System.out.println(error);
+        } catch (SQLException error) {
+            System.out.println("La búsqueda del horario del alumno falló en: " + error);
         }
+        return null;
     }
-    
-    
-    public String SeparadorDeHoraDeEntrada(){
-        
-        String HoraDeEntrada =  CodigoDeHorario.substring(1,5);
-        
-        System.out.println("Se esta separando Hora de entrada : " + CodigoDeHorario);
-        System.out.println("Se esta enviando Hora de entrada : " + HoraDeEntrada);
-        
-        return HoraDeEntrada;
 
-    }
     
-    public String SeparadorDeHoraDeSalida(){
+    public String[] SeparadorDeHorarios(String Dia,String Grado,String Grupo){
+        String CodigoCompleto =  BusquedaHoraDelAlumno(Dia,Grado, Grupo );
         
-        String horaDeSalida =  CodigoDeHorario.substring(5,9);
+        String uniforme = CodigoCompleto.substring(0, 1);   // "1"
+        String horaEntrada = CodigoCompleto.substring(1, 3);   // "23"
+        String minutosEntrada = CodigoCompleto.substring(3, 5);   // "45"
+        String horaSalida = CodigoCompleto.substring(5, 7);   // "67"
+        String minutosSalida = CodigoCompleto.substring(7, 9);   // "89"
         
-        System.out.println("Se esta separando Hora de Salida : " + CodigoDeHorario);
-        System.out.println("Se esta enviando Hora de Salida : " + horaDeSalida);
-        
-        return horaDeSalida;
+        return new String[]{uniforme,horaEntrada,minutosEntrada,horaSalida,minutosSalida} ;
+    }
 
-    }
     
-    
-    public String HoraEnFormato24hrs() {
+    public String[] HoraEnFormato24hrs() {
         
         DateTimeFormatter hora12horas = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime horaActual = LocalTime.now();
@@ -323,7 +269,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
         String horaFormateada = horaFija.format(hora12horas);
         
         System.out.println("Hora ajustada: " + horaFormateada);
-        
         //Formato para comprobacion eliminacion de  los dos puntos(:)
         
         String horas = horaFormateada.substring(0,2);
@@ -338,47 +283,58 @@ public class ControladorDePaginaPrincipal implements Initializable {
         System.out.println("Hora que se compara : " + formatoDeHoraComparativa);
         
         
-        return formatoDeHoraComparativa;
+        return new String[]{horas, minutos};
         
         
     }
     
-    
-    public void VerificadorDeHorarios(){
+    public void ComparadorDeEntrada(String Codigo){
         
-        String HoraDeEntrada = SeparadorDeHoraDeEntrada();
-        String HoraActual = HoraEnFormato24hrs();
+        String Dia = SelectorDeDiaSemana();
+        //System.out.println("Dia es: " + Dia);
+        String Semestre = AsignadorDeSemestre(Codigo);
+        //System.out.println("Semestre es: " + Semestre);
         
-        int HoraEntradaNumero = Integer.parseInt(HoraDeEntrada);
-        int HoraActualNumero = Integer.parseInt(HoraActual);
+        String[] Datos =  BuscadorDeAlumno(Codigo);
+        //System.out.println("Grupo es: " + Datos[3]);
+        
+        String[] horasEntradaAlumno = SeparadorDeHorarios(Dia, Semestre, Datos[3]);
+        String[] horasEntradaActual = HoraEnFormato24hrs();
+        
+       //Organizador De horas
+       int HoraAlumno = Integer.parseInt(horasEntradaAlumno[1]);
+       int HoraActual = Integer.parseInt(horasEntradaActual[0]);
+       
+       System.out.println("La hora del alumno a comparar es: " + HoraAlumno);
+       System.out.println("La hora actual a comparar es: " + HoraActual);
+       
+       //Organizador De minutos
+       int MinutosAlumno = Integer.parseInt(horasEntradaAlumno[2]);
+       int MinutosActual = Integer.parseInt(horasEntradaActual[1]);
+       
+       System.out.println("Los minutos del alumno a comparar es: " + MinutosAlumno);
+       System.out.println("La minutos actual a comparar es: " + MinutosActual);
+       
+       int minutosTotalesAlumno = HoraAlumno * 60 + MinutosAlumno;
+        int minutosTotalesActual = HoraActual * 60 + MinutosActual;
+        
+        int diferenciaMinutos = Math.abs(minutosTotalesAlumno - minutosTotalesActual);
         
         
-        int MinutosDeTolerancia = 10;
-        int HoraEntradaHoras = HoraEntradaNumero / 100;
-        int HoraEntradaMinutos = HoraEntradaNumero % 100;
-        int HoraActualHoras = HoraActualNumero / 100;
-        int HoraActualMinutos = HoraActualNumero % 100;
-
-        int minutosEntrada = HoraEntradaHoras * 60 + HoraEntradaMinutos;
-        int minutosActual = HoraActualHoras * 60 + HoraActualMinutos;
-        int minutosEntradaConTolerancia = minutosEntrada + MinutosDeTolerancia;
+       //Comparador y asignador
+       if(HoraAlumno <= HoraActual){ 
+           if(diferenciaMinutos <= 10){
+               ImagenMarcoAmarillo();
+           }else if(diferenciaMinutos > 10){
+               ImagenMarcoRojo();
+           }
+       }else{
+         ImagenMarcoVerde();  
+       }
+      
         
         
-        if (HoraActualNumero <= HoraEntradaNumero) {
-            ImagenMarcoVerde();
-            System.out.println("El Alumno está a tiempo");
-        } else if (minutosActual > minutosEntrada && minutosActual <= minutosEntradaConTolerancia) {
-            ImagenMarcoAmarillo();
-            System.out.println("El Alumno está dentro de los 10 minutos de tolerancia");
-        } else {
-            ImagenMarcoRojo();
-            System.out.println("El Alumno está retrasado");
-        }
-
     }
-    
-    
-    
     
     //Metodos de las Alertas de tiempo
     
@@ -415,23 +371,38 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     
     
-    
-    
-    
-    
-    
-   
-    
-    public void MetodosDelasHoras(){
-        
-        
-        HoraEnPantalla();
+    public void EnvioDeregistro(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
+            try (Connection connection = ConexionBd();
+             PreparedStatement statement = connection.prepareStatement(
+                 "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+            // Obtener la fecha y la hora actuales
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            String NombreCompleto = Nombre + " " +  Apellidos; 
+            // Configurar los parámetros de la consulta
+            statement.setString(1, NombreCompleto);
+            statement.setString(2, Grado);
+            statement.setString(3, Grupo);
+            statement.setString(4, Matricula);
+            statement.setDate(5, java.sql.Date.valueOf(fechaActual));
+            statement.setTime(6, java.sql.Time.valueOf(horaActual));
+
+            // Ejecutar la consulta
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Los datos se han registrado correctamente.");
+            } else {
+                System.out.println("No se pudieron ingresar los datos.");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();  // Manejo de errores
+        } 
     }
     
-    
-    
     public void ConexionesConBd() {
-        // Conexion Base de datos
         ConexionBd();
     }
 
@@ -446,13 +417,11 @@ public class ControladorDePaginaPrincipal implements Initializable {
         LimitadorLongutid();
         LimpiadorDeCodigo();
         
-
-        AprobacionDeBusqueda();
+        VerificacionDeLongitud();
 
         
-
+        HoraEnPantalla();
         ConexionesConBd();
-        MetodosDelasHoras();
         
     }
 
