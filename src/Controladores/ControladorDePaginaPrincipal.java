@@ -68,7 +68,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
     // Conexión a la base de datos
     private static Connection conexion;
-
+    private static Connection conexionDeregistro;
     // Código de conexión
     public static Connection ConexionBd() {
         if (conexion == null) {
@@ -80,6 +80,17 @@ public class ControladorDePaginaPrincipal implements Initializable {
             }
         }
         return conexion;
+    }
+    public static Connection ConexionDeregistoBd() {
+        if (conexionDeregistro == null) {
+            try {
+                conexionDeregistro = DriverManager.getConnection(direccion, usuario, password);
+                System.out.println("Conexión exitosa");
+            } catch (SQLException e) {
+                Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, "Error de conexión", e);
+            }
+        }
+        return conexionDeregistro;
     }
     
     private String[] BuscadorDeAlumno (String codigo){
@@ -323,16 +334,16 @@ public class ControladorDePaginaPrincipal implements Initializable {
         
        //Comparador y asignador
        if(HoraAlumno <= HoraActual){ 
-           if(diferenciaMinutos <= 10){
+           if( MinutosAlumno == MinutosActual || MinutosAlumno > MinutosActual){
+               ImagenMarcoVerde();
+           }else if(diferenciaMinutos <= 10 && MinutosAlumno < MinutosActual){
                ImagenMarcoAmarillo();
-           }else if(diferenciaMinutos > 10){
+           }else{
                ImagenMarcoRojo();
            }
        }else{
          ImagenMarcoVerde();  
        }
-      
-        
         
     }
     
@@ -372,7 +383,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     
     public void EnvioDeregistro(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
-            try (Connection connection = ConexionBd();
+            try (Connection connection = ConexionDeregistoBd();
              PreparedStatement statement = connection.prepareStatement(
                  "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
