@@ -62,6 +62,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     @FXML
     private ImageView imgAlerta;
     
+    //Prueba base De datos Cambio
 
     // Datos de la Conexion a Base de datos
     private static final String bd = "basedatosprueba";
