@@ -1,5 +1,6 @@
 package Controladores;
 
+import Conexiones.dateBaseconnection;
 import static Controladores.VentanaAgregarAlumnoController.ConexionBd;
 import java.io.IOException;
 import java.net.URL;
@@ -53,6 +54,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
     @FXML
     private Label txtHora;
     @FXML
+    private TextField txtUniforme;
+    @FXML
     private ImageView imgFotoPerfil;
     @FXML
     private ImageView imgMarco;
@@ -81,7 +84,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
         }
         return conexion;
     }
-    public static Connection ConexionDeregistoBd() {
+    public Connection ConexionDeregistoBd() {
         if (conexionDeregistro == null) {
             try {
                 conexionDeregistro = DriverManager.getConnection(direccion, usuario, password);
@@ -92,6 +95,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
         }
         return conexionDeregistro;
     }
+    
     
     private String[] BuscadorDeAlumno (String codigo){
 
@@ -114,7 +118,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
                     txtApellido.setText(Apellidos);
                     txtGrado.setText(Grado);
                     txtGrupo.setText(Grupo);
-        
+                    
                     return new String[]{Nombre, Apellidos, Grado, Grupo};
                 }
             }
@@ -123,7 +127,19 @@ public class ControladorDePaginaPrincipal implements Initializable {
         }
         return null;
     }
-  
+    
+    public void SeteadorDeUniforme(String Codigo){
+        String Dia = SelectorDeDiaSemana();
+        //System.out.println("Dia es: " + Dia);
+        String Semestre = AsignadorDeSemestre(Codigo);
+        //System.out.println("Semestre es: " + Semestre);
+        
+        String[] Datos =  BuscadorDeAlumno(Codigo);
+        //System.out.println("Grupo es: " + Datos[3]);
+        String Uniforme = SelectorDeUniforme(Dia,Semestre, Datos[3]);
+        
+        txtUniforme.setText(Uniforme);
+    }
 
     public void VerificacionDeLongitud(){
         
@@ -132,6 +148,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             if(newValue.length() == 14){
                String[] Datos = BuscadorDeAlumno(newValue);
                ComparadorDeEntrada(newValue);
+               SeteadorDeUniforme(newValue);
                EnvioDeregistro(Datos[0], Datos[1], Datos[2], Datos[3], newValue);
             }
         });
@@ -380,10 +397,36 @@ public class ControladorDePaginaPrincipal implements Initializable {
         imgMarco.setImage(image);
     }
     
+    public String SelectorDeUniforme(String Dia,String Grado,String Grupo){
+        String[] Datos =  SeparadorDeHorarios(Dia,Grado,Grupo); 
+        
+        String BaseDatos = "";
+        switch(Datos[0]){
+            case "1":
+                BaseDatos = "Oficial";
+                break;
+            case "2":
+                BaseDatos = "Deportivo";
+                break;
+            case "3":
+                BaseDatos = "Alimentos";
+                break;
+            case "4":
+                BaseDatos = "Enfermeria";
+                break;
+            case "5":
+                BaseDatos = "Puericultura";
+                break;
+                 
+        }
+        System.out.println("Se supone que el uniforne es: " + BaseDatos);
+        return BaseDatos;
+    }
+    
     
     
     public void EnvioDeregistro(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
-            try (Connection connection = ConexionDeregistoBd();
+            try (Connection connection = dateBaseconnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                  "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
