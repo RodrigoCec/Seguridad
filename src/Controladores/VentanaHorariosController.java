@@ -309,7 +309,7 @@ public class VentanaHorariosController implements Initializable {
 
     
     // Datos de la Conexion a Base de datos
-    private static final String bd = "basedatosprueba";
+    private static final String bd = "pruebacecyteh";
     private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
     private static final String usuario = "root";
     private static final String password = "";

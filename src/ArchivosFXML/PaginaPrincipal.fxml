@@ -79,9 +79,10 @@
                   <MenuItem mnemonicParsing="false" onAction="#btnAsignarHorarios" text="Asignar Horarios" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Informes">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#btnInformeDeEntrada" text="Informes de entrada" />
+                  <MenuItem mnemonicParsing="false" onAction="#btnInformeDeSalida" text="Informes de salida" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

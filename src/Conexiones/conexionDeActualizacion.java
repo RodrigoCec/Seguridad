@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author Rodrigo
  */
-public class dateBaseconnection {
+public class conexionDeActualizacion {
     
     private static final String bd = "pruebacecyteh";
     private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
@@ -23,4 +23,5 @@ public class dateBaseconnection {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(direccion, usuario, password);
     }
+    
 }

@@ -65,7 +65,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
     //Prueba base De datos Cambio
 
     // Datos de la Conexion a Base de datos
-    private static final String bd = "basedatosprueba";
+    private static final String bd = "pruebacecyteh";
     private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
     private static final String usuario = "root";
     private static final String password = "";
@@ -514,5 +514,13 @@ public class ControladorDePaginaPrincipal implements Initializable {
         } catch (IOException e) {
             Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    @FXML
+    private void btnInformeDeEntrada(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnInformeDeSalida(ActionEvent event) {
     }
 }
