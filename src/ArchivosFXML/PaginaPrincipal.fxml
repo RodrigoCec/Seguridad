@@ -112,22 +112,27 @@
             <Font name="System Bold" size="64.0" />
          </font>
       </Label>
-      <Button layoutX="1503.0" layoutY="173.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="153.0" text="Uniforme">
+      <Button fx:id="txtButtonUniforme" layoutX="1503.0" layoutY="173.0" mnemonicParsing="false" onAction="#bntUniforme" prefHeight="54.0" prefWidth="153.0" text="Uniforme">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button layoutX="1503.0" layoutY="243.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="359.0" text="Corte de cabello">
+      <Button fx:id="txtButtonCorte" layoutX="1503.0" layoutY="243.0" mnemonicParsing="false" onAction="#btnCorte" prefHeight="54.0" prefWidth="359.0" text="Corte de cabello">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button layoutX="1673.0" layoutY="173.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="185.0" text="Credencial">
+      <Button fx:id="txtButtonCredencial" layoutX="1673.0" layoutY="173.0" mnemonicParsing="false" onAction="#btnCredencial" prefHeight="54.0" prefWidth="185.0" text="Credencial">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button layoutX="1503.0" layoutY="313.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="359.0" text="Reporte perzonalizado">
+      <Button fx:id="txtButtonPersonalizado" layoutX="1503.0" layoutY="313.0" mnemonicParsing="false" onAction="#btnPersonalizado" prefHeight="54.0" prefWidth="359.0" text="Reporte personalizado">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="txtButtonUns" layoutX="1503.0" layoutY="379.0" mnemonicParsing="false" onAction="#btnuns" prefHeight="54.0" prefWidth="359.0" text="Uñas">
          <font>
             <Font size="24.0" />
          </font>

@@ -1,7 +1,6 @@
 package Controladores;
 
 import Conexiones.dateBaseconnection;
-import static Controladores.VentanaAgregarAlumnoController.ConexionBd;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -9,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -61,11 +60,19 @@ public class ControladorDePaginaPrincipal implements Initializable {
     private ImageView imgMarco;
     @FXML
     private ImageView imgAlerta;
+    @FXML
+    private Button txtButtonUniforme;
+    @FXML
+    private Button txtButtonCorte;
+    @FXML
+    private Button txtButtonCredencial;
+    @FXML
+    private Button txtButtonPersonalizado;
     
     //Prueba base De datos Cambio
 
     // Datos de la Conexion a Base de datos
-    private static final String bd = "pruebacecyteh";
+    private static final String bd = "basedatosprueba";
     private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
     private static final String usuario = "root";
     private static final String password = "";
@@ -85,6 +92,9 @@ public class ControladorDePaginaPrincipal implements Initializable {
         }
         return conexion;
     }
+    @FXML
+    private Button txtButtonUns;
+    
     public Connection ConexionDeregistoBd() {
         if (conexionDeregistro == null) {
             try {
@@ -148,9 +158,9 @@ public class ControladorDePaginaPrincipal implements Initializable {
             
             if(newValue.length() == 14){
                String[] Datos = BuscadorDeAlumno(newValue);
-               ComparadorDeEntrada(newValue);
+               String estado = ComparadorDeEntrada(newValue);
                SeteadorDeUniforme(newValue);
-               EnvioDeregistro(Datos[0], Datos[1], Datos[2], Datos[3], newValue);
+               EnvioDeRegistrosGeneral(Datos[0], Datos[1], Datos[2], Datos[3], newValue, estado);
             }
         });
     }
@@ -179,9 +189,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             }
         });
     }
-    
-    
-    
+   
     //Comparativa de horarios de entrada
     
     public void HoraEnPantalla(){
@@ -199,8 +207,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
         timeline.play();
         
     }
-    
-    
+
     public String SelectorDeDiaSemana() {
         String dia = null;
          LocalDateTime fechaHoraActual = LocalDateTime.now();
@@ -276,7 +283,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
         return null;
     }
 
-    
     public String[] SeparadorDeHorarios(String Dia,String Grado,String Grupo){
         String CodigoCompleto =  BusquedaHoraDelAlumno(Dia,Grado, Grupo );
         
@@ -289,7 +295,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
         return new String[]{uniforme,horaEntrada,minutosEntrada,horaSalida,minutosSalida} ;
     }
 
-    
     public String[] HoraEnFormato24hrs() {
         
         DateTimeFormatter hora12horas = DateTimeFormatter.ofPattern("HH:mm");
@@ -317,7 +322,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
         
     }
     
-    public void ComparadorDeEntrada(String Codigo){
+    public String ComparadorDeEntrada(String Codigo){
         
         String Dia = SelectorDeDiaSemana();
         //System.out.println("Dia es: " + Dia);
@@ -351,18 +356,28 @@ public class ControladorDePaginaPrincipal implements Initializable {
         
         
        //Comparador y asignador
+       String Estado = "";
        if(HoraAlumno <= HoraActual){ 
            if( MinutosAlumno == MinutosActual || MinutosAlumno > MinutosActual){
                ImagenMarcoVerde();
+               Estado = "Puntual";
+               return Estado;
            }else if(diferenciaMinutos <= 10 && MinutosAlumno < MinutosActual){
                ImagenMarcoAmarillo();
+               Estado = "Tolerancia";
+               return Estado;
            }else{
+               
                ImagenMarcoRojo();
+               Estado = "Retardo";
+               return Estado;
            }
        }else{
-         ImagenMarcoVerde();  
+           ImagenMarcoVerde(); 
+           Estado = "Puntual";
+           return Estado;
+          
        }
-        
     }
     
     //Metodos de las Alertas de tiempo
@@ -425,11 +440,210 @@ public class ControladorDePaginaPrincipal implements Initializable {
     }
     
     
+    //
+    public boolean Conexion (String Query, String TipoDato){
+        
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                Query)){
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String datos = resultSet.getString(TipoDato);
+                    System.out.println("Tiene: " + datos);
+                    if(datos == null){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }catch(SQLException ex){
+        
+        }
+        
+        return false;
+    }
+    public void SubidaDeSancionesAutomatica(String Matricula, String Sancion){
+        for (int i = 1; i < 4; i++) {
+            boolean editable = false;
+            boolean editable2 = false;
+            boolean editable3 = false;
+            String dato = "";
+            String dato2 = "";
+            String dato3 = "";
+            switch(i){
+                case 1:
+                    String query = "SELECT Reporte FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                    dato = "Reporte";
+                    editable = Conexion(query, dato);
+                    System.out.println(editable);
+                    break;
+                case 2:
+                    String query2 = "SELECT ReporteDos FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                    dato2 = "ReporteDos";
+                    editable2 = Conexion(query2, dato2);
+                    System.out.println(editable2);
+                    break;
+                case 3:
+                    String query3 = "SELECT ReporteTres FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                     dato3 = "ReporteTres";
+                    editable3 = Conexion(query3, dato3);
+                    System.out.println(editable3);
+                    break;
+            }
+            if (editable) {
+                SubidaDeSanciones(Matricula, dato, Sancion);
+                break;
+            } else if (editable2) {
+                SubidaDeSanciones(Matricula, dato2, Sancion);
+                break;
+            } else if (editable3) {
+                SubidaDeSanciones(Matricula, dato3, Sancion);
+                break;
+            } else {
+                // Exceso de sanciones
+            }
+
+        }
+    }
     
-    public void EnvioDeregistro(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
+    public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion){
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                "UPDATE registros SET " + Tipo + " = ? WHERE Matricula = ? ")){
+                statement.setString(1, Sancion);
+                statement.setString(2, Matricula);
+                
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Los datos se han registrado correctamente.");
+            } else {
+                System.out.println("No se pudieron ingresar los datos.");
+            }
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    
+                }
+            }
+        }catch(SQLException ex){
+        
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    public boolean ComprobadorDeExistencia(String Matricula){
+        
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                "SELECT EXISTS (SELECT 1 FROM registros WHERE Matricula = ?) AS existe")){
+                statement.setString(1, Matricula);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    boolean existencia = resultSet.getBoolean("existe");
+                    System.out.println("Existe en la base de datos: " + existencia);
+
+                    if (!existencia) {
+                        System.out.println("Entrada detectada asdf asdfas dfasdf asd");
+                        return false;
+                    } else {
+                        System.out.println("Salida detectada asdfasdfasd");
+                        return true;
+                    }
+                }
+            }
+        }catch(SQLException ex){
+        
+        }
+        return true;
+    }   
+    
+    public boolean ComprobadorDeExistenciaSalida (String Matricula){
+        
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                "SELECT EXISTS (SELECT 1 FROM salida WHERE Matricula = ?) AS existe")){
+                statement.setString(1, Matricula);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    boolean existencia = resultSet.getBoolean("existe");
+                    System.out.println("Existe en la base de datos: " + existencia);
+
+                    if (!existencia) {
+                        System.out.println("Entrada detectada asdf asdfas dfasdf asd");
+                        return false;
+                    } else {
+                        System.out.println("Salida detectada asdfasdfasd");
+                        return true;
+                    }
+                }
+            }
+        }catch(SQLException ex){
+        
+        }
+        return true;
+    }
+    
+    public void EnvioDeRegistrosGeneral(String Nombre,String Apellidos , String Grado, String Grupo,String Matricula,String Estado){
+        boolean existencia = ComprobadorDeExistencia(Matricula);
+        boolean existenciaSalida = ComprobadorDeExistenciaSalida(Matricula);
+        
+        
+        if(!existencia){
+            if(!existenciaSalida){
+                EnvioDeregistroEntrada(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
+            }else{
+                
+            }
+        }else{
+            EnvioDeregistroSalida(Nombre, Apellidos, Grado, Grupo, Matricula);
+        }
+        
+    
+    }
+
+    
+    public void EnvioDeregistroEntrada(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula,String Estado){
             try (Connection connection = dateBaseconnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                 "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
+
+            // Obtener la fecha y la hora actuales
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            String NombreCompleto = Nombre + " " +  Apellidos; 
+            // Configurar los parámetros de la consulta
+            statement.setString(1, NombreCompleto);
+            statement.setString(2, Grado);
+            statement.setString(3, Grupo);
+            statement.setString(4, Matricula);
+            statement.setDate(5, java.sql.Date.valueOf(fechaActual));
+            statement.setTime(6, java.sql.Time.valueOf(horaActual));
+            statement.setString(7, Estado);
+
+            // Ejecutar la consulta
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Los datos se han registrado correctamente.");
+            } else {
+                System.out.println("No se pudieron ingresar los datos.");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();  // Manejo de errores
+        } 
+    }
+    
+    public void EnvioDeregistroSalida(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
+            try (Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                 "INSERT INTO salida (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -464,8 +678,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
+      ComprobadorDeExistencia("22413070010397");
+      //descicionDeRegistros("22413070010379");
         
         
         // Metodos Indispensables no clasificados xd
@@ -537,5 +751,45 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
     @FXML
     private void btnInformeDeSalida(ActionEvent event) {
+        
     }
+
+    @FXML
+    private void bntUniforme(ActionEvent event) {
+        String Matricula = txtCodigo.getText();
+        if(Matricula.length()> 13){
+            SubidaDeSancionesAutomatica(Matricula, "Uniforme incompleto");
+        }
+        
+    }
+
+    @FXML
+    private void btnCorte(ActionEvent event) {
+        String Matricula = txtCodigo.getText();
+        if(Matricula.length()> 13){
+            SubidaDeSancionesAutomatica(Matricula, "Corte de cabello");
+        }
+       
+    }
+    
+    @FXML
+    private void btnuns(ActionEvent event) {
+        
+        String Matricula = txtCodigo.getText();
+        if(Matricula.length()> 13){
+            SubidaDeSancionesAutomatica(Matricula, "Uñas");
+        }
+        
+    }
+
+    @FXML
+    private void btnCredencial(ActionEvent event) {
+        
+    }
+
+    @FXML
+    private void btnPersonalizado(ActionEvent event) {
+    }
+
+    
 }
