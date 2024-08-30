@@ -518,6 +518,21 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
     @FXML
     private void btnInformeDeEntrada(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaInformeEntrada.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Agregar Alumno");
+            stage.setScene(new Scene(root, 1800, 750));
+            stage.setIconified(false);
+            stage.setResizable(false);
+            stage.show();
+            Image icon = new Image("file:C:/Users/Rodrigo/Downloads/cecyteh_horizontal1.png");
+            stage.getIcons().add(icon);
+        } catch (IOException e) {
+            Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     @FXML

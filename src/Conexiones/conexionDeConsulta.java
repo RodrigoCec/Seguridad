@@ -15,13 +15,15 @@ import java.sql.SQLException;
  */
 public class conexionDeConsulta {
     
-    private static final String bd = "pruebacecyteh";
+    private static final String bd = "basedatosprueba";
     private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
     private static final String usuario = "root";
     private static final String password = "";
 
     public static Connection getConnection() throws SQLException {
+        System.out.println("Conexion ta bien");
         return DriverManager.getConnection(direccion, usuario, password);
+        
     }
     
 }

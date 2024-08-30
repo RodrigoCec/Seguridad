@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="750" prefWidth="1800" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaInformeEntrada">
+   <children>
+      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="762.0" layoutY="42.0" prefHeight="38.0" prefWidth="87.0" text="A">
+         <font>
+            <Font size="30.0" />
+         </font></TextField>
+      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="649.0" layoutY="42.0" prefHeight="38.0" prefWidth="87.0" text="1">
+         <font>
+            <Font size="30.0" />
+         </font></TextField>
+      <TableView fx:id="TablaGeneral" editable="true" layoutX="112.0" layoutY="122.0" prefHeight="546.0" prefWidth="1591.0" style="-fx-font-size: 15 px;">
+        <columns>
+          <TableColumn fx:id="Nombre" prefWidth="268.0" style="-fx-font-size: 20;" text="Nombre" />
+          <TableColumn fx:id="Grado" minWidth="0.0" prefWidth="81.0" style="-fx-font-size: 20;" text="Grado" />
+            <TableColumn fx:id="Grupo" prefWidth="74.0" style="-fx-font-size: 20;" text="Grupo" />
+            <TableColumn fx:id="Matricula" prefWidth="190.0" style="-fx-font-size: 20;" text="Matricula" />
+            <TableColumn fx:id="Fecha" prefWidth="119.0" style="-fx-font-size: 20;" text="Fecha" />
+            <TableColumn fx:id="Hora" prefWidth="118.0" style="-fx-font-size: 20;" text="Hora" />
+            <TableColumn fx:id="Reporte" prefWidth="157.0" style="-fx-font-size: 20;" text="Reporte" />
+            <TableColumn fx:id="ReporteDos" prefWidth="157.0" style="-fx-font-size: 20;" text="Reporte" />
+            <TableColumn fx:id="ReporteTres" prefWidth="157.0" style="-fx-font-size: 20;" text="Reporte" />
+            <TableColumn fx:id="Observaciones" prefWidth="293.0" style="-fx-font-size: 20;" text="Observaciones" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
