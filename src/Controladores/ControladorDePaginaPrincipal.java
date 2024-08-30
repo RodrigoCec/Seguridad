@@ -678,8 +678,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      ComprobadorDeExistencia("22413070010397");
-      //descicionDeRegistros("22413070010379");
         
         
         // Metodos Indispensables no clasificados xd
@@ -737,7 +735,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Agregar Alumno");
-            stage.setScene(new Scene(root, 1800, 750));
+            stage.setScene(new Scene(root, 1900, 750));
             stage.setIconified(false);
             stage.setResizable(false);
             stage.show();
@@ -751,7 +749,20 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
     @FXML
     private void btnInformeDeSalida(ActionEvent event) {
-        
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaInformeSalida.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Agregar Alumno");
+            stage.setScene(new Scene(root, 1200, 750));
+            stage.setIconified(false);
+            stage.setResizable(false);
+            stage.show();
+            Image icon = new Image("file:C:/Users/Rodrigo/Downloads/cecyteh_horizontal1.png");
+            stage.getIcons().add(icon);
+        } catch (IOException e) {
+            Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     @FXML

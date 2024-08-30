@@ -1,13 +1,17 @@
-
-package Controladores;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ArchivosFXML;
 
 import Conexiones.conexionDeConsulta;
 import Main.datos;
+import Main.datosSalida;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
@@ -25,43 +29,30 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author Rodrigo
  */
-public class ControladorVentanaInformeEntrada implements Initializable {
+public class ControladorVentandaInformeSalida implements Initializable {
 
     @FXML
     private TextField txtGrupo;
     @FXML
     private TextField txtGrado;
-    
     @FXML
-    private TableView<datos> TablaGeneral;
+    private TableView<datosSalida> TablaGeneral;
     @FXML
-    private TableColumn<datos, String> Nombre;
+    private TableColumn<datosSalida, String> Nombre;
     @FXML
-    private TableColumn<datos, String> Grado;
+    private TableColumn<datosSalida, String> Grado;
     @FXML
-    private TableColumn<datos, String> Grupo;
+    private TableColumn<datosSalida, String> Grupo;
     @FXML
-    private TableColumn<datos, String> Matricula;
+    private TableColumn<datosSalida, String> Matricula;
     @FXML
-    private TableColumn<datos, LocalDate> Fecha;
+    private TableColumn<datosSalida, LocalDate> Fecha;
     @FXML
-    private TableColumn<datos, LocalTime> Hora;
-    @FXML
-    private TableColumn<datos, String> Tiempo;
-    @FXML
-    private TableColumn<datos, String> Reporte;
-    @FXML
-    private TableColumn<datos, String> ReporteDos;
-    @FXML
-    private TableColumn<datos, String> ReporteTres;
-    @FXML
-    private TableColumn<datos, String> Observaciones;
-    
+    private TableColumn<datosSalida, LocalTime> Hora;
 
     /**
      * Initializes the controller class.
      */
-    
     
     public void ActualizadorDeDatos(){
         
@@ -81,20 +72,15 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         Matricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
         Fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         Hora.setCellValueFactory(new PropertyValueFactory<>("hora"));
-        Tiempo.setCellValueFactory(new PropertyValueFactory<>("tiempo"));
-        Reporte.setCellValueFactory(new PropertyValueFactory<>("reporte"));
-        ReporteDos.setCellValueFactory(new PropertyValueFactory<>("reporteDos"));
-        ReporteTres.setCellValueFactory(new PropertyValueFactory<>("reporteTres"));
-        Observaciones.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
-        ObservableList<datos> users = FXCollections.observableArrayList();
+        ObservableList<datosSalida> users = FXCollections.observableArrayList();
 
         try {
             // Utilizar el método de conexión proporcionado
             Connection connection = conexionDeConsulta.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte, ReporteDos, ReporteTres, Descripcion FROM registros WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora FROM salida WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros
@@ -112,14 +98,9 @@ public class ControladorVentanaInformeEntrada implements Initializable {
                 String matricula = resultSet.getString("Matricula");
                 LocalDate fecha = resultSet.getDate("Fecha").toLocalDate();
                 LocalTime hora = resultSet.getTime("Hora").toLocalTime();
-                String tiempo = resultSet.getString("Estado");
-                String reporte = resultSet.getString("Reporte");
-                String reporteDos = resultSet.getString("ReporteDos");
-                String reporteTres = resultSet.getString("ReporteTres");
-                String descripcion = resultSet.getString("Descripcion");
 
                 // Crear un nuevo objeto datos y agregarlo a la lista
-                users.add(new datos(nombre, grado, grupo, matricula, fecha, hora, tiempo, reporte, reporteDos, reporteTres, descripcion));
+                users.add(new datosSalida(nombre, grado, grupo, matricula, fecha, hora));
             }
 
             // Cerrar la conexión
@@ -138,7 +119,7 @@ public class ControladorVentanaInformeEntrada implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-         ActualizadorDeDatos();
+        ActualizadorDeDatos();
 
         // Agrega listeners para actualizar los datos en la tabla cuando cambien los valores de los TextField
         txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
