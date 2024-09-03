@@ -1,6 +1,7 @@
 package Controladores;
 
 import Conexiones.dateBaseconnection;
+import MetodosExtra.ComparadorDeHoras;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -125,6 +127,12 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
                     String Apellidos = apellidoP + " " + apellidoM;
                     
+                    System.out.println("Nombre: " + Nombre);
+                    System.out.println("Apellido Paterno: " + apellidoP);
+                    System.out.println("Apellido Materno: " + apellidoM);
+                    System.out.println("Grupo: " + Grupo);
+                    System.out.println("Grado: " + Grado);
+                    
                     txtNombre.setText(Nombre);
                     txtApellido.setText(Apellidos);
                     txtGrado.setText(Grado);
@@ -240,7 +248,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
         String[] Datos =  BuscadorDeAlumno(Codigo); 
         
         String BaseDatos = "";
-        switch(Datos[2]){
+        String Grado = Datos[2];
+        switch(Grado){
             case "1":
                 BaseDatos = "primersemestre";
                 break;
@@ -463,7 +472,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
         
         return false;
     }
-    public void SubidaDeSancionesAutomatica(String Matricula, String Sancion){
+    public void SubidaDeSancionesAutomatica(String Sancion){
+        String matricula = SelectorDeMatricula();
         for (int i = 1; i < 4; i++) {
             boolean editable = false;
             boolean editable2 = false;
@@ -473,32 +483,32 @@ public class ControladorDePaginaPrincipal implements Initializable {
             String dato3 = "";
             switch(i){
                 case 1:
-                    String query = "SELECT Reporte FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                    String query = "SELECT Reporte FROM `registros` WHERE Matricula = '" +matricula+ "';";
                     dato = "Reporte";
                     editable = Conexion(query, dato);
                     System.out.println(editable);
                     break;
                 case 2:
-                    String query2 = "SELECT ReporteDos FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                    String query2 = "SELECT ReporteDos FROM `registros` WHERE Matricula = '" +matricula+ "';";
                     dato2 = "ReporteDos";
                     editable2 = Conexion(query2, dato2);
                     System.out.println(editable2);
                     break;
                 case 3:
-                    String query3 = "SELECT ReporteTres FROM `registros` WHERE Matricula = '" +Matricula+ "';";
+                    String query3 = "SELECT ReporteTres FROM `registros` WHERE Matricula = '" +matricula+ "';";
                      dato3 = "ReporteTres";
                     editable3 = Conexion(query3, dato3);
                     System.out.println(editable3);
                     break;
             }
             if (editable) {
-                SubidaDeSanciones(Matricula, dato, Sancion);
+                SubidaDeSanciones(matricula, dato, Sancion);
                 break;
             } else if (editable2) {
-                SubidaDeSanciones(Matricula, dato2, Sancion);
+                SubidaDeSanciones(matricula, dato2, Sancion);
                 break;
             } else if (editable3) {
-                SubidaDeSanciones(Matricula, dato3, Sancion);
+                SubidaDeSanciones(matricula, dato3, Sancion);
                 break;
             } else {
                 // Exceso de sanciones
@@ -506,8 +516,26 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
         }
     }
-    
+    public String SelectorDeMatricula(){
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                "SELECT Matricula FROM registros ORDER BY Id_registro DESC LIMIT 1")){
+             
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String Matriucla = resultSet.getString("Matricula");
+                    System.out.println("Matricula: " + Matriucla);
+                    return Matriucla;
+                }
+            }
+        }catch(SQLException ex){
+        
+        }
+        
+        return null;
+    }
     public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion){
+        
         try(Connection connection = dateBaseconnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "UPDATE registros SET " + Tipo + " = ? WHERE Matricula = ? ")){
@@ -521,15 +549,44 @@ public class ControladorDePaginaPrincipal implements Initializable {
             } else {
                 System.out.println("No se pudieron ingresar los datos.");
             }
+            
+        }catch(SQLException ex){
+        
+        }
+    }
+    
+    private Time ComprobadorDeTiempo(String Matricula) {
+        try(Connection connection = dateBaseconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                "SELECT Hora FROM registros WHERE Matricula = ?")){
+                statement.setString(1, Matricula);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    
+                    Time existencia = resultSet.getTime("Hora");
+                   return existencia; 
+
                 }
             }
         }catch(SQLException ex){
         
         }
+        
+        return null; // Aquí debería ir la lógica que devuelve un Time
     }
+    
+    public boolean Comparador(String Matricula) {
+        // Supongamos que tienes un método que te da la hora de la base de datos
+        Time Horabd = ComprobadorDeTiempo(Matricula);
+
+        // Crear instancia de ComparadorDeHoras
+        ComparadorDeHoras comparador = new ComparadorDeHoras();
+
+        // Usar el método compararHoras
+        boolean diferencia = comparador.compararHoras(Horabd);
+        
+        return diferencia;
+    }
+
     
     
     
@@ -594,14 +651,24 @@ public class ControladorDePaginaPrincipal implements Initializable {
         boolean existenciaSalida = ComprobadorDeExistenciaSalida(Matricula);
         
         
-        if(!existencia){
-            if(!existenciaSalida){
-                EnvioDeregistroEntrada(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
-            }else{
+        
+        if(!existencia){ //
+            //Entrada
+            
+            EnvioDeregistroEntrada(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
+            
+        }else if(existencia){
+            //Salida
+            boolean tolerancia = Comparador(Matricula);
+            if(tolerancia){
+                if(!existenciaSalida){
+                    
+                    EnvioDeregistroSalida(Nombre, Apellidos, Grado, Grupo, Matricula);
+                }else{
+                    System.out.println("YA esxiste un registro");
+                }
                 
             }
-        }else{
-            EnvioDeregistroSalida(Nombre, Apellidos, Grado, Grupo, Matricula);
         }
         
     
@@ -610,8 +677,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     public void EnvioDeregistroEntrada(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula,String Estado){
             try (Connection connection = dateBaseconnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                 "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
+            PreparedStatement statement = connection.prepareStatement(
+            "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -642,8 +709,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     public void EnvioDeregistroSalida(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
             try (Connection connection = dateBaseconnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                 "INSERT INTO salida (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
+            PreparedStatement statement = connection.prepareStatement(
+            "INSERT INTO salida (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -678,7 +745,6 @@ public class ControladorDePaginaPrincipal implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         
         // Metodos Indispensables no clasificados xd
         LimitadorLongutid();
@@ -767,18 +833,16 @@ public class ControladorDePaginaPrincipal implements Initializable {
 
     @FXML
     private void bntUniforme(ActionEvent event) {
-        String Matricula = txtCodigo.getText();
-        if(Matricula.length()> 13){
-            SubidaDeSancionesAutomatica(Matricula, "Uniforme incompleto");
+        if(!txtNombre.getText().isEmpty()){
+            SubidaDeSancionesAutomatica("Uniforme incompleto");
         }
         
     }
 
     @FXML
     private void btnCorte(ActionEvent event) {
-        String Matricula = txtCodigo.getText();
-        if(Matricula.length()> 13){
-            SubidaDeSancionesAutomatica(Matricula, "Corte de cabello");
+        if(!txtNombre.getText().isEmpty()){
+            SubidaDeSancionesAutomatica("Corte de cabello");
         }
        
     }
@@ -786,9 +850,8 @@ public class ControladorDePaginaPrincipal implements Initializable {
     @FXML
     private void btnuns(ActionEvent event) {
         
-        String Matricula = txtCodigo.getText();
-        if(Matricula.length()> 13){
-            SubidaDeSancionesAutomatica(Matricula, "Uñas");
+        if(!txtNombre.getText().isEmpty()){
+            SubidaDeSancionesAutomatica("Uñas");
         }
         
     }

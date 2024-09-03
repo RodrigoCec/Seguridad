@@ -2,12 +2,11 @@
 package Controladores;
 
 import Conexiones.conexionDeConsulta;
-import Main.datos;
+import DatosInformes.datos;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
@@ -65,7 +64,7 @@ public class ControladorVentanaInformeEntrada implements Initializable {
     
     public void ActualizadorDeDatos(){
         
-         String Grado = txtGrado.getText();
+        String Grado = txtGrado.getText();
         String Grupo = txtGrupo.getText();
 
         // Actualiza la tabla con los valores actuales de Grado y Grupo

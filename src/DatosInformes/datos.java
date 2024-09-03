@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Main;
+package DatosInformes;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- *
- * @author Rodrigo
+ * Clase que representa una entrada de datos con información personal,
+ * horario y reportes.
+ * 
+ * @autor Rodrigo
  */
-public class datosSalida {
+public class datos {
     private String nombre;
     private String grado;
     private String grupo;
@@ -20,6 +17,10 @@ public class datosSalida {
     private LocalDate fecha;
     private LocalTime hora;
     private String tiempo;
+    private String reporte;
+    private String reporteDos;
+    private String reporteTres;
+    private String descripcion;
 
     /**
      * Constructor para inicializar todos los campos de la clase.
@@ -30,14 +31,23 @@ public class datosSalida {
      * @param matricula Matrícula de la persona.
      * @param fecha Fecha de la entrada.
      * @param hora Hora de la entrada.
+     * @param reporte Reporte principal.
+     * @param reporteDos Segundo reporte.
+     * @param reporteTres Tercer reporte.
+     * @param descripcion Descripción adicional.
      */
-    public datosSalida(String nombre, String grado, String grupo, String matricula, LocalDate fecha, LocalTime hora) {
+    public datos(String nombre, String grado, String grupo, String matricula, LocalDate fecha, LocalTime hora,String tiempo, String reporte, String reporteDos, String reporteTres, String descripcion) {
         this.nombre = nombre;
         this.grado = grado;
         this.grupo = grupo;
         this.matricula = matricula;
         this.fecha = fecha;
         this.hora = hora;
+        this.tiempo = tiempo;
+        this.reporte = reporte;
+        this.reporteDos = reporteDos;
+        this.reporteTres = reporteTres;
+        this.descripcion = descripcion;
     }
     
     public String getNombre() {
@@ -88,4 +98,44 @@ public class datosSalida {
         this.hora = hora;
     }
     
+    public String getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(String tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    public String getReporte() {
+        return reporte;
+    }
+
+    public void setReporte(String reporte) {
+        this.reporte = reporte;
+    }
+
+    public String getReporteDos() {
+        return reporteDos;
+    }
+
+    public void setReporteDos(String reporteDos) {
+        this.reporteDos = reporteDos;
+    }
+
+    public String getReporteTres() {
+        return reporteTres;
+    }
+
+    public void setReporteTres(String reporteTres) {
+        this.reporteTres = reporteTres;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }
+
