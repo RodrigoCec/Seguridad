@@ -28,7 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author Rodrigo
  */
-public class ControladorVentandaInformeSalida implements Initializable {
+public class ControladorVentanaInformeSalida implements Initializable {
 
     @FXML
     private TextField txtGrupo;

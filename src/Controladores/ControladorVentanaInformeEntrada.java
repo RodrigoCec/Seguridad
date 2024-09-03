@@ -147,6 +147,9 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         txtGrupo.textProperty().addListener((observable, oldValue, newValue) -> {
             ActualizadorDeDatos();
         });
+
+        
+        
     }    
     
 }

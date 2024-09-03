@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="761.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="Controladores.ControladorVentaBusquedaAlumno">
+<AnchorPane id="AnchorPane" prefHeight="460.0" prefWidth="708.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentaBusquedaAlumno">
     
    <children>
-      <TextField layoutX="110.0" layoutY="72.0" promptText="t" />
+      <TextField fx:id="txtGrado" layoutX="215.0" layoutY="64.0" promptText="Grado" />
+      <TextField fx:id="txtGrupo" layoutX="373.0" layoutY="64.0" promptText="Grupo" />
+      <TableView fx:id="tablaGeneral" editable="true" layoutX="50.0" layoutY="156.0" prefHeight="253.0" prefWidth="606.0">
+        <columns>
+          <TableColumn fx:id="nombre" prefWidth="191.0" text="Nombre" />
+          <TableColumn fx:id="grado" prefWidth="95.0" text="Grado" />
+            <TableColumn fx:id="grupo" prefWidth="93.0" text="Grupo" />
+            <TableColumn fx:id="matricula" onEditStart="#ObtenerDato" prefWidth="226.0" text="Matricula" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
