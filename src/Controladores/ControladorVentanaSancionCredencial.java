@@ -7,6 +7,8 @@ package Controladores;
 
 import Conexion.conexionDeConsulta;
 import DatosInformes.datos;
+import DatosInformes.datosBusqueda;
+import MetodosExtra.gestorDeVentanas;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,50 +23,38 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;;
+import javafx.scene.control.cell.PropertyValueFactory;
+import static javafx.scene.input.KeyCode.S;
+import static javafx.scene.input.KeyCode.T;
+import javafx.stage.Stage;
+
 
 /**
  * FXML Controller class
  *
  * @author Rodrigo
  */
-public class ControladorVentanaInformeEntrada implements Initializable {
+public class ControladorVentanaSancionCredencial implements Initializable {
 
     @FXML
-    private TextField txtGrupo;
+    private TableView<datosBusqueda> tablaGeneral;
+    @FXML
+    private TableColumn<datosBusqueda, String> nombre;
+    @FXML
+    private TableColumn<datosBusqueda, String> grado;
+    @FXML
+    private TableColumn<datosBusqueda, String> grupo;
+    @FXML
+    private TableColumn<datosBusqueda, String> matricula;
     @FXML
     private TextField txtGrado;
-    
     @FXML
-    private TableView<datos> TablaGeneral;
-    @FXML
-    private TableColumn<datos, String> Nombre;
-    @FXML
-    private TableColumn<datos, String> Grado;
-    @FXML
-    private TableColumn<datos, String> Grupo;
-    @FXML
-    private TableColumn<datos, String> Matricula;
-    @FXML
-    private TableColumn<datos, LocalDate> Fecha;
-    @FXML
-    private TableColumn<datos, LocalTime> Hora;
-    @FXML
-    private TableColumn<datos, String> Tiempo;
-    @FXML
-    private TableColumn<datos, String> Reporte;
-    @FXML
-    private TableColumn<datos, String> ReporteDos;
-    @FXML
-    private TableColumn<datos, String> ReporteTres;
-    @FXML
-    private TableColumn<datos, String> Observaciones;
+    private TextField txtGrupo;
     
 
     /**
      * Initializes the controller class.
      */
-    
     
     public void ActualizadorDeDatos(){
         
@@ -75,29 +65,23 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         MostradorDeDatos(Grado, Grupo);
         
     }
-   
+    
+    
     public void MostradorDeDatos(String Semestre, String Grup){
         // Configurar las columnas para utilizar las propiedades de la clase datos
-        Nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        Grado.setCellValueFactory(new PropertyValueFactory<>("grado"));
-        Grupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
-        Matricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
-        Fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        Hora.setCellValueFactory(new PropertyValueFactory<>("hora"));
-        Tiempo.setCellValueFactory(new PropertyValueFactory<>("tiempo"));
-        Reporte.setCellValueFactory(new PropertyValueFactory<>("reporte"));
-        ReporteDos.setCellValueFactory(new PropertyValueFactory<>("reporteDos"));
-        ReporteTres.setCellValueFactory(new PropertyValueFactory<>("reporteTres"));
-        Observaciones.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        grado.setCellValueFactory(new PropertyValueFactory<>("grado"));
+        grupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
+        matricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
 
-        ObservableList<datos> users = FXCollections.observableArrayList();
+        ObservableList<datosBusqueda> users = FXCollections.observableArrayList();
 
         try {
             // Utilizar el método de conexión proporcionado
             Connection connection = conexionDeConsulta.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte, ReporteDos, ReporteTres, Descripcion FROM registros WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, Grado, Grupo, Matricula FROM alumnos WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros
@@ -113,16 +97,9 @@ public class ControladorVentanaInformeEntrada implements Initializable {
                 String grado = resultSet.getString("Grado");
                 String grupo = resultSet.getString("Grupo");
                 String matricula = resultSet.getString("Matricula");
-                LocalDate fecha = resultSet.getDate("Fecha").toLocalDate();
-                LocalTime hora = resultSet.getTime("Hora").toLocalTime();
-                String tiempo = resultSet.getString("Estado");
-                String reporte = resultSet.getString("Reporte");
-                String reporteDos = resultSet.getString("ReporteDos");
-                String reporteTres = resultSet.getString("ReporteTres");
-                String descripcion = resultSet.getString("Descripcion");
 
                 // Crear un nuevo objeto datos y agregarlo a la lista
-                users.add(new datos(nombre, grado, grupo, matricula, fecha, hora, tiempo, reporte, reporteDos, reporteTres, descripcion));
+                users.add(new datosBusqueda(nombre, grado, grupo, matricula));
             }
 
             // Cerrar la conexión
@@ -135,13 +112,15 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         }
 
         // Configurar el TableView con los datos
-        TablaGeneral.setItems(users);
+        tablaGeneral.setItems(users);
 
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-         ActualizadorDeDatos();
+        
+        ActualizadorDeDatos();
 
         // Agrega listeners para actualizar los datos en la tabla cuando cambien los valores de los TextField
         txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -151,9 +130,16 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         txtGrupo.textProperty().addListener((observable, oldValue, newValue) -> {
             ActualizadorDeDatos();
         });
+    }    
+    
 
-        
-        
-    }      
+    @FXML
+    private void ObtenerDato(TableColumn.CellEditEvent<datosBusqueda, String> event) {
+        datosBusqueda person = event.getRowValue();
+            String currentValue = person.getMatricula();
+            
+            gestorDeVentanas.openOrUpdateDestinationWindow(currentValue);
+            System.out.println("Editing Started. Current Value: " + currentValue);
+    }  
     
 }

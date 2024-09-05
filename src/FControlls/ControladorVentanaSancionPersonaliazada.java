@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controladores;
+package FControlls;
 
-import Conexiones.dateBaseconnection;
+import Conexion.dateBaseconnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

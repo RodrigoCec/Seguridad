@@ -1,0 +1,45 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+.tetxField{
+    
+    -fx-background-color: #fff;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: #fff;
+    -fx-border-width: 0;
+    -fx-padding: 5;
+    
+}
+
+.txtLabel{
+    -fx-background-color: #d3d4d7;
+    -fx-background-radius: 45;
+    -fx-padding: 10;
+    
+}
+
+#FondoInferior{
+    
+    -fx-fill: #d5bf9f;
+    -fx-stroke-width: 0; 
+    
+    
+}
+
+#FondoMedio{
+    
+    -fx-stroke-width: 0; 
+    -fx-fill: #8f4846;
+}
+
+#FondoSuperior{
+    
+    -fx-stroke-width: 0; 
+    -fx-fill: #7b2328;
+}

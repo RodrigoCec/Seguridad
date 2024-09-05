@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controladores;
+package FControlls;
 
-import Conexiones.conexionDeConsulta;
+import Conexion.conexionDeConsulta;
 import DatosInformes.datos;
 import DatosInformes.datosBusqueda;
 import MetodosExtra.gestorDeVentanas;

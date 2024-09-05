@@ -1,6 +1,6 @@
-package Controladores;
+package FControlls;
 
-import Conexiones.dateBaseconnection;
+import Conexion.dateBaseconnection;
 import MetodosExtra.ComparadorDeHoras;
 import java.io.IOException;
 import java.net.URL;
@@ -159,6 +159,37 @@ public class ControladorDePaginaPrincipal implements Initializable {
         
         txtUniforme.setText(Uniforme);
     }
+    
+    public void SeteadorImagenUniforme(String Codigo){
+        String Dia = SelectorDeDiaSemana();
+        //System.out.println("Dia es: " + Dia);
+        String Semestre = AsignadorDeSemestre(Codigo);
+        //System.out.println("Semestre es: " + Semestre);
+        String Grupo = txtGrupo.getText();
+        
+        String[] datos =  SeparadorDeHorarios(Dia,Semestre,Grupo);
+        
+        String BaseDatos = "";
+        switch(datos[0]){
+            case "1":
+                uniformeOficial();
+                
+                break;
+            case "2":
+                uniformeDeportivo();
+                break;
+            case "3":
+                BaseDatos = "Alimentos";
+                break;
+            case "4":
+                BaseDatos = "Enfermeria";
+                break;
+            case "5":
+                BaseDatos = "Puericultura";
+                break;
+                 
+        }
+    }
 
     public void VerificacionDeLongitud(){
         
@@ -168,6 +199,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
                String[] Datos = BuscadorDeAlumno(newValue);
                String estado = ComparadorDeEntrada(newValue);
                SeteadorDeUniforme(newValue);
+               SeteadorImagenUniforme(newValue);
                EnvioDeRegistrosGeneral(Datos[0], Datos[1], Datos[2], Datos[3], newValue, estado);
             }
         });
@@ -421,6 +453,27 @@ public class ControladorDePaginaPrincipal implements Initializable {
         imgAlerta.setImage(image2);
         imgMarco.setImage(image);
     }
+    
+    private void uniformeOficial(){
+        String imagePath = "/Imagenes/oficial.png";
+        
+        Image img = new Image(imagePath);
+        
+        imgFotoPerfil.setImage(img);
+    }
+    private void uniformeDeportivo(){
+        String imagePath = "/Imagenes/deportivo.png";
+        
+        Image img = new Image(imagePath);
+        
+        imgFotoPerfil.setImage(img);
+    }
+    
+    
+    
+    
+    
+    
     
     public String SelectorDeUniforme(String Dia,String Grado,String Grupo){
         String[] Datos =  SeparadorDeHorarios(Dia,Grado,Grupo); 
@@ -742,10 +795,35 @@ public class ControladorDePaginaPrincipal implements Initializable {
         ConexionBd();
     }
 
+    public void CreadorDeTablasParaSanciones(){
+        
+        
+        String query = "CREATE TABLE `sss` (\n" +
+            "  `Id_registro` int(11) NOT NULL,\n" +
+            "  `Nombre` text NOT NULL,\n" +
+            "  `Grado` text NOT NULL,\n" +
+            "  `Grupo` text NOT NULL,\n" +
+            "  `Matricula` text NOT NULL,\n" +
+            "  `Fecha` date NOT NULL,\n" +
+            "  `Hora` time NOT NULL,\n" +
+            "  `Estado` text NOT NULL,\n" +
+            "  `Reporte` text DEFAULT NULL,\n" +
+            "  `ReporteDos` text DEFAULT NULL,\n" +
+            "  `ReporteTres` text DEFAULT NULL,\n" +
+            "  `Descripcion` text DEFAULT NULL\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;";
+        
+        System.out.println(query);
+    }
+    
+    
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        CreadorDeTablasParaSanciones();
+            
         // Metodos Indispensables no clasificados xd
         LimitadorLongutid();
         LimpiadorDeCodigo();
@@ -782,7 +860,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaHorarios.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Agregar Alumno");
+            stage.setTitle("Asignar horarios");
             stage.setScene(new Scene(root, 1000, 500));
             stage.setIconified(false);
             stage.setResizable(false);
@@ -800,7 +878,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaInformeEntrada.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Agregar Alumno");
+            stage.setTitle("Informe de entrada");
             stage.setScene(new Scene(root, 1900, 750));
             stage.setIconified(false);
             stage.setResizable(false);
@@ -819,7 +897,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaInformeSalida.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Agregar Alumno");
+            stage.setTitle("Informe de salida");
             stage.setScene(new Scene(root, 1200, 750));
             stage.setIconified(false);
             stage.setResizable(false);
@@ -863,7 +941,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentaBusquedaAlumno.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Agregar Alumno");
+            stage.setTitle("Busqueda de alumno");
             stage.setScene(new Scene(root, 1000, 500));
             stage.setIconified(false);
             stage.setResizable(false);
@@ -887,7 +965,7 @@ public class ControladorDePaginaPrincipal implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ArchivosFXML/VentanaSancionPersonalizada.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Agregar Alumno");
+            stage.setTitle("Generar un reporte personalizado");
             stage.setScene(new Scene(root, 1000, 500));
             stage.setIconified(false);
             stage.setResizable(false);

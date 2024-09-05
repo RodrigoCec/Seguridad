@@ -1,6 +1,6 @@
 package MetodosExtra;
 
-import Controladores.ControladorDePaginaPrincipal;
+import FControlls.ControladorDePaginaPrincipal;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

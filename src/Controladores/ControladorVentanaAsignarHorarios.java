@@ -1,5 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Controladores;
-
 
 import java.net.URL;
 import java.sql.Connection;
@@ -25,9 +29,9 @@ import javafx.util.Duration;
  *
  * @author Rodrigo
  */
-public class VentanaHorariosController implements Initializable {
-    
-    //---------> Organizacion de Etiquetas
+public class ControladorVentanaAsignarHorarios implements Initializable {
+
+   //---------> Organizacion de Etiquetas
     
         //Datos
     
@@ -325,7 +329,7 @@ public class VentanaHorariosController implements Initializable {
             //System.out.println("Conexión exitosa");
         }
     } catch (SQLException e) {
-        Logger.getLogger(VentanaHorariosController.class.getName()).log(Level.SEVERE, "Error de conexión", e);
+        Logger.getLogger(ControladorVentanaAsignarHorarios.class.getName()).log(Level.SEVERE, "Error de conexión", e);
     }
     return conexion;
     }
@@ -1650,7 +1654,6 @@ public class VentanaHorariosController implements Initializable {
     
         //Conexion a base de datos
         ConexionBd();
-    }    
-
+    }
     
 }

@@ -30,7 +30,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 /**
@@ -38,7 +41,7 @@ import javax.imageio.ImageIO;
  *
  * @author Rodrigo
  */
-public class VentanaAgregarAlumnoController implements Initializable {
+public class ControladorVentanaAgregarAlumnos implements Initializable {
 
     @FXML
     private TextField txtNombre;
@@ -74,7 +77,7 @@ public class VentanaAgregarAlumnoController implements Initializable {
                 conexion = DriverManager.getConnection(direccion, usuario, password);
                 System.out.println("Conexión exitosa");
             } catch (SQLException e) {
-                Logger.getLogger(ControladorDePaginaPrincipal.class.getName()).log(Level.SEVERE, "Error de conexión", e);
+                Logger.getLogger(ControladorVentanaAgregarAlumnos.class.getName()).log(Level.SEVERE, "Error de conexión", e);
             }
         }
         return conexion;
@@ -92,6 +95,8 @@ public class VentanaAgregarAlumnoController implements Initializable {
     String Matricula;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     int numerodeGrupo;
     String gradoEnNum;
+    @FXML
+    private MenuItem btnSeleccionar;
     
     
     public void recuperarDatos(){
@@ -306,7 +311,7 @@ public class VentanaAgregarAlumnoController implements Initializable {
             generateQRCode(Matricula, filePath);
             subirDatos();
         } catch (IOException | WriterException ex) {
-            Logger.getLogger(VentanaAgregarAlumnoController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorVentanaAgregarAlumnos.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -321,6 +326,24 @@ public class VentanaAgregarAlumnoController implements Initializable {
         txtGrupo.setText("");
         txtMatricula.setText("");
     
+    }
+
+    @FXML
+    private void bntSelecionarCarpeta(ActionEvent event) {
+        
+       DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Seleccionar Carpeta");
+
+        // Obtener el Stage a partir del MenuItem
+        Stage stage = (Stage) btnSeleccionar.getParentPopup().getOwnerWindow();
+
+        // Abrir el explorador de archivos para seleccionar una carpeta
+        File selectedDirectory = directoryChooser.showDialog(stage);
+
+        // Si se selecciona una carpeta, puedes hacer algo con ella
+        if (selectedDirectory != null) {
+            System.out.println("Carpeta seleccionada: " + selectedDirectory.getAbsolutePath());
+        }
     }
     
 }

@@ -3,14 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/ArchivosFXML/ControladorVentandaInformeSalida.java</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/ArchivosFXML/VentanaInformeEntrada.fxml</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Controladores/VentanaHorariosController.java</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/ArchivosFXML/VentanaInformeSalida.fxml</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Controladores/ControladorVentanaInformeEntrada.java</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Controladores/ControladorDePaginaPrincipal.java</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Main/datos.java</file>
-            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Main/datosSalida.java</file>
+            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/ArchivosFXML/PaginaPrincipal.fxml</file>
+            <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/Styles/PaginaPrincipalStyle.css</file>
         </group>
     </open-files>
 </project-private>
