@@ -101,11 +101,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#btnInformeDeSalida" text="Informes de salida" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
         </menus>
       </MenuBar>
       <ImageView fx:id="imgMarco" fitHeight="361.0" fitWidth="425.0" layoutX="283.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
@@ -152,7 +147,7 @@
             <Font size="24.0" />
          </font>
       </Button>
-      <Label alignment="CENTER" layoutX="340.0" layoutY="701.0" prefHeight="93.0" prefWidth="269.0" text="SANCIONES" textFill="WHITE">
+      <Label alignment="CENTER" layoutX="340.0" layoutY="701.0" prefHeight="93.0" prefWidth="269.0" text="REPORTES" textFill="WHITE">
          <font>
             <Font name="Olympus Mount" size="40.0" />
          </font>
