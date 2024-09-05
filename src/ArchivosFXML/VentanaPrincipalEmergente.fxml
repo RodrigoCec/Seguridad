@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="1700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaPrincipalEmergente">
+    <stylesheets>
+        <URL value="@/Styles/VentanaPrincipalEmergenteStyle.css" />
+    </stylesheets>
+    <children>
+      <Rectangle id="FondoInferior" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="950.0" layoutX="-7.0" stroke="BLACK" strokeType="INSIDE" width="1700.0" AnchorPane.bottomAnchor="244.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="517.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle id="FondoMedio" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1304.0" layoutX="-172.0" layoutY="-118.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="2382.0" y="4.0" />
+      <Rectangle id="FondoSuperior" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1208.0" layoutX="-110.0" layoutY="-64.0" rotate="40.0" stroke="BLACK" strokeType="INSIDE" width="2244.0" />
+      <ImageView fitHeight="123.0" fitWidth="578.0" layoutX="410.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Imagenes/logo1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="120.0" fitWidth="423.0" layoutX="983.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Imagenes/logo2.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="722.0" layoutY="219.0" prefWidth="324.0" styleClass="txtLabel" text="    NOMBRE   ">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="722.0" layoutY="332.0" prefHeight="47.0" prefWidth="417.0" styleClass="txtLabel" text="    APELLIDOS   ">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtCodigo" alignment="CENTER" layoutX="170.0" layoutY="609.0" prefHeight="65.0" prefWidth="372.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="40.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtNombre" editable="false" layoutX="965.0" layoutY="219.0" prefHeight="54.0" prefWidth="524.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="55.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextField>
+      <Label layoutX="722.0" layoutY="435.0" prefHeight="38.0" prefWidth="278.0" styleClass="txtLabel" text="    GRADO   ">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtGrado" alignment="CENTER" editable="false" layoutX="941.0" layoutY="435.0" prefHeight="54.0" prefWidth="140.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="55.0" />
+         </font>
+      </TextField>
+      <Label layoutX="1112.0" layoutY="435.0" prefHeight="29.0" prefWidth="269.0" styleClass="txtLabel" text="    GRUPO   ">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtGrupo" alignment="CENTER" editable="false" layoutX="1329.0" layoutY="435.0" prefHeight="65.0" prefWidth="153.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="55.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtApellido" editable="false" layoutX="1005.0" layoutY="332.0" prefHeight="54.0" prefWidth="475.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="55.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="imgFotoPerfil" fitHeight="342.0" fitWidth="285.0" layoutX="239.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="txtHora" layoutX="1452.0" layoutY="797.0" text="10:20" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="32.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imgMarco" fitHeight="361.0" fitWidth="425.0" layoutX="177.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/rec/1x/Recurso%203.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgAlerta" fitHeight="113.0" fitWidth="285.0" layoutX="243.0" layoutY="517.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Pictures/rec/1x/Recurso%202.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="722.0" layoutY="539.0" prefHeight="21.0" prefWidth="359.0" styleClass="txtLabel" text="    UNIFORME   ">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtUniforme" editable="false" layoutX="1000.0" layoutY="539.0" prefHeight="65.0" prefWidth="487.0" styleClass="tetxField">
+         <font>
+            <Font name="TT Bluescreens Trial Medium" size="55.0" />
+         </font></TextField>
+      <Button fx:id="txtButtonUniforme" layoutX="379.0" layoutY="755.0" mnemonicParsing="false" onAction="#bntUniforme" prefHeight="54.0" prefWidth="278.0" text="Uniforme">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="txtButtonCorte" layoutX="77.0" layoutY="834.0" mnemonicParsing="false" onAction="#btnCorte" prefHeight="54.0" prefWidth="278.0" text="Corte de cabello">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="txtButtonPersonalizado" layoutX="379.0" layoutY="834.0" mnemonicParsing="false" onAction="#btnPersonalizado" prefHeight="54.0" prefWidth="278.0" text="Reporte personalizado">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="txtButtonUns" layoutX="76.0" layoutY="754.0" mnemonicParsing="false" onAction="#btnuns" prefHeight="54.0" prefWidth="278.0" text="Uñas">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Label alignment="CENTER" layoutX="234.0" layoutY="667.0" prefHeight="93.0" prefWidth="269.0" text="REPORTES" textFill="WHITE">
+         <font>
+            <Font name="Olympus Mount" size="40.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
