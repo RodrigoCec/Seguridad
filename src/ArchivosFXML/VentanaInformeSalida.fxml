@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="729.0" prefWidth="1171.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="Controladores.ControladorVentanaInformeSalida">
+<AnchorPane id="AnchorPane" prefHeight="729.0" prefWidth="1164.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaInformeSalida">
     <stylesheets>
         <URL value="@/Styles/VentanaInformeSalidaStyle.css" />
     </stylesheets>

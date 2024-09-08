@@ -38,7 +38,7 @@
             <Font name="Olympus Mount" size="50.0" />
          </font>
       </Label>
-      <Label layoutX="820.0" layoutY="351.0" prefHeight="99.0" prefWidth="417.0" styleClass="txtLabel" text="    APELLIDOS   ">
+      <Label layoutX="820.0" layoutY="351.0" prefHeight="65.0" prefWidth="417.0" styleClass="txtLabel" text="    APELLIDOS   ">
          <font>
             <Font name="Olympus Mount" size="50.0" />
          </font>
@@ -56,27 +56,27 @@
             <Insets />
          </opaqueInsets>
       </TextField>
-      <Label layoutX="820.0" layoutY="469.0" prefHeight="93.0" prefWidth="278.0" styleClass="txtLabel" text="    GRADO   ">
+      <Label layoutX="820.0" layoutY="469.0" prefHeight="41.0" prefWidth="278.0" styleClass="txtLabel" text="    GRADO   ">
          <font>
             <Font name="Olympus Mount" size="50.0" />
          </font>
       </Label>
-      <TextField fx:id="txtGrado" alignment="CENTER" editable="false" layoutX="1039.0" layoutY="469.0" prefHeight="93.0" prefWidth="140.0" styleClass="tetxField">
+      <TextField fx:id="txtGrado" alignment="CENTER" editable="false" layoutX="1037.0" layoutY="469.0" prefHeight="86.0" prefWidth="140.0" styleClass="tetxField">
          <font>
             <Font name="TT Bluescreens Trial Medium" size="65.0" />
          </font>
       </TextField>
-      <Label layoutX="1210.0" layoutY="469.0" prefHeight="93.0" prefWidth="269.0" styleClass="txtLabel" text="    GRUPO   ">
+      <Label layoutX="1210.0" layoutY="469.0" prefHeight="0.0" prefWidth="269.0" styleClass="txtLabel" text="    GRUPO   ">
          <font>
             <Font name="Olympus Mount" size="50.0" />
          </font>
       </Label>
-      <TextField fx:id="txtGrupo" alignment="CENTER" editable="false" layoutX="1427.0" layoutY="469.0" prefHeight="93.0" prefWidth="153.0" styleClass="tetxField">
+      <TextField fx:id="txtGrupo" alignment="CENTER" editable="false" layoutX="1422.0" layoutY="469.0" prefHeight="86.0" prefWidth="153.0" styleClass="tetxField">
          <font>
             <Font name="TT Bluescreens Trial Medium" size="65.0" />
          </font>
       </TextField>
-      <TextField fx:id="txtApellido" editable="false" layoutX="1103.0" layoutY="351.0" prefHeight="99.0" prefWidth="475.0" styleClass="tetxField">
+      <TextField fx:id="txtApellido" editable="false" layoutX="1103.0" layoutY="351.0" prefHeight="86.0" prefWidth="475.0" styleClass="tetxField">
          <font>
             <Font name="TT Bluescreens Trial Medium" size="65.0" />
          </font>
@@ -113,12 +113,12 @@
             <Image url="@../../../../../Pictures/rec/1x/Recurso%202.png" />
          </image>
       </ImageView>
-      <Label layoutX="820.0" layoutY="595.0" prefHeight="93.0" prefWidth="359.0" styleClass="txtLabel" text="    UNIFORME   ">
+      <Label layoutX="820.0" layoutY="595.0" prefHeight="47.0" prefWidth="359.0" styleClass="txtLabel" text="    UNIFORME   ">
          <font>
             <Font name="Olympus Mount" size="50.0" />
          </font>
       </Label>
-      <TextField fx:id="txtUniforme" editable="false" layoutX="1098.0" layoutY="595.0" prefHeight="93.0" prefWidth="487.0" styleClass="tetxField">
+      <TextField fx:id="txtUniforme" editable="false" layoutX="1098.0" layoutY="595.0" prefHeight="86.0" prefWidth="487.0" styleClass="tetxField">
          <font>
             <Font name="TT Bluescreens Trial Medium" size="65.0" />
          </font></TextField>
