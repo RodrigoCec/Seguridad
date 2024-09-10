@@ -14,7 +14,7 @@ import java.sql.SQLException;
  *
  * @author Rodrigo
  */
-public class conexionDeConsulta {
+public class conexionDeCreacion {
     
     public static Connection getConnection() throws SQLException {
         ExtractorDatosConexion.ConfiguracionDB config = ExtractorDatosConexion.cargarConfiguracion();
@@ -24,5 +24,4 @@ public class conexionDeConsulta {
         
         return connection;
     }
-    
 }

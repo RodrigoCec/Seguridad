@@ -5,6 +5,8 @@
  */
 package Controladores;
 
+import Conexion.conexionDeConsulta;
+import Conexion.conexionDeRegistro;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -63,27 +65,6 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     
     //Metodo conexion A base de datos
     
-    private static final String bd = "basedatosprueba";
-    private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
-    private static final String usuario = "root";
-    private static final String password = "";
-    
-    private static Connection conexion;
-
-    // Código de conexión
-    public static Connection ConexionBd() {
-        if (conexion == null) {
-            try {
-                conexion = DriverManager.getConnection(direccion, usuario, password);
-                System.out.println("Conexión exitosa");
-            } catch (SQLException e) {
-                Logger.getLogger(ControladorVentanaAgregarAlumnos.class.getName()).log(Level.SEVERE, "Error de conexión", e);
-            }
-        }
-        return conexion;
-    }
-    
- 
     
     //metodo Generador de codigo de alumno
     
@@ -146,7 +127,7 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
         //
         recuperarDatos();
         
-        try (Connection connection = ConexionBd();
+        try (Connection connection = conexionDeRegistro.getConnection();
              Statement statement = connection.createStatement()) {
 
             String sql = "INSERT INTO alumnos (Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo, matricula) "
@@ -181,7 +162,7 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
         
         String Consulta = "SELECT matricula FROM alumnos WHERE matricula = '"+ valorAverificar +"'";
         
-        try(Connection connection = ConexionBd();
+        try(Connection connection = conexionDeConsulta.getConnection();
             PreparedStatement DatosDeConsulta = connection.prepareStatement(Consulta)){
             
             //DatosDeConsulta.setString(1, valorAverificar);

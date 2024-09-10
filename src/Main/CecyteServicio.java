@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -24,8 +25,19 @@ public class CecyteServicio extends Application {
         
         Scene scene = new Scene(root);
         
-        
         stage.setScene(scene);
+          
+        // Verifica si el Stage no está maximizado
+        if (!stage.isMaximized()) {
+            // Establece el tamaño de la ventana si no está maximizada
+            stage.setHeight(1000);  // Altura de la ventana
+            stage.setWidth(1920);   // Ancho de la ventana
+        }
+
+        // Si quieres maximizar después de cambiar el tamaño, puedes hacerlo
+        stage.setMaximized(true);
+        Image icon = new Image("file:C:/Users/Rodrigo/Downloads/cecyteh_horizontal1.png");
+        stage.getIcons().add(icon);
         stage.show();
     }
 
@@ -33,7 +45,7 @@ public class CecyteServicio extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        launch(args);   
     }
     
 }

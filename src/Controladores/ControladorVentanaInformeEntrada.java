@@ -5,6 +5,7 @@
  */
 package Controladores;
 
+import Conexion.conexionDeActualizacion;
 import Conexion.conexionDeConsulta;
 import DatosInformes.datos;
 import java.net.URL;
@@ -94,7 +95,7 @@ public class ControladorVentanaInformeEntrada implements Initializable {
 
         try {
             // Utilizar el método de conexión proporcionado
-            Connection connection = conexionDeConsulta.getConnection();
+            Connection connection = conexionDeActualizacion.getConnection();
 
             // Crear la consulta con parámetros
             String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte, ReporteDos, ReporteTres, Descripcion FROM registros WHERE Grado = ? AND Grupo = ?";

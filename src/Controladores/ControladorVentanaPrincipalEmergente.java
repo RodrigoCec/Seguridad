@@ -5,7 +5,9 @@
  */
 package Controladores;
 
-import Conexion.dateBaseconnection;
+import Conexion.conexionDeActualizacion;
+import Conexion.conexionDeConsulta;
+import Conexion.conexionDeRegistro;
 import MetodosExtra.ComparadorDeHoras;
 import java.io.IOException;
 import java.net.URL;
@@ -81,45 +83,15 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     /**
      * Initializes the controller class.
      */
-    private static final String bd = "basedatosprueba";
-    private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
-    private static final String usuario = "root";
-    private static final String password = "";
-
-    // Conexión a la base de datos
-    private static Connection conexion;
-    private static Connection conexionDeregistro;
-    // Código de conexión
-    public static Connection ConexionBd() {
-        if (conexion == null) {
-            try {
-                conexion = DriverManager.getConnection(direccion, usuario, password);
-                System.out.println("Conexión exitosa");
-            } catch (SQLException e) {
-                Logger.getLogger(ControladorPaginaPrincipal.class.getName()).log(Level.SEVERE, "Error de conexión", e);
-            }
-        }
-        return conexion;
-    }
     
-    public Connection ConexionDeregistoBd() {
-        if (conexionDeregistro == null) {
-            try {
-                conexionDeregistro = DriverManager.getConnection(direccion, usuario, password);
-                System.out.println("Conexión exitosa");
-            } catch (SQLException e) {
-                Logger.getLogger(ControladorPaginaPrincipal.class.getName()).log(Level.SEVERE, "Error de conexión", e);
-            }
-        }
-        return conexionDeregistro;
-    }
     
     
     private String[] BuscadorDeAlumno (String codigo){
 
         String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE matricula = ?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(query)) {
+        try (Connection connection = conexionDeConsulta.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, codigo);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -314,7 +286,8 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     public String BusquedaHoraDelAlumno(String dia, String grado, String grupo) {
         String query = "SELECT " + dia + " FROM " + grado + " WHERE Grupo = ?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(query)) {
+        try(Connection connection = conexionDeConsulta.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, grupo);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -510,7 +483,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     //
     public boolean Conexion (String Query, String TipoDato){
         
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 Query)){
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -575,7 +548,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         }
     }
     public String SelectorDeMatricula(){
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "SELECT Matricula FROM registros ORDER BY Id_registro DESC LIMIT 1")){
              
@@ -594,7 +567,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     }
     public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion){
         
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeActualizacion.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "UPDATE registros SET " + Tipo + " = ? WHERE Matricula = ? ")){
                 statement.setString(1, Sancion);
@@ -614,7 +587,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     }
     
     private Time ComprobadorDeTiempo(String Matricula) {
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "SELECT Hora FROM registros WHERE Matricula = ?")){
                 statement.setString(1, Matricula);
@@ -650,7 +623,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     
     public boolean ComprobadorDeExistencia(String Matricula){
         
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "SELECT EXISTS (SELECT 1 FROM registros WHERE Matricula = ?) AS existe")){
                 statement.setString(1, Matricula);
@@ -676,7 +649,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     
     public boolean ComprobadorDeExistenciaSalida (String Matricula){
         
-        try(Connection connection = dateBaseconnection.getConnection();
+        try(Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "SELECT EXISTS (SELECT 1 FROM salida WHERE Matricula = ?) AS existe")){
                 statement.setString(1, Matricula);
@@ -730,7 +703,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
 
     
     public void EnvioDeregistroEntrada(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula,String Estado){
-            try (Connection connection = dateBaseconnection.getConnection();
+            try (Connection connection = conexionDeRegistro.getConnection();
             PreparedStatement statement = connection.prepareStatement(
             "INSERT INTO registros (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
 
@@ -762,7 +735,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     }
     
     public void EnvioDeregistroSalida(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
-            try (Connection connection = dateBaseconnection.getConnection();
+            try (Connection connection = conexionDeRegistro.getConnection();
             PreparedStatement statement = connection.prepareStatement(
             "INSERT INTO salida (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
@@ -792,9 +765,6 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         } 
     }
     
-    public void ConexionesConBd() {
-        ConexionBd();
-    }
 
     public void CreadorDeTablasParaSanciones(){
         
@@ -833,7 +803,6 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
 
         
         HoraEnPantalla();
-        ConexionesConBd();
         
     }
 

@@ -5,6 +5,8 @@
  */
 package Controladores;
 
+import Conexion.conexionDeConsulta;
+import Conexion.conexionDeRegistro;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -313,26 +315,6 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
 
     
     // Datos de la Conexion a Base de datos
-    private static final String bd = "basedatosprueba";
-    private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
-    private static final String usuario = "root";
-    private static final String password = "";
-
-    // Conexión a la base de datos
-    private static Connection conexion;
-
-            // Código de conexión
-    public static Connection ConexionBd() {
-        try {
-        if (conexion == null || conexion.isClosed()) {
-            conexion = DriverManager.getConnection(direccion, usuario, password);
-            //System.out.println("Conexión exitosa");
-        }
-    } catch (SQLException e) {
-        Logger.getLogger(ControladorVentanaAsignarHorarios.class.getName()).log(Level.SEVERE, "Error de conexión", e);
-    }
-    return conexion;
-    }
     
   
             //Metodos para obtener datos   
@@ -342,7 +324,7 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
         String query = "SELECT `" + Dia + "` FROM `" + Semestre + "` WHERE Grupo = ?";
 
 
-        try (Connection connection = ConexionBd();
+        try (Connection connection = conexionDeConsulta.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, Grupo);
@@ -362,7 +344,7 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
             //MetodoActualizador De Base de datos;
     private void ActualizarCodigoHorabd(String Semestre, String dia, String newValue, String grupo) {
         String query = "UPDATE " + Semestre +" SET " + dia + " = ? WHERE Grupo = ?";
-        try (Connection connection = ConexionBd();
+        try (Connection connection = conexionDeRegistro.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newValue);
@@ -1652,8 +1634,7 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
         
         //---> --- <-----
     
-        //Conexion a base de datos
-        ConexionBd();
+        
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package Conexion;
 
+import MetodosExtra.ExtractorDatosConexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,13 +16,16 @@ import java.sql.SQLException;
  */
 public class conexionDeActualizacion {
     
-    private static final String bd = "basedatosprueba";
-    private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
-    private static final String usuario = "root";
-    private static final String password = "";
+    
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(direccion, usuario, password);
+        ExtractorDatosConexion.ConfiguracionDB config = ExtractorDatosConexion.cargarConfiguracion();
+        String addres = config.direccion + config.bd ;
+        Connection connection = DriverManager.getConnection(addres, config.usuario,config.password);
+        System.out.println("La direccion es:" + config.direccion);
+        
+        return connection;
     }
+    
     
 }
