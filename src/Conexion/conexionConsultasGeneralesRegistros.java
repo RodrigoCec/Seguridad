@@ -5,7 +5,7 @@
  */
 package Conexion;
 
-import MetodosExtra.ExtractorDatosConexion;
+import DatosBasesJSON.ExtractorDatosRegistros;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,15 +14,16 @@ import java.sql.SQLException;
  *
  * @author Rodrigo
  */
-public class conexionDeConsulta {
+public class conexionConsultasGeneralesRegistros {
     
     public static Connection getConnection() throws SQLException {
-        ExtractorDatosConexion.ConfiguracionDB config = ExtractorDatosConexion.cargarConfiguracion();
+        ExtractorDatosRegistros.ConfiguracionDB config = ExtractorDatosRegistros.cargarConfiguracion();
         String addres = config.direccion + config.bd ;
         Connection connection = DriverManager.getConnection(addres, config.usuario,config.password);
-        System.out.println("La direccion es:" + config.direccion);
+        System.out.println("La direccion es:" + config.direccion + config.bd);
         
         return connection;
     }
+    
     
 }

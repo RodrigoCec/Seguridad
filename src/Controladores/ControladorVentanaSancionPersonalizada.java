@@ -5,7 +5,8 @@
  */
 package Controladores;
 
-import Conexion.conexionDeConsulta;
+import Conexion.conexionConsultasGeneralesRegistros;
+import Conexion.conexionEnvioDeSanciones;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,7 +34,7 @@ public class ControladorVentanaSancionPersonalizada implements Initializable {
      */
     
     public String SelectorDeMatricula(){
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "SELECT Matricula FROM registros ORDER BY Id_registro DESC LIMIT 1")){
              
@@ -53,7 +54,7 @@ public class ControladorVentanaSancionPersonalizada implements Initializable {
     
     public void SubidaDeSanciones(String Matricula, String Sancion){
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionEnvioDeSanciones.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 "UPDATE registros SET Descripcion = ? WHERE Matricula = ? ")){
                 statement.setString(1, Sancion);

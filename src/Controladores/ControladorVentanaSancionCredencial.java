@@ -5,7 +5,7 @@
  */
 package Controladores;
 
-import Conexion.conexionDeConsulta;
+import Conexion.conexionConsultasGeneralesRegistros;
 import DatosInformes.datos;
 import DatosInformes.datosBusqueda;
 import MetodosExtra.gestorDeVentanas;
@@ -78,7 +78,7 @@ public class ControladorVentanaSancionCredencial implements Initializable {
 
         try {
             // Utilizar el método de conexión proporcionado
-            Connection connection = conexionDeConsulta.getConnection();
+            Connection connection = conexionConsultasGeneralesRegistros.getConnection();
 
             // Crear la consulta con parámetros
             String query = "SELECT Nombre, Grado, Grupo, Matricula FROM alumnos WHERE Grado = ? AND Grupo = ?";

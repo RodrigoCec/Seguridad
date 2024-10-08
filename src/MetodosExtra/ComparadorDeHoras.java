@@ -17,13 +17,14 @@ public class ComparadorDeHoras {
     
     public boolean compararHoras(Time timeFromDB) {
         
-         // Convertir a LocalTime
+        System.out.println("Hora que se le pasa al comparador de horas: " + timeFromDB);
+        // Convertir a LocalTime
         LocalTime dbTime = timeFromDB.toLocalTime();
 
         // Hora local actual
         LocalTime localTime = LocalTime.now();
 
-// Adelantar la hora local una hora
+        // Adelantar la hora local una hora
         localTime = localTime.minusHours(1);
 
         

@@ -5,8 +5,9 @@
  */
 package Controladores;
 
-import Conexion.conexionDeConsulta;
-import Conexion.conexionDeRegistro;
+
+import Conexion.conexionEnvioDeAlumnos;
+import Conexion.conexionGeneralDeConsultaAlumnos;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -127,10 +128,10 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
         //
         recuperarDatos();
         
-        try (Connection connection = conexionDeRegistro.getConnection();
+        try (Connection connection = conexionEnvioDeAlumnos.getConnection();
              Statement statement = connection.createStatement()) {
 
-            String sql = "INSERT INTO alumnos (Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo, matricula) "
+            String sql = "INSERT INTO alumnos (Nombre, ApellidoPaterno, ApellidoMaterno, Grado, Grupo, Matricula) "
                 + "VALUES ('" + Nombre +  "', '" + ApellidoPat +  "', '" + ApellidoMat + "', '" + Grado + "', '" + Grupo +  "', '" + Matricula + "')";
 
             int filasAfectadas = statement.executeUpdate(sql);
@@ -160,9 +161,9 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     
     public void MetodoCodigoRepetido(String valorAverificar) throws SQLException{
         
-        String Consulta = "SELECT matricula FROM alumnos WHERE matricula = '"+ valorAverificar +"'";
+        String Consulta = "SELECT Matricula FROM alumnos WHERE matricula = '"+ valorAverificar +"'";
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionGeneralDeConsultaAlumnos.getConnection();
             PreparedStatement DatosDeConsulta = connection.prepareStatement(Consulta)){
             
             //DatosDeConsulta.setString(1, valorAverificar);

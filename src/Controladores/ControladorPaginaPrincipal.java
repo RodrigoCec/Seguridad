@@ -5,17 +5,22 @@
  */
 package Controladores;
 
-import Conexion.conexionDeConsulta;
-import Conexion.conexionDeRegistro;
+import Conexion.conexionComprobadoresDeRegistros;
+import Conexion.conexionConsultaDeHorariosComp;
+import Conexion.conexionConsultasGeneralesRegistros;
+import Conexion.conexionCreacionTablasRegistros;
+import Conexion.conexionEnvioDeRegistros;
+import Conexion.conexionEnvioDeSanciones;
+import Conexion.conexionGeneralDeConsultaAlumnos;
 import MetodosExtra.ComparadorDeHoras;
-import MetodosExtra.ExtractorDatosConexion;
+import DatosBasesJSON.ExtractorDatosConexion;
+import DatosBasesJSON.ExtractorDatosRegistros;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -88,9 +93,9 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     private String[] BuscadorDeAlumno (String codigo){
 
-        String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE matricula = ?";
+        String query = "SELECT Nombre, apellidoPaterno, apellidoMaterno, Grado, Grupo FROM alumnos WHERE Matricula = ?";
         
-        try (Connection connection = conexionDeConsulta.getConnection();
+        try (Connection connection = conexionGeneralDeConsultaAlumnos.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, codigo);
 
@@ -207,7 +212,10 @@ public class ControladorPaginaPrincipal implements Initializable {
         });
     }
    
-    //Comparativa de horarios de entrada
+    
+
+
+//Comparativa de horarios de entrada
     
     public void HoraEnPantalla(){
     
@@ -286,7 +294,7 @@ public class ControladorPaginaPrincipal implements Initializable {
     public String BusquedaHoraDelAlumno(String dia, String grado, String grupo) {
         String query = "SELECT " + dia + " FROM " + grado + " WHERE Grupo = ?";
 
-        try (Connection connection = conexionDeConsulta.getConnection();
+        try (Connection connection = conexionConsultaDeHorariosComp.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, grupo);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -483,7 +491,7 @@ public class ControladorPaginaPrincipal implements Initializable {
     //
     public boolean Conexion (String Query, String TipoDato){
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                 Query)){
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -503,8 +511,10 @@ public class ControladorPaginaPrincipal implements Initializable {
         
         return false;
     }
+    
     public void SubidaDeSancionesAutomatica(String Sancion){
-        String matricula = SelectorDeMatricula();
+        String NombreTablaEntrada = NombreTablaActualEntrada();
+        String matricula = SelectorDeMatricula(NombreTablaEntrada);
         for (int i = 1; i < 4; i++) {
             boolean editable = false;
             boolean editable2 = false;
@@ -514,32 +524,35 @@ public class ControladorPaginaPrincipal implements Initializable {
             String dato3 = "";
             switch(i){
                 case 1:
-                    String query = "SELECT Reporte FROM `registros` WHERE Matricula = '" +matricula+ "';";
+                    String query = "SELECT Reporte FROM `" + NombreTablaEntrada + "` WHERE Matricula = '" + matricula + "';"; //Registros
+                    System.out.println("---------<<< Se esta revisando con: " + matricula);
                     dato = "Reporte";
                     editable = Conexion(query, dato);
                     System.out.println(editable);
                     break;
                 case 2:
-                    String query2 = "SELECT ReporteDos FROM `registros` WHERE Matricula = '" +matricula+ "';";
+                    String query2 = "SELECT ReporteDos FROM `" + NombreTablaEntrada + "` WHERE Matricula = '" +matricula+ "';"; //regis
+                    System.out.println("---------<<< Se esta revisando con: " + matricula);
                     dato2 = "ReporteDos";
                     editable2 = Conexion(query2, dato2);
                     System.out.println(editable2);
                     break;
                 case 3:
-                    String query3 = "SELECT ReporteTres FROM `registros` WHERE Matricula = '" +matricula+ "';";
-                     dato3 = "ReporteTres";
+                    String query3 = "SELECT ReporteTres FROM  `" + NombreTablaEntrada + "` WHERE Matricula = '" +matricula+ "';"; //regis
+                    System.out.println("---------<<< Se esta revisando con: " + matricula);
+                    dato3 = "ReporteTres";
                     editable3 = Conexion(query3, dato3);
                     System.out.println(editable3);
                     break;
             }
             if (editable) {
-                SubidaDeSanciones(matricula, dato, Sancion);
+                SubidaDeSanciones(matricula, dato, Sancion,NombreTablaEntrada);
                 break;
             } else if (editable2) {
-                SubidaDeSanciones(matricula, dato2, Sancion);
+                SubidaDeSanciones(matricula, dato2, Sancion, NombreTablaEntrada);
                 break;
             } else if (editable3) {
-                SubidaDeSanciones(matricula, dato3, Sancion);
+                SubidaDeSanciones(matricula, dato3, Sancion, NombreTablaEntrada);
                 break;
             } else {
                 // Exceso de sanciones
@@ -547,15 +560,15 @@ public class ControladorPaginaPrincipal implements Initializable {
 
         }
     }
-    public String SelectorDeMatricula(){
-        try(Connection connection = conexionDeConsulta.getConnection();
+    public String SelectorDeMatricula(String nombreTabla){
+        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT Matricula FROM registros ORDER BY Id_registro DESC LIMIT 1")){
+                "SELECT Matricula FROM  `" + nombreTabla + "`  ORDER BY Id_registro DESC LIMIT 1")){//regis
              
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     String Matriucla = resultSet.getString("Matricula");
-                    System.out.println("Matricula: " + Matriucla);
+                    System.out.println("========> Matricula: " + Matriucla);
                     return Matriucla;
                 }
             }
@@ -565,11 +578,11 @@ public class ControladorPaginaPrincipal implements Initializable {
         
         return null;
     }
-    public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion){
+    public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion, String nombreTabla){
         
-        try(Connection connection = conexionDeRegistro.getConnection();
+        try(Connection connection = conexionEnvioDeSanciones.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "UPDATE registros SET " + Tipo + " = ? WHERE Matricula = ? ")){
+                "UPDATE  `" + nombreTabla + "` SET " + Tipo + " = ? WHERE Matricula = ? ")){ //registtros
                 statement.setString(1, Sancion);
                 statement.setString(2, Matricula);
                 
@@ -586,10 +599,10 @@ public class ControladorPaginaPrincipal implements Initializable {
         }
     }
     
-    private Time ComprobadorDeTiempo(String Matricula) {
-        try(Connection connection = conexionDeConsulta.getConnection();
+    private Time ComprobadorDeTiempo(String nombreTabla, String Matricula) {
+        try(Connection connection = conexionComprobadoresDeRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT Hora FROM registros WHERE Matricula = ?")){
+                "SELECT Hora FROM  `" + nombreTabla + "`  WHERE Matricula = ?")){//regis
                 statement.setString(1, Matricula);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -606,8 +619,11 @@ public class ControladorPaginaPrincipal implements Initializable {
     }
     
     public boolean Comparador(String Matricula) {
-        // Supongamos que tienes un método que te da la hora de la base de datos
-        Time Horabd = ComprobadorDeTiempo(Matricula);
+        
+        String NombreTablaEntrada = NombreTablaActualEntrada();
+        System.out.println("El nombre de tabla deberia ser 100: " + NombreTablaEntrada);
+        Time Horabd = ComprobadorDeTiempo(NombreTablaEntrada, Matricula);
+        System.out.println("Hora pasada desde pagina principal al comparador: " + Horabd);
 
         // Crear instancia de ComparadorDeHoras
         ComparadorDeHoras comparador = new ComparadorDeHoras();
@@ -625,49 +641,51 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     
     
-    public boolean ComprobadorDeExistencia(String Matricula){
+    public boolean ComprobadorDeExistencia(String nombreTabla, String Matricula){
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionComprobadoresDeRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT EXISTS (SELECT 1 FROM registros WHERE Matricula = ?) AS existe")){
+                "SELECT EXISTS (SELECT 1 FROM  `" + nombreTabla + "`  WHERE Matricula = ?) AS existe")){//registros
                 statement.setString(1, Matricula);
+                System.out.println("Se esta usando la tabla: " + nombreTabla);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     boolean existencia = resultSet.getBoolean("existe");
                     System.out.println("Existe en la base de datos: " + existencia);
 
-                    if (!existencia) {
+                    if (existencia) {
                         System.out.println("Entrada detectada asdf asdfas dfasdf asd");
-                        return false;
+                        return true;
                     } else {
                         System.out.println("Salida detectada asdfasdfasd");
-                        return true;
+                        return false;
                     }
                 }
             }
         }catch(SQLException ex){
         
         }
-        return true;
+       
+        return false;
     }   
     
-    public boolean ComprobadorDeExistenciaSalida (String Matricula){
+    public boolean ComprobadorDeExistenciaSalida (String Matricula, String nombreTabla){
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionComprobadoresDeRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT EXISTS (SELECT 1 FROM salida WHERE Matricula = ?) AS existe")){
+                "SELECT EXISTS (SELECT 1 FROM  `" + nombreTabla + "`   WHERE Matricula = ?) AS existe")){ //Salida
                 statement.setString(1, Matricula);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     boolean existencia = resultSet.getBoolean("existe");
                     System.out.println("Existe en la base de datos: " + existencia);
 
-                    if (!existencia) {
+                    if (existencia) {
                         System.out.println("Entrada detectada asdf asdfas dfasdf asd");
-                        return false;
+                        return true;
                     } else {
                         System.out.println("Salida detectada asdfasdfasd");
-                        return true;
+                        return false;
                     }
                 }
             }
@@ -678,23 +696,29 @@ public class ControladorPaginaPrincipal implements Initializable {
     }
     
     public void EnvioDeRegistrosGeneral(String Nombre,String Apellidos , String Grado, String Grupo,String Matricula,String Estado){
-        boolean existencia = ComprobadorDeExistencia(Matricula);
-        boolean existenciaSalida = ComprobadorDeExistenciaSalida(Matricula);
+        String NombreTablaEntrada = NombreTablaActualEntrada();
+        String NombreTablaSalida = NombreTablaActualSalida();
+        System.out.println("El nombre de tabla deberia ser 10: " + NombreTablaEntrada);
+        System.out.println("El nombre de tabla deberia ser 20: " + NombreTablaSalida);
+        boolean existencia = ComprobadorDeExistencia(NombreTablaEntrada, Matricula);
+        System.out.println("-------------En la tabla existe el alumno: " + existencia);
+        boolean existenciaSalida = ComprobadorDeExistenciaSalida(NombreTablaSalida, Matricula);
         
         
         
-        if(!existencia){ //
+        if(existencia == false){ //
             //Entrada
             
             EnvioDeregistroEntrada(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
+            System.err.println("------Se esta registrado");
             
-        }else if(existencia){
+        }else if(existencia = true){
             //Salida
             boolean tolerancia = Comparador(Matricula);
             if(tolerancia){
                 if(!existenciaSalida){
                     
-                    EnvioDeregistroSalida(Nombre, Apellidos, Grado, Grupo, Matricula);
+                    EnvioDeregistroSalida(NombreTablaSalida, Nombre, Apellidos, Grado, Grupo, Matricula);
                 }else{
                     System.out.println("YA esxiste un registro");
                 }
@@ -708,10 +732,11 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     public void EnvioDeregistroEntrada(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula,String Estado){
         String nombreTabla = NombreTablaActualEntrada();
+        System.out.println("Se esta intentando subir los datos inicialessss a la tabla: " + nombreTabla);
         
-        try (Connection connection = conexionDeRegistro.getConnection();
+        try (Connection connection = conexionEnvioDeRegistros.getConnection();
             PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO " + nombreTabla + " (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
+            "INSERT INTO `" + nombreTabla + "` (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -740,12 +765,12 @@ public class ControladorPaginaPrincipal implements Initializable {
         } 
     }
     
-    public void EnvioDeregistroSalida(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
+    public void EnvioDeregistroSalida(String NombreTabla, String Nombre,String Apellidos, String Grado, String Grupo, String Matricula){
 
         
-            try (Connection connection = conexionDeRegistro.getConnection();
+            try (Connection connection = conexionEnvioDeRegistros.getConnection();
             PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO salida (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
+            "INSERT INTO `" +  NombreTabla + "` (Nombre, Grado, Grupo, Matricula, Fecha, Hora) VALUES (?, ?, ?, ?, ?, ?)")) {
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -780,11 +805,12 @@ public class ControladorPaginaPrincipal implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
         String nombreTabla = fechaActual.format(formatter);
         
-        String TablaEntrada = "E-" +nombreTabla;
+        String TablaEntrada = "01-" +nombreTabla;
+        System.out.println("El nombre de tabla deberia ser: " + TablaEntrada);
         
         return TablaEntrada;
     }
-    
+    //7721087522
     public void CreadorDeTablasDeEntrada(String tabla){
         // Obtener la fecha actual
             // Consulta SQL para crear la tabla
@@ -804,7 +830,7 @@ public class ControladorPaginaPrincipal implements Initializable {
                 "  PRIMARY KEY (`Id_registro`)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;";
 
-            try (Connection connection = conexionDeRegistro.getConnection();
+            try (Connection connection = conexionCreacionTablasRegistros.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
                 // Ejecutar la consulta para crear la tabla
                 statement.executeUpdate();
@@ -829,11 +855,11 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     public boolean ComprobadorDeExistenciaDeTableEntrada(String dia){
         
-        ExtractorDatosConexion.ConfiguracionDB config = ExtractorDatosConexion.cargarConfiguracion();
+        ExtractorDatosRegistros.ConfiguracionDB config = ExtractorDatosRegistros.cargarConfiguracion();
         String bd = config.bd;
         String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);)
             {  statement.setString(1,bd);
                statement.setString(2, dia);
@@ -861,7 +887,7 @@ public class ControladorPaginaPrincipal implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
         String nombreTabla = fechaActual.format(formatter);
         
-        String TablaSalida = "S-" +nombreTabla;
+        String TablaSalida = "02-" +nombreTabla;
         
         return TablaSalida;
     }
@@ -881,7 +907,7 @@ public class ControladorPaginaPrincipal implements Initializable {
                 "  PRIMARY KEY (`Id_registro`)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;";
 
-            try (Connection connection = conexionDeRegistro.getConnection();
+            try (Connection connection = conexionCreacionTablasRegistros.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
                 // Ejecutar la consulta para crear la tabla
                 statement.executeUpdate();
@@ -892,12 +918,12 @@ public class ControladorPaginaPrincipal implements Initializable {
     }
     
     public void GestionadorDeExistenciaDeTablasSalida(){
-        String nombreTabla = NombreTablaActualEntrada();
+        String nombreTabla = NombreTablaActualSalida();
         
         boolean existencia = ComprobadorDeExistenciaDeTableSalida(nombreTabla);
         
         if(!existencia){
-            CreadorDeTablasDeEntrada(nombreTabla);
+            CreadorDeTablasDeSalida(nombreTabla);
         }else{
             System.out.println("ya esxiste la Tabla: " + nombreTabla);
         }
@@ -906,11 +932,11 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     public boolean ComprobadorDeExistenciaDeTableSalida(String dia){
         
-        ExtractorDatosConexion.ConfiguracionDB config = ExtractorDatosConexion.cargarConfiguracion();
+        ExtractorDatosRegistros.ConfiguracionDB config = ExtractorDatosRegistros.cargarConfiguracion();
         String bd = config.bd;
         String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
         
-        try(Connection connection = conexionDeConsulta.getConnection();
+        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);)
             {  statement.setString(1,bd);
                statement.setString(2, dia);
@@ -936,6 +962,8 @@ public class ControladorPaginaPrincipal implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         GestionadorDeExistenciaDeTablasEntrada();
+        GestionadorDeExistenciaDeTablasSalida();
+        
         // Metodos Indispensables no clasificados xd
         LimitadorLongutid();
         LimpiadorDeCodigo();
@@ -1020,30 +1048,7 @@ public class ControladorPaginaPrincipal implements Initializable {
         }
     }
 
-    @FXML
-    private void bntUniforme(ActionEvent event) {
-        if(!txtNombre.getText().isEmpty()){
-            SubidaDeSancionesAutomatica("Uniforme incompleto");
-        }
-        
-    }
-
-    @FXML
-    private void btnCorte(ActionEvent event) {
-        if(!txtNombre.getText().isEmpty()){
-            SubidaDeSancionesAutomatica("Corte de cabello");
-        }
-       
-    }
     
-    @FXML
-    private void btnuns(ActionEvent event) {
-        
-        if(!txtNombre.getText().isEmpty()){
-            SubidaDeSancionesAutomatica("Uñas");
-        }
-        
-    }
 
     @FXML
     private void btnCredencial(ActionEvent event) {
@@ -1088,5 +1093,37 @@ public class ControladorPaginaPrincipal implements Initializable {
         }
         
     }
+    
+    
+    
+    //Buttons de las sanciones
+    
+    @FXML
+    private void bntUniforme(ActionEvent event) {
+        if(!txtNombre.getText().isEmpty()){
+            
+            SubidaDeSancionesAutomatica("Uniforme incompleto");
+        }
+        
+    }
+
+    @FXML
+    private void btnCorte(ActionEvent event) {
+        if(!txtNombre.getText().isEmpty()){
+            SubidaDeSancionesAutomatica("Corte de cabello");
+        }
+       
+    }
+    
+    @FXML
+    private void btnuns(ActionEvent event) {
+        
+        if(!txtNombre.getText().isEmpty()){
+            SubidaDeSancionesAutomatica("Uñas");
+        }
+        
+    }
+    
+    //---->
     
 }

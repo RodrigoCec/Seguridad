@@ -5,8 +5,8 @@
  */
 package Controladores;
 
-import Conexion.conexionDeConsulta;
-import Conexion.conexionDeRegistro;
+import Conexion.conexionConsultaDatosHorarios;
+import Conexion.conexionModDatosHorarios;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -324,7 +324,7 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
         String query = "SELECT `" + Dia + "` FROM `" + Semestre + "` WHERE Grupo = ?";
 
 
-        try (Connection connection = conexionDeConsulta.getConnection();
+        try (Connection connection = conexionConsultaDatosHorarios.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, Grupo);
@@ -344,7 +344,7 @@ public class ControladorVentanaAsignarHorarios implements Initializable {
             //MetodoActualizador De Base de datos;
     private void ActualizarCodigoHorabd(String Semestre, String dia, String newValue, String grupo) {
         String query = "UPDATE " + Semestre +" SET " + dia + " = ? WHERE Grupo = ?";
-        try (Connection connection = conexionDeRegistro.getConnection();
+        try (Connection connection = conexionModDatosHorarios.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newValue);
