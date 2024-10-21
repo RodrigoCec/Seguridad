@@ -19,7 +19,7 @@ public class datosSalida {
     private String matricula;
     private LocalDate fecha;
     private LocalTime hora;
-    private String tiempo;
+    private String estado;
 
     /**
      * Constructor para inicializar todos los campos de la clase.
@@ -31,13 +31,14 @@ public class datosSalida {
      * @param fecha Fecha de la entrada.
      * @param hora Hora de la entrada.
      */
-    public datosSalida(String nombre, String grado, String grupo, String matricula, LocalDate fecha, LocalTime hora) {
+    public datosSalida(String nombre, String grado, String grupo, String matricula, LocalDate fecha, LocalTime hora, String estado) {
         this.nombre = nombre;
         this.grado = grado;
         this.grupo = grupo;
         this.matricula = matricula;
         this.fecha = fecha;
         this.hora = hora;
+        this.estado = estado;
     }
     
     public String getNombre() {
@@ -87,5 +88,15 @@ public class datosSalida {
     public void setHora(LocalTime hora) {
         this.hora = hora;
     }
+    
+    public String getEstado(){
+        return estado;
+    }
+        
+    public void setEstado(String estado){
+        this.estado = estado;
+    }
+    
+    
     
 }

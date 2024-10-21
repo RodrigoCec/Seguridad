@@ -49,6 +49,8 @@ public class ControladorVentanaInformeSalida implements Initializable {
     private TableColumn<datosSalida, LocalDate> Fecha;
     @FXML
     private TableColumn<datosSalida, LocalTime> Hora;
+    @FXML
+    private TableColumn<datosSalida, String> Estado;
 
     /**
      * Initializes the controller class.
@@ -78,6 +80,7 @@ public class ControladorVentanaInformeSalida implements Initializable {
         Matricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
         Fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         Hora.setCellValueFactory(new PropertyValueFactory<>("hora"));
+        Estado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         ObservableList<datosSalida> users = FXCollections.observableArrayList();
 
@@ -86,7 +89,7 @@ public class ControladorVentanaInformeSalida implements Initializable {
             Connection connection = conexionConsultasGeneralesRegistros.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora FROM `"+ NameTable +"` WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado FROM `"+ NameTable +"` WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros
@@ -104,9 +107,9 @@ public class ControladorVentanaInformeSalida implements Initializable {
                 String matricula = resultSet.getString("Matricula");
                 LocalDate fecha = resultSet.getDate("Fecha").toLocalDate();
                 LocalTime hora = resultSet.getTime("Hora").toLocalTime();
-
+                String estado = resultSet.getString("Estado");    
                 // Crear un nuevo objeto datos y agregarlo a la lista
-                users.add(new datosSalida(nombre, grado, grupo, matricula, fecha, hora));
+                users.add(new datosSalida(nombre, grado, grupo, matricula, fecha, hora, estado));
             }
 
             // Cerrar la conexión

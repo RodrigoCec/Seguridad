@@ -16,29 +16,22 @@ import java.time.temporal.ChronoUnit;
 public class ComparadorDeHoras {
     
     public boolean compararHoras(Time timeFromDB) {
-        
         System.out.println("Hora que se le pasa al comparador de horas: " + timeFromDB);
-        // Convertir a LocalTime
+
         LocalTime dbTime = timeFromDB.toLocalTime();
 
-        // Hora local actual
         LocalTime localTime = LocalTime.now();
 
-        // Adelantar la hora local una hora
         localTime = localTime.minusHours(1);
-
-        
-        System.out.println("segun estamos a esto: " + localTime);
-        // Calcular la diferencia en minutos entre las dos horas
+        System.out.println("Hora local ajustada: " + localTime);
         long minutesBetween = ChronoUnit.MINUTES.between(dbTime, localTime);
-
-        // Verificar si han pasado 30 minutos o más
-        if (minutesBetween >= 30) {
-            System.out.println("Han pasado 30 minutos o más desde la hora de la base de datos.");
+        if (minutesBetween >= 60) {
+            System.out.println("Han pasado 60 minutos o más desde la hora de la base de datos.");
             return true;
         } else {
-            System.out.println("No han pasado 30 minutos desde la hora de la base de datos.");
+            System.out.println("No han pasado 60 minutos desde la hora de la base de datos.");
             return false;
         }
-    }
+    }   
+
 }
