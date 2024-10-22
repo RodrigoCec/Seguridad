@@ -7,6 +7,7 @@ package Controladores;
 
 import Conexion.conexionConsultasGeneralesRegistros;
 import Conexion.conexionEnvioDeSanciones;
+import MetodosExtra.nombreTablasRegistroEntrada;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,10 +34,16 @@ public class ControladorVentanaSancionPersonalizada implements Initializable {
      * Initializes the controller class.
      */
     
-    public String SelectorDeMatricula(){
+    public String NombreTablaActualEntrada(){
+       nombreTablasRegistroEntrada tablaRegistro = new nombreTablasRegistroEntrada();
+        String TablaEntrada = tablaRegistro.NombreTablaActualEntrada();
+        return TablaEntrada;
+    }
+    
+    public String SelectorDeMatricula(String nombreTabla){
         try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT Matricula FROM registros ORDER BY Id_registro DESC LIMIT 1")){
+                "SELECT Matricula FROM ´" + nombreTabla + "´ ORDER BY Id_registro DESC LIMIT 1")){
              
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -52,11 +59,11 @@ public class ControladorVentanaSancionPersonalizada implements Initializable {
         return null;
     }
     
-    public void SubidaDeSanciones(String Matricula, String Sancion){
+    public void SubidaDeSanciones(String nombreTabla, String Matricula, String Sancion){
         
         try(Connection connection = conexionEnvioDeSanciones.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "UPDATE registros SET Descripcion = ? WHERE Matricula = ? ")){
+                "UPDATE ´" + nombreTabla + "´ SET Descripcion = ? WHERE Matricula = ? ")){
                 statement.setString(1, Sancion);
                 statement.setString(2, Matricula);
                 
@@ -83,9 +90,9 @@ public class ControladorVentanaSancionPersonalizada implements Initializable {
     private void btnEnviar(ActionEvent event) {
         
         String Sancion = txtAreaTexto.getText();
-        
-        String Matricula = SelectorDeMatricula();
-        SubidaDeSanciones(Matricula, Sancion);
+        String nameTabla = NombreTablaActualEntrada();
+        String Matricula = SelectorDeMatricula(nameTabla);
+        SubidaDeSanciones(nameTabla,Matricula, Sancion);
         
         txtAreaTexto.setText("");
         

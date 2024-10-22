@@ -1171,7 +1171,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Informe de entrada");
-            stage.setScene(new Scene(root, 1900, 900));
+            stage.setScene(new Scene(root, 1060, 570));
             stage.setIconified(false);
             stage.setResizable(false);
             stage.show();
@@ -1190,7 +1190,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Informe de salida");
-            stage.setScene(new Scene(root, 1400, 800));
+            stage.setScene(new Scene(root, 1060, 570));
             stage.setIconified(false);
             stage.setResizable(false);
             stage.show();

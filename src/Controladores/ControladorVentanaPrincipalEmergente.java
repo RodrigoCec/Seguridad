@@ -958,7 +958,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         
         Alert cerrar = new Alert(Alert.AlertType.WARNING);
         cerrar.setTitle("Advertencia");
-        cerrar.setContentText("Por favor cierra esta y la siguiente ventana tras terminar el registro");
+        cerrar.setContentText("Por favor cierra esta ventana y la siguiente, tras terminar el registro del alumno");
         cerrar.showAndWait();
         
         HoraEnPantalla();
