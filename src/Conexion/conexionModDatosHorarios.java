@@ -21,7 +21,7 @@ public class conexionModDatosHorarios {
         ExtractorDatosHorarios.ConfiguracionDB config = ExtractorDatosHorarios.cargarConfiguracion();
         String addres = config.direccion + config.bd ;
         Connection connection = DriverManager.getConnection(addres, config.usuario,config.password);
-        System.out.println("La direccion es:" + config.direccion);
+       // System.out.println("La direccion es:" + config.direccion);
         
         return connection;
     }

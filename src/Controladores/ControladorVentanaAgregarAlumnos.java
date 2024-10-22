@@ -13,9 +13,15 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -96,8 +102,8 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     //Metodo Generador de codigo Qr
     
     public static void generateQRCode(String data, String filePath) throws IOException, WriterException {
-        int AnchoCodigo = 1000;
-        int AltoCodigo = 1000;
+        int AnchoCodigo = 400; //100
+        int AltoCodigo = 400;
 
         Map<EncodeHintType, Object> mapa = new HashMap<>();
         mapa.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -138,6 +144,7 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
 
             if (filasAfectadas > 0) {
                 System.out.println("los datos son correctos.");
+                alerta(Alert.AlertType.CONFIRMATION, "Registro", "Se ah registrado correctamente al alumno");
             } else {
                 System.out.println("no se pueden ingresar datos.");
             }
@@ -159,29 +166,31 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     }
     
     
-    public void MetodoCodigoRepetido(String valorAverificar) throws SQLException{
+    public boolean MetodoCodigoRepetido(String valorAverificar){
         
-        String Consulta = "SELECT Matricula FROM alumnos WHERE matricula = '"+ valorAverificar +"'";
+        String Consulta = "SELECT COUNT(*) FROM alumnos WHERE Matricula = "+ valorAverificar +"";
         
         try(Connection connection = conexionGeneralDeConsultaAlumnos.getConnection();
             PreparedStatement DatosDeConsulta = connection.prepareStatement(Consulta)){
             
-            //DatosDeConsulta.setString(1, valorAverificar);
-            
             
             try(ResultSet dato = DatosDeConsulta.executeQuery()){
                 if(dato.next()){
-                    int count = dato.getInt("count");
-                    
+                    int count = dato.getInt(1);
                     if (count > 0) {
                         System.out.println("Ya existe un registro con valor: " + valorAverificar);
                         alerta(Alert.AlertType.WARNING,"Alumno Repetido", "Ya existe un alumno con el mismo codigo Asignado, Deseas remplazarlo?");
+                        return true;
                     } else {
                         System.out.println("No existe ningún registro con valor: " + valorAverificar);
+                        return false;
                     }
                 }
             } 
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVentanaAgregarAlumnos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
     
     
@@ -258,6 +267,10 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     }
     @FXML
     private void clickPasarSiguiente5(ActionEvent event) {
+        txtMatricula.requestFocus();
+    }
+    @FXML
+    private void clickPasarSiguiente6(ActionEvent event) {
         txtNombre.requestFocus();
     }
     
@@ -276,7 +289,7 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        CredencialesCompletas();
         limitadoresDeCuadrosDeTexto();
         
     }    
@@ -291,7 +304,15 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
             String filePath = "C:/Users/Rodrigo/Pictures/sas/" + Matricula + ".png";
             
             generateQRCode(Matricula, filePath);
-            subirDatos();
+            boolean seguir = MetodoCodigoRepetido(Matricula);
+            if(!seguir){
+                subirDatos();
+            }else{
+                alerta(Alert.AlertType.WARNING,"Alumno Repetido", "Ya existe un alumno con el mismo codigo Asignado, Deseas remplazarlo?");
+            }
+            
+            CredencialesCompletas();
+            
         } catch (IOException | WriterException ex) {
             Logger.getLogger(ControladorVentanaAgregarAlumnos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -307,7 +328,8 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
         txtGrado.setText("");
         txtGrupo.setText("");
         txtMatricula.setText("");
-    
+        
+        txtNombre.requestFocus();
     }
 
     @FXML
@@ -327,5 +349,110 @@ public class ControladorVentanaAgregarAlumnos implements Initializable {
             System.out.println("Carpeta seleccionada: " + selectedDirectory.getAbsolutePath());
         }
     }
+    
+    //Creador de credenciales
+    public int[] CordenadasTexto(Graphics2D image ,String name, String lastName, String Matricula){
+            
+            int margenIzquierdo = 145;
+            int areaWidth = 780;
+            //Codigo Nombre
+            FontMetrics metrics = image.getFontMetrics(image.getFont());
+            int textWidthName = metrics.stringWidth(name);
+            int textWidtLastName = metrics.stringWidth(lastName);
+            int textWidtMatricula = metrics.stringWidth(Matricula);
+            
+            int firstX = margenIzquierdo + (areaWidth - textWidthName) / 2;
+            int secondX = margenIzquierdo + (areaWidth - textWidtLastName) / 2;
+            int thirdX = margenIzquierdo + (areaWidth - textWidtMatricula) / 2;
+            
+             
+
+
+            int[] valores = new int[]{firstX, secondX, thirdX};
+            
+            return valores;
+    }
+    
+    
+    
+    public void CredencialesCompletas(){
+        
+        recuperarDatos();
+        
+        String name = Nombre;
+        String lastName = ApellidoPat;
+        String secondLastName = ApellidoMat;
+        String apellidos =  lastName + " " +  secondLastName;
+        String matricula = Matricula;
+        
+        System.out.println("Nombre: " + name);
+        System.out.println("Apellido Paterno: " + lastName);
+        System.out.println("Apellido Materno: " + secondLastName);
+        System.out.println("Matrícula: " + matricula);
+        
+        
+        String pahtImgFondo = "C:/Users/Rodrigo/Pictures/sas/fondo.png";
+        String matriculaImgQr = "C:/Users/Rodrigo/Pictures/sas/" + matricula + ".png";
+        //String pahtImgFondo = "/Imagenes/fondo.png";
+        //String matriculaImgQr = "C:/Users/Rodrigo/Pictures/sas/" + matricula + ".png";
+        //String rutaGuardado = "";
+        
+        File fondoCredencialFile = new File(pahtImgFondo);
+        File matriculaQrFile = new File(matriculaImgQr);
+
+        if (!fondoCredencialFile.exists()) {
+            System.out.println("El archivo del fondo de la credencial no se encontró: " + pahtImgFondo);
+        } else {
+            System.out.println("Archivo del fondo de la credencial encontrado: " + pahtImgFondo);
+        }
+
+        if (!matriculaQrFile.exists()) {
+            System.out.println("El archivo del código QR de la matrícula no se encontró: " + matriculaImgQr);
+        } else {
+            System.out.println("Archivo del código QR de la matrícula encontrado: " + matriculaImgQr);
+        }
+        
+        
+        int cordenadaX = 325;
+        int cordenadaY = 350;
+        
+        int fontSize = 40;
+        String fuente = "Garet-Heavy";
+        
+        try{
+            
+            BufferedImage fondoCredencial = ImageIO.read(new File(pahtImgFondo));
+            BufferedImage matriculaQr = ImageIO.read(new File(matriculaImgQr));
+            
+            BufferedImage image = new BufferedImage(
+                    fondoCredencial.getWidth(),
+                    fondoCredencial.getHeight(),
+                    BufferedImage.TYPE_INT_ARGB);
+            
+            Graphics2D credencial = image.createGraphics();
+            credencial.drawImage(fondoCredencial, 0, 0, null);
+            credencial.drawImage(matriculaQr, cordenadaX, cordenadaY, null);
+            
+            credencial.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            credencial.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            credencial.setFont(new Font(fuente, Font.BOLD, fontSize));
+            credencial.setColor(new Color(0x37291d));
+            
+            int[] result = CordenadasTexto(credencial, name,apellidos, Matricula);
+            
+            credencial.drawString(name, result[0], 810);
+            credencial.drawString(apellidos, result[1], 850);
+            credencial.drawString(matricula, result[2], 990);
+            
+            String GuardadoCredencia = name + " " + apellidos; 
+            ImageIO.write(image, "png", new File("C:/Users/Rodrigo/Pictures/"+ GuardadoCredencia+ ".png"));
+
+            System.out.println("Imagen combinada con texto centrado guardada correctamente.");
+        }catch(Exception e){}
+        
+    }
+
+    
     
 }

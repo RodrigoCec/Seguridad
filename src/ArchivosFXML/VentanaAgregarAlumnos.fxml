@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="280.0" prefWidth="862.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="Controladores.ControladorVentanaAgregarAlumnos">
+<AnchorPane id="AnchorPane" prefHeight="280.0" prefWidth="862.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaAgregarAlumnos">
     <stylesheets>
         <URL value="@/Styles/VentanaAgregarAlumnosStyle.css" />
     </stylesheets>
@@ -66,7 +66,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtMatricula" layoutX="356.0" layoutY="170.0">
+      <TextField fx:id="txtMatricula" layoutX="356.0" layoutY="170.0" onAction="#clickPasarSiguiente6">
          <font>
             <Font size="18.0" />
          </font>

@@ -8,34 +8,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaSancionCredencial">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaSancionCredencial">
     <stylesheets>
         <URL value="@/Styles/VentanaSancionCredencialStyle.css" />
     </stylesheets>
     
     <children>
-      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="243.0" layoutY="37.0" prefHeight="51.0" prefWidth="85.0">
+      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="296.0" layoutY="35.0" prefHeight="51.0" prefWidth="85.0">
          <font>
             <Font size="24.0" />
          </font></TextField>
-      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="462.0" layoutY="38.0" prefHeight="51.0" prefWidth="83.0">
+      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="515.0" layoutY="36.0" prefHeight="51.0" prefWidth="83.0">
          <font>
             <Font size="24.0" />
          </font></TextField>
-      <TableView fx:id="tablaGeneral" editable="true" layoutX="49.0" layoutY="102.0" prefHeight="289.0" prefWidth="598.0">
+      <TableView fx:id="tablaGeneral" editable="true" layoutX="14.0" layoutY="105.0" prefHeight="381.0" prefWidth="773.0">
         <columns>
-          <TableColumn fx:id="nombre" prefWidth="255.0" text="Nombre" />
-          <TableColumn fx:id="grado" prefWidth="88.0" text="Grado" />
-            <TableColumn fx:id="grupo" prefWidth="91.0" text="Grupo" />
-            <TableColumn fx:id="matricula" onEditStart="#ObtenerDato" prefWidth="171.0" text="Matricula" />
+          <TableColumn fx:id="nombre" prefWidth="137.0" text="Nombre" />
+            <TableColumn fx:id="paterno" prefWidth="145.0" text="Apellido Paterno" />
+            <TableColumn fx:id="materno" prefWidth="141.0" text="Apellido Materno" />
+          <TableColumn fx:id="grado" prefWidth="59.0" text="Grado" />
+            <TableColumn fx:id="grupo" prefWidth="102.0" text="Grupo" />
+            <TableColumn fx:id="matricula" onEditStart="#ObtenerDato" prefWidth="188.0" text="Matricula" />
         </columns>
       </TableView>
-      <Label layoutX="151.0" layoutY="43.0" text="Grado:">
+      <Label layoutX="204.0" layoutY="41.0" text="Grado:">
          <font>
             <Font name="System Bold" size="28.0" />
          </font>
       </Label>
-      <Label layoutX="355.0" layoutY="43.0" text="Grupo:">
+      <Label layoutX="408.0" layoutY="41.0" text="Grupo:">
          <font>
             <Font name="System Bold" size="28.0" />
          </font>

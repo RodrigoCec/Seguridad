@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controladores;
 
 import Conexion.conexionComprobadoresDeRegistros;
@@ -13,8 +9,9 @@ import Conexion.conexionEnvioDeRegistros;
 import Conexion.conexionEnvioDeSanciones;
 import Conexion.conexionGeneralDeConsultaAlumnos;
 import MetodosExtra.ComparadorDeHoras;
-import DatosBasesJSON.ExtractorDatosConexion;
 import DatosBasesJSON.ExtractorDatosRegistros;
+import MetodosExtra.nombreTablasRegistroEntrada;
+import MetodosExtra.nombreTablasRegistroSalida;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -85,10 +82,6 @@ public class ControladorPaginaPrincipal implements Initializable {
     @FXML
     private Button txtButtonUns;
 
-    /**
-     * Initializes the controller class.
-     */
-    
     
     
     private String[] BuscadorDeAlumno (String codigo){
@@ -389,7 +382,7 @@ public class ControladorPaginaPrincipal implements Initializable {
                ImagenMarcoVerde();
                Estado = "Puntual";
                return Estado;
-           }else if(diferenciaMinutos <= 10 && MinutosAlumno < MinutosActual){
+           }else if(diferenciaMinutos <= 15 && MinutosAlumno < MinutosActual){
                ImagenMarcoAmarillo();
                Estado = "Tolerancia";
                return Estado;
@@ -454,11 +447,6 @@ public class ControladorPaginaPrincipal implements Initializable {
         
         imgFotoPerfil.setImage(img);
     }
-    
-    
-    
-    
-    
     
     
     public String SelectorDeUniforme(String Dia,String Grado,String Grupo){
@@ -560,6 +548,7 @@ public class ControladorPaginaPrincipal implements Initializable {
 
         }
     }
+    
     public String SelectorDeMatricula(String nombreTabla){
         try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -578,6 +567,7 @@ public class ControladorPaginaPrincipal implements Initializable {
         
         return null;
     }
+    
     public void SubidaDeSanciones(String Matricula, String Tipo,String Sancion, String nombreTabla){
         
         try(Connection connection = conexionEnvioDeSanciones.getConnection();
@@ -725,10 +715,7 @@ public class ControladorPaginaPrincipal implements Initializable {
                 
             }
         }
-        
-    
     }
-
     
     public void EnvioDeregistroEntrada(String Nombre,String Apellidos, String Grado, String Grupo, String Matricula,String Estado){
         String nombreTabla = NombreTablaActualEntrada();
@@ -741,6 +728,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
             LocalTime horaActual = LocalTime.now();
+            horaActual = horaActual.minusHours(1);
             String NombreCompleto = Nombre + " " +  Apellidos; 
             // Configurar los parámetros de la consulta
             statement.setString(1, NombreCompleto);
@@ -775,6 +763,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
             LocalTime horaActual = LocalTime.now();
+            horaActual = horaActual.minusHours(1);
             String NombreCompleto = Nombre + " " +  Apellidos; 
             // Configurar los parámetros de la consulta
             statement.setString(1, NombreCompleto);
@@ -801,16 +790,11 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     //Tablas entrada
     public String NombreTablaActualEntrada(){
-        LocalDate fechaActual = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
-        String nombreTabla = fechaActual.format(formatter);
-        
-        String TablaEntrada = "01-" +nombreTabla;
-        System.out.println("El nombre de tabla deberia ser: " + TablaEntrada);
-        
+       nombreTablasRegistroEntrada tablaRegistro = new nombreTablasRegistroEntrada();
+        String TablaEntrada = tablaRegistro.NombreTablaActualEntrada();
         return TablaEntrada;
     }
-    //7721087522
+   
     public void CreadorDeTablasDeEntrada(String tabla){
         // Obtener la fecha actual
             // Consulta SQL para crear la tabla
@@ -883,12 +867,8 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     //Tablas Salida
     public String NombreTablaActualSalida(){
-        LocalDate fechaActual = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
-        String nombreTabla = fechaActual.format(formatter);
-        
-        String TablaSalida = "02-" +nombreTabla;
-        
+        nombreTablasRegistroSalida tablaRegistro = new nombreTablasRegistroSalida();
+        String TablaSalida = tablaRegistro.NombreTablaActualSalida();
         return TablaSalida;
     }
     
@@ -972,6 +952,14 @@ public class ControladorPaginaPrincipal implements Initializable {
 
         
         HoraEnPantalla();
+        String nombreTablasRegistro;
+        
+        nombreTablasRegistroEntrada tablaRegistro = new nombreTablasRegistroEntrada();
+
+        String xd = tablaRegistro.NombreTablaActualEntrada();
+
+        // Mostrar el resultado
+        System.out.println("Nombre de la tabla generado: " + xd);
         
     }
 
@@ -1058,7 +1046,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Busqueda de alumno");
-            stage.setScene(new Scene(root, 700,420));
+            stage.setScene(new Scene(root, 800,500));
             stage.setIconified(false);
             stage.setResizable(false);
             stage.show();
@@ -1104,7 +1092,7 @@ public class ControladorPaginaPrincipal implements Initializable {
             
             SubidaDeSancionesAutomatica("Uniforme incompleto");
         }
-        
+       txtCodigo.requestFocus();
     }
 
     @FXML
@@ -1112,7 +1100,7 @@ public class ControladorPaginaPrincipal implements Initializable {
         if(!txtNombre.getText().isEmpty()){
             SubidaDeSancionesAutomatica("Corte de cabello");
         }
-       
+       txtCodigo.requestFocus();
     }
     
     @FXML
@@ -1121,6 +1109,7 @@ public class ControladorPaginaPrincipal implements Initializable {
         if(!txtNombre.getText().isEmpty()){
             SubidaDeSancionesAutomatica("Uñas");
         }
+        txtCodigo.requestFocus();
         
     }
     

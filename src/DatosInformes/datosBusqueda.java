@@ -10,7 +10,9 @@ package DatosInformes;
  * @author Rodrigo
  */
 public class datosBusqueda {
-     private String nombre;
+    private String nombre;
+    private String paterno;
+    private String materno;
     private String grado;
     private String grupo;
     private String matricula;
@@ -23,9 +25,11 @@ public class datosBusqueda {
      * @param grupo Grupo de la persona.
      * @param matricula Matrícula de la persona.
      */
-    public datosBusqueda(String nombre, String grado, String grupo, String matricula) {
+    public datosBusqueda(String nombre, String paterno, String materno, String grado, String grupo, String matricula) {
         
         this.nombre = nombre;
+        this.paterno = paterno;
+        this.materno = materno;
         this.grado = grado;
         this.grupo = grupo;
         this.matricula = matricula;
@@ -38,6 +42,22 @@ public class datosBusqueda {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public String getPaterno() {
+        return paterno;
+    }
+
+    public void setPaterno(String paterno) {
+        this.paterno = paterno;
+    }
+    
+    public String getMaterno() {
+        return materno;
+    }
+
+    public void setMaterno(String materno) {
+        this.materno = materno;
     }
 
     public String getGrado() {

@@ -7,6 +7,8 @@ package Controladores;
 
 import Conexion.conexionConsultasGeneralesRegistros;
 import DatosInformes.datos;
+import MetodosExtra.nombreTablasRegistroEntrada;
+import MetodosExtra.nombreTablasRegistroSalida;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,13 +72,20 @@ public class ControladorVentanaInformeEntrada implements Initializable {
         
         String Grado = txtGrado.getText();
         String Grupo = txtGrupo.getText();
+        String NameT = TableName();
 
         // Actualiza la tabla con los valores actuales de Grado y Grupo
-        MostradorDeDatos(Grado, Grupo);
+        MostradorDeDatos(NameT, Grado, Grupo);
         
     }
+    
+    public String TableName(){
+        nombreTablasRegistroEntrada tablaRegistro = new nombreTablasRegistroEntrada();
+        String TablaEntrada = tablaRegistro.NombreTablaActualEntrada();
+        return TablaEntrada;
+    }
    
-    public void MostradorDeDatos(String Semestre, String Grup){
+    public void MostradorDeDatos(String TableName, String Semestre, String Grup){
         // Configurar las columnas para utilizar las propiedades de la clase datos
         Nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         Grado.setCellValueFactory(new PropertyValueFactory<>("grado"));
@@ -97,7 +106,7 @@ public class ControladorVentanaInformeEntrada implements Initializable {
             Connection connection = conexionConsultasGeneralesRegistros.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte, ReporteDos, ReporteTres, Descripcion FROM registros WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte, ReporteDos, ReporteTres, Descripcion FROM `"+ TableName +"` WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros

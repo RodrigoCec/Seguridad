@@ -13,6 +13,7 @@ import Conexion.conexionEnvioDeRegistros;
 import Conexion.conexionEnvioDeSanciones;
 import Conexion.conexionGeneralDeConsultaAlumnos;
 import MetodosExtra.ComparadorDeHoras;
+import MetodosExtra.nombreTablasRegistroEntrada;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -38,6 +39,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -590,10 +592,10 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         }
     }
     
-    private Time ComprobadorDeTiempo(String Matricula) {
-        try(Connection connection = conexionComprobadoresDeRegistros.getConnection();
+    private Time ComprobadorDeTiempo(String Matricula, String nombreTabla) {
+       try(Connection connection = conexionComprobadoresDeRegistros.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                "SELECT Hora FROM registros WHERE Matricula = ?")){
+                "SELECT Hora FROM  `" + nombreTabla + "`  WHERE Matricula = ?")){//regis
                 statement.setString(1, Matricula);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -610,8 +612,9 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     }
     
     public boolean Comparador(String Matricula) {
+        String tabla = NombreTablaActualEntrada();
         // Supongamos que tienes un método que te da la hora de la base de datos
-        Time Horabd = ComprobadorDeTiempo(Matricula);
+        Time Horabd = ComprobadorDeTiempo(Matricula, tabla);
 
         // Crear instancia de ComparadorDeHoras
         ComparadorDeHoras comparador = new ComparadorDeHoras();
@@ -791,6 +794,60 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         System.out.println(query);
     }
     
+    public String NombreTablaActualEntrada(){
+       nombreTablasRegistroEntrada tablaRegistro = new nombreTablasRegistroEntrada();
+        String TablaEntrada = tablaRegistro.NombreTablaActualEntrada();
+        return TablaEntrada;
+    }
+    
+    public void ReporteCredencial(){
+        
+        txtCodigo.textProperty().addListener((observable, oldValue, newValue) -> {
+            
+            if(newValue.length() == 14){
+               String[] Datos = BuscadorDeAlumno(newValue);
+               String estado = ComparadorDeEntrada(newValue);
+               SancionCredencial(Datos[0], Datos[1], Datos[2], Datos[3], newValue, estado);
+            }
+        });
+    }
+    public void SancionCredencial(String Nombre, String Apellidos, String Grado, String Grupo, String Matricula, String Estado){
+        
+        String nombreTabla = NombreTablaActualEntrada();
+        System.out.println("Se esta intentando subir los datos inicialessss a la tabla: " + nombreTabla);
+        
+        try (Connection connection = conexionEnvioDeRegistros.getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+            "INSERT INTO `" + nombreTabla + "` (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte) VALUES (?, ?, ?, ?, ?, ?, ?, 'Credencial')")){
+
+            // Obtener la fecha y la hora actuales
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            horaActual = horaActual.minusHours(1);
+            String NombreCompleto = Nombre + " " +  Apellidos; 
+            // Configurar los parámetros de la consulta
+            statement.setString(1, NombreCompleto);
+            statement.setString(2, Grado);
+            statement.setString(3, Grupo);
+            statement.setString(4, Matricula);
+            statement.setDate(5, java.sql.Date.valueOf(fechaActual));
+            statement.setTime(6, java.sql.Time.valueOf(horaActual));
+            statement.setString(7, Estado);
+
+            // Ejecutar la consulta
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Los datos se han registrado correctamente.");
+            } else {
+                System.out.println("No se pudieron ingresar los datos.");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();  // Manejo de errores
+        }
+    }
+    
     
     
     
@@ -798,13 +855,17 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         CreadorDeTablasParaSanciones();
-            
+        ReporteCredencial();    
         // Metodos Indispensables no clasificados xd
         LimitadorLongutid();
         LimpiadorDeCodigo();
         
         VerificacionDeLongitud();
-
+        
+        Alert cerrar = new Alert(Alert.AlertType.WARNING);
+        cerrar.setTitle("Advertencia");
+        cerrar.setContentText("Por favor cierra esta y la siguiente ventana tras terminar el registro");
+        cerrar.showAndWait();
         
         HoraEnPantalla();
         

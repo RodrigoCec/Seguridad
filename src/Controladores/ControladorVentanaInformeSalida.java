@@ -7,6 +7,8 @@ package Controladores;
 
 import Conexion.conexionConsultasGeneralesRegistros;
 import DatosInformes.datosSalida;
+import MetodosExtra.nombreTablasRegistroEntrada;
+import MetodosExtra.nombreTablasRegistroSalida;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,13 +58,19 @@ public class ControladorVentanaInformeSalida implements Initializable {
         
         String Grado = txtGrado.getText();
         String Grupo = txtGrupo.getText();
-
+        String NameT = TableName();
         // Actualiza la tabla con los valores actuales de Grado y Grupo
-        MostradorDeDatos(Grado, Grupo);
+        MostradorDeDatos(Grado, Grupo, NameT);
         
     }
-   
-    public void MostradorDeDatos(String Semestre, String Grup){
+    
+    public String TableName(){
+        nombreTablasRegistroSalida tablaRegistro = new nombreTablasRegistroSalida();
+        String TablaSalida = tablaRegistro.NombreTablaActualSalida();
+        return TablaSalida;
+    }
+    
+    public void MostradorDeDatos(String Semestre, String Grup, String NameTable){
         // Configurar las columnas para utilizar las propiedades de la clase datos
         Nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         Grado.setCellValueFactory(new PropertyValueFactory<>("grado"));
@@ -78,7 +86,7 @@ public class ControladorVentanaInformeSalida implements Initializable {
             Connection connection = conexionConsultasGeneralesRegistros.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora FROM salida WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, Grado, Grupo, Matricula, Fecha, Hora FROM `"+ NameTable +"` WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros

@@ -6,6 +6,7 @@
 package Controladores;
 
 import Conexion.conexionConsultasGeneralesRegistros;
+import Conexion.conexionGeneralDeConsultaAlumnos;
 import DatosInformes.datos;
 import DatosInformes.datosBusqueda;
 import MetodosExtra.gestorDeVentanas;
@@ -41,6 +42,10 @@ public class ControladorVentanaSancionCredencial implements Initializable {
     @FXML
     private TableColumn<datosBusqueda, String> nombre;
     @FXML
+    private TableColumn<datosBusqueda, String> paterno;
+    @FXML
+    private TableColumn<datosBusqueda, String> materno;
+    @FXML
     private TableColumn<datosBusqueda, String> grado;
     @FXML
     private TableColumn<datosBusqueda, String> grupo;
@@ -70,6 +75,8 @@ public class ControladorVentanaSancionCredencial implements Initializable {
     public void MostradorDeDatos(String Semestre, String Grup){
         // Configurar las columnas para utilizar las propiedades de la clase datos
         nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        paterno.setCellValueFactory(new PropertyValueFactory<>("paterno"));
+        materno.setCellValueFactory(new PropertyValueFactory<>("materno"));
         grado.setCellValueFactory(new PropertyValueFactory<>("grado"));
         grupo.setCellValueFactory(new PropertyValueFactory<>("grupo"));
         matricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
@@ -78,10 +85,10 @@ public class ControladorVentanaSancionCredencial implements Initializable {
 
         try {
             // Utilizar el método de conexión proporcionado
-            Connection connection = conexionConsultasGeneralesRegistros.getConnection();
+            Connection connection = conexionGeneralDeConsultaAlumnos.getConnection();
 
             // Crear la consulta con parámetros
-            String query = "SELECT Nombre, Grado, Grupo, Matricula FROM alumnos WHERE Grado = ? AND Grupo = ?";
+            String query = "SELECT Nombre, ApellidoPaterno, ApellidoMaterno, Grado, Grupo, Matricula FROM alumnos WHERE Grado = ? AND Grupo = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             // Establecer los valores de los parámetros
@@ -94,12 +101,14 @@ public class ControladorVentanaSancionCredencial implements Initializable {
             // Agregar los datos al ObservableList
             while (resultSet.next()) {
                 String nombre = resultSet.getString("Nombre");
+                String materno = resultSet.getString("ApellidoPaterno");
+                String paterno = resultSet.getString("ApellidoMaterno");
                 String grado = resultSet.getString("Grado");
                 String grupo = resultSet.getString("Grupo");
                 String matricula = resultSet.getString("Matricula");
 
                 // Crear un nuevo objeto datos y agregarlo a la lista
-                users.add(new datosBusqueda(nombre, grado, grupo, matricula));
+                users.add(new datosBusqueda(nombre, materno, paterno, grado, grupo, matricula));
             }
 
             // Cerrar la conexión
@@ -140,6 +149,8 @@ public class ControladorVentanaSancionCredencial implements Initializable {
             
             gestorDeVentanas.openOrUpdateDestinationWindow(currentValue);
             System.out.println("Editing Started. Current Value: " + currentValue);
+            
+       
     }  
     
 }
