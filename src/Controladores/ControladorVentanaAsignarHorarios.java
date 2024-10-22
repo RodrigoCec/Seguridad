@@ -1,6 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Controladores;
 
-
+import Conexion.conexionConsultaDatosHorarios;
+import Conexion.conexionModDatosHorarios;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,9 +32,9 @@ import javafx.util.Duration;
  *
  * @author Rodrigo
  */
-public class VentanaHorariosController implements Initializable {
-    
-    //---------> Organizacion de Etiquetas
+public class ControladorVentanaAsignarHorarios implements Initializable {
+
+   //---------> Organizacion de Etiquetas
     
         //Datos
     
@@ -91,7 +98,7 @@ public class VentanaHorariosController implements Initializable {
     private MenuItem txtPuericulturaLunes;
 
 
-    // Martes
+    // Martes   
 
         //----------> Horas
 
@@ -309,26 +316,6 @@ public class VentanaHorariosController implements Initializable {
 
     
     // Datos de la Conexion a Base de datos
-    private static final String bd = "basedatosprueba";
-    private static final String direccion = "jdbc:mysql://localhost:3306/" + bd;
-    private static final String usuario = "root";
-    private static final String password = "";
-
-    // Conexión a la base de datos
-    private static Connection conexion;
-
-            // Código de conexión
-    public static Connection ConexionBd() {
-        try {
-        if (conexion == null || conexion.isClosed()) {
-            conexion = DriverManager.getConnection(direccion, usuario, password);
-            //System.out.println("Conexión exitosa");
-        }
-    } catch (SQLException e) {
-        Logger.getLogger(VentanaHorariosController.class.getName()).log(Level.SEVERE, "Error de conexión", e);
-    }
-    return conexion;
-    }
     
   
             //Metodos para obtener datos   
@@ -338,7 +325,7 @@ public class VentanaHorariosController implements Initializable {
         String query = "SELECT `" + Dia + "` FROM `" + Semestre + "` WHERE Grupo = ?";
 
 
-        try (Connection connection = ConexionBd();
+        try (Connection connection = conexionConsultaDatosHorarios.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, Grupo);
@@ -356,19 +343,32 @@ public class VentanaHorariosController implements Initializable {
     }
     
             //MetodoActualizador De Base de datos;
-    private void ActualizarCodigoHorabd(String Semestre, String dia, String newValue, String grupo) {
-        String query = "UPDATE " + Semestre +" SET " + dia + " = ? WHERE Grupo = ?";
-        try (Connection connection = ConexionBd();
+    public void ActualizarCodigoHorabd(String Semestre, String dia, String newValue, String grupo) {
+        String query = "UPDATE " + Semestre + " SET " + dia + " = ? WHERE Grupo = ?";
+        try (Connection connection = conexionModDatosHorarios.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newValue);
             preparedStatement.setString(2, grupo);
-            System.out.println("Se actualizo el: " + Semestre);
-            preparedStatement.executeUpdate();
+
+            System.out.println("Ejecutando consulta: " + query);
+
+            // Ejecutamos la actualización y obtenemos el número de filas afectadas
+            int filasActualizadas = preparedStatement.executeUpdate();
+
+            // Comprobamos si la actualización fue exitosa
+            if (filasActualizadas > 0) {
+                System.out.println("Se actualizó el semestre: " + Semestre);
+                System.out.println("Se actualizó el día: " + dia + " del grupo: " + grupo + " con el valor: " + newValue);
+            } else {
+                System.out.println("No se encontró el grupo: " + grupo + " en el semestre: " + Semestre);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     // Empiezan convertidores
             //Convertidores de tiempo
@@ -995,34 +995,52 @@ public class VentanaHorariosController implements Initializable {
      * @param tipo Selecciona el tipo de filtro que se usa(Entrada[Hora y minutos], Salida[Hora y minutos] )
      * @param Turno Seleciona el boton del que se obtendra el turno (AM o PM) para filtrar y poner en formato 24 horas
      */
-    public void ActualizadorHorasEnBaseDeDatos(TextField textfield, String dia, Tipo tipo, MenuButton Turno){
-        
-        String Grupo = txtGrupo.getText();
-        String SemestreInicial = AsignadorDeSemestre();
-        
-        String Datos = DatosDeBD(dia, SemestreInicial, Grupo);
-        
-        //MetodoDeActualizacion
-        
-         textfield.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != oldValue){
+    public void ActualizadorHorasEnBaseDeDatos(TextField textfield, String dia, Tipo tipo, MenuButton Turno) {
+
+        // Listener para actualizar el valor de Grupo dinámicamente
+        txtGrupo.textProperty().addListener((observable, oldGrupo, newGrupo) -> {
+            Platform.runLater(() -> {
+                // Si el grupo ha cambiado, actualizamos el valor de Grupo
+                System.out.println("Grupo actualizado: " + newGrupo);
+                actualizarDatos(textfield, dia, tipo, Turno, newGrupo);
+            });
+        });
+
+        // Llamamos una vez para establecer los datos iniciales
+        String grupoInicial = txtGrupo.getText();
+        actualizarDatos(textfield, dia, tipo, Turno, grupoInicial);
+    }
+
+    // Método separado para realizar la actualización
+    private void actualizarDatos(TextField textfield, String dia, Tipo tipo, MenuButton Turno, String grupo) {
+        String semestreInicial = AsignadorDeSemestre();
+        String datos = DatosDeBD(dia, semestreInicial, grupo);
+
+        // Listener para cambios en el textfield
+        textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(oldValue)) {
                 if (newValue.length() == 2) {
+                    Platform.runLater(() -> {
+                        String filteredValue = extractorDeCodigoSeparadoParaHoras(newValue, tipo, datos, Turno);
 
-                    String filteredValue = extractorDeCodigoSeparadoParaHoras(newValue, tipo , Datos, Turno);
-                    if(filteredValue.length() > 8){ 
-                        String SemestreFinal = AsignadorDeSemestre();
-                        System.out.println("Se envia: " + SemestreFinal);
-                        ActualizarCodigoHorabd(SemestreFinal , dia, filteredValue, Grupo);
-                    }else{
-                        System.err.println("Tas mal mijo, te salve");
-                    }
+                        if (filteredValue.length() > 8) {
+                            String semestreFinal = AsignadorDeSemestre();
+                            System.out.println("Se envía: " + semestreFinal);
+                            System.out.println("_>>>>>>> " + filteredValue);
+                            System.out.println("Grupo actual: " + grupo);
 
+                            ActualizarCodigoHorabd(semestreFinal, dia, filteredValue, grupo);
+                        } else {
+                            System.err.println("Error en el formato del valor");
+                        }
+                    });
                 } else if (newValue.length() == 1) {
-                    System.out.println("No es de dos digitos pa");
+                    System.out.println("No es de dos dígitos");
                 }
             }
-        });   
+        });
     }
+
     
     public void ActualizadoresHorasEntrada(){
         
@@ -1648,9 +1666,7 @@ public class VentanaHorariosController implements Initializable {
         
         //---> --- <-----
     
-        //Conexion a base de datos
-        ConexionBd();
-    }    
-
+        
+    }
     
 }
