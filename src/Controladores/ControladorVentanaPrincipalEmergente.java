@@ -251,7 +251,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         
         try (Connection connection = conexionEnvioDeRegistros.getConnection();
             PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO `" + nombreTabla + "` (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)")){
+            "INSERT INTO `" + nombreTabla + "` (Nombre, Grado, Grupo, Matricula, Fecha, Hora, Estado, Reporte) VALUES (?, ?, ?, ?, ?, ?, ?, 'Credencial')")){
 
             // Obtener la fecha y la hora actuales
             LocalDate fechaActual = LocalDate.now();
@@ -857,7 +857,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         
 
         if (!existencia) { // Si no existe en la tabla de entrada, registrar entrada
-            EnvioDeregistroEntrada(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
+            SancionCredencial(Nombre, Apellidos, Grado, Grupo, Matricula, Estado);
             System.err.println("------Se ha registrado la entrada.");
         } else { 
             boolean tolerancia = Comparador(Matricula);
@@ -894,18 +894,7 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
         String TablaEntrada = tablaRegistro.NombreTablaActualEntrada();
         return TablaEntrada;
     }
-    
-    public void ReporteCredencial(){
-        
-        txtCodigo.textProperty().addListener((observable, oldValue, newValue) -> {
-            
-            if(newValue.length() == 14){
-               String[] Datos = BuscadorDeAlumno(newValue);
-               String estado = ComparadorDeEntrada(newValue);
-               SancionCredencial(Datos[0], Datos[1], Datos[2], Datos[3], newValue, estado);
-            }
-        });
-    }
+   
     public void SancionCredencial(String Nombre, String Apellidos, String Grado, String Grupo, String Matricula, String Estado){
         
         String nombreTabla = NombreTablaActualEntrada();
@@ -948,13 +937,13 @@ public class ControladorVentanaPrincipalEmergente implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        ReporteCredencial();    
+           
         // Metodos Indispensables no clasificados xd
         LimitadorLongutid();
         LimpiadorDeCodigo();
         
         VerificacionDeLongitud();
+        
         
         Alert cerrar = new Alert(Alert.AlertType.WARNING);
         cerrar.setTitle("Advertencia");

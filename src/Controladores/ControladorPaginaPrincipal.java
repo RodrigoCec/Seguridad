@@ -777,28 +777,30 @@ public class ControladorPaginaPrincipal implements Initializable {
     
     
     //
-    public boolean Conexion (String Query, String TipoDato){
-        
-        try(Connection connection = conexionConsultasGeneralesRegistros.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                Query)){
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    String datos = resultSet.getString(TipoDato);
-                    System.out.println("Tiene: " + datos);
-                    if(datos == null){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                }
+    public boolean Conexion(String Query, String TipoDato) {
+        try (Connection connection = conexionConsultasGeneralesRegistros.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query)) {
+
+            // Ejecutar la inserción o actualización con executeUpdate()
+            int filasAfectadas = statement.executeUpdate();
+
+            // Verificar si se afectaron filas (inserción exitosa)
+            if (filasAfectadas > 0) {
+                System.out.println("Inserción exitosa. Filas afectadas: " + filasAfectadas);
+                
+                return true;
+            } else {
+                System.out.println("La inserción no tuvo éxito.");
+                return false;
             }
-        }catch(SQLException ex){
-        
+
+        } catch (SQLException ex) {
+            // Manejo de la excepción en caso de error de SQL
+            System.out.println("Error al ejecutar la consulta: " + ex.getMessage());
+            return false;
         }
-        
-        return false;
     }
+
     
     public void SubidaDeSancionesAutomatica(String Sancion){
         String NombreTablaEntrada = NombreTablaActualEntrada();
