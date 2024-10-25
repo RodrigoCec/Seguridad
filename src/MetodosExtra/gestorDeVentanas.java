@@ -27,8 +27,8 @@ public class gestorDeVentanas {
 
                 destinationStage = new Stage();
                 destinationStage.setScene(scene);
-                destinationStage.setWidth(1700);  // Ancho deseado
-                destinationStage.setHeight(950);  // Alto deseado
+                destinationStage.setWidth(1060);  // Ancho deseado
+                destinationStage.setHeight(568);  // Alto deseado
 
                 // Evitar que el usuario modifique el tamaño de la ventana
                 destinationStage.setResizable(false);

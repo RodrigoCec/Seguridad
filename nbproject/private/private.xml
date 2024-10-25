@@ -3,7 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Rodrigo/Documents/CecytehModulo/CecyteServicio/src/ArchivosFXML/PaginaPrincipal.fxml</file>
+=======
+            <file>file:/C:/Users/52772/Documents/RecursosSICETH/SICETH/Seguridad/src/Controladores/ControladorVentanaPrincipalEmergente.java</file>
+            <file>file:/C:/Users/52772/Documents/RecursosSICETH/SICETH/Seguridad/src/Controladores/ControladorPaginaPrincipal.java</file>
+            <file>file:/C:/Users/52772/Documents/RecursosSICETH/SICETH/Seguridad/src/Controladores/ControladorVentanaSancionCredencial.java</file>
+            <file>file:/C:/Users/52772/Documents/RecursosSICETH/SICETH/Seguridad/src/Controladores/ControladorVentanaSancionPersonalizada.java</file>
+>>>>>>> 8cba726f3073d9ea9b4e214929f4730d87402f85
         </group>
     </open-files>
 </project-private>

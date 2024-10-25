@@ -8,43 +8,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="916.0" prefWidth="1908.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaInformeEntrada">
+<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="1060.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.ControladorVentanaInformeEntrada">
     <stylesheets>
         <URL value="@/Styles/VentanaInformeEntradaStyle.css" />
     </stylesheets>
     
     <children>
-      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="1146.0" layoutY="43.0" prefHeight="38.0" prefWidth="87.0" text="A">
+      <TextField fx:id="txtGrupo" alignment="CENTER" layoutX="642.0" layoutY="37.0" prefHeight="38.0" prefWidth="87.0" text="A">
          <font>
-            <Font size="30.0" />
+            <Font size="20.0" />
          </font></TextField>
-      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="837.0" layoutY="42.0" prefHeight="38.0" prefWidth="87.0" text="1">
+      <TextField fx:id="txtGrado" alignment="CENTER" layoutX="427.0" layoutY="37.0" prefHeight="38.0" prefWidth="87.0" text="1">
          <font>
-            <Font size="30.0" />
+            <Font size="20.0" />
          </font></TextField>
-      <TableView fx:id="TablaGeneral" editable="true" layoutX="66.0" layoutY="124.0" prefHeight="742.0" prefWidth="1780.0" style="-fx-font-size: 15 px;">
+      <TableView fx:id="TablaGeneral" editable="true" layoutX="20.0" layoutY="103.0" prefHeight="443.0" prefWidth="1020.0" style="-fx-font-size: 15 px;">
         <columns>
-          <TableColumn fx:id="Nombre" prefWidth="289.0" style="-fx-font-size: 20;" text="Nombre" />
-          <TableColumn fx:id="Grado" minWidth="0.0" prefWidth="81.0" style="-fx-font-size: 20;" text="Grado" />
-            <TableColumn fx:id="Grupo" prefWidth="86.0" style="-fx-font-size: 20;" text="Grupo" />
-            <TableColumn fx:id="Matricula" prefWidth="185.0" style="-fx-font-size: 20;" text="Matricula" />
-            <TableColumn fx:id="Fecha" prefWidth="122.0" style="-fx-font-size: 20;" text="Fecha" />
-            <TableColumn fx:id="Hora" prefWidth="106.0" style="-fx-font-size: 20;" text="Hora" />
-            <TableColumn fx:id="Tiempo" prefWidth="103.0" style="-fx-font-size: 20;" text="Tiempo" />
-            <TableColumn fx:id="Reporte" prefWidth="178.0" style="-fx-font-size: 20;" text="Reporte" />
-            <TableColumn fx:id="ReporteDos" prefWidth="219.0" style="-fx-font-size: 20;" text="Reporte" />
-            <TableColumn fx:id="ReporteTres" prefWidth="161.0" style="-fx-font-size: 20;" text="Reporte" />
-            <TableColumn fx:id="Observaciones" prefWidth="249.0" style="-fx-font-size: 20;" text="Observaciones" />
+          <TableColumn fx:id="Nombre" prefWidth="160.0" style="-fx-font-size: 10;" text="Nombre" />
+          <TableColumn fx:id="Grado" minWidth="0.0" prefWidth="47.0" style="-fx-font-size: 10;" text="Grado" />
+            <TableColumn fx:id="Grupo" prefWidth="44.0" style="-fx-font-size: 10;" text="Grupo" />
+            <TableColumn fx:id="Matricula" prefWidth="103.0" style="-fx-font-size: 10;" text="Matricula" />
+            <TableColumn fx:id="Fecha" prefWidth="76.0" style="-fx-font-size: 10;" text="Fecha" />
+            <TableColumn fx:id="Hora" prefWidth="71.0" style="-fx-font-size: 10;" text="Hora" />
+            <TableColumn fx:id="Tiempo" prefWidth="68.0" style="-fx-font-size: 10;" text="Tiempo" />
+            <TableColumn fx:id="Reporte" prefWidth="108.0" style="-fx-font-size: 10;" text="Reporte" />
+            <TableColumn fx:id="ReporteDos" prefWidth="110.0" style="-fx-font-size: 10;" text="Reporte" />
+            <TableColumn fx:id="ReporteTres" prefWidth="109.0" style="-fx-font-size: 10;" text="Reporte" />
+            <TableColumn fx:id="Observaciones" prefWidth="123.0" style="-fx-font-size: 10;" text="Observaciones" />
         </columns>
       </TableView>
-      <Label layoutX="668.0" layoutY="40.0" text="Grado:">
+      <Label layoutX="335.0" layoutY="31.0" text="Grado:">
          <font>
-            <Font name="System Bold" size="48.0" />
+            <Font name="TT Bluescreens Trial Bold" size="48.0" />
          </font>
       </Label>
-      <Label layoutX="956.0" layoutY="40.0" text="Grupo:">
+      <Label layoutX="537.0" layoutY="31.0" text="Grupo:">
          <font>
-            <Font name="System Bold" size="48.0" />
+            <Font name="TT Bluescreens Trial Bold" size="48.0" />
          </font>
       </Label>
    </children>
