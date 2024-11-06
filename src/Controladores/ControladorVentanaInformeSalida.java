@@ -15,11 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -51,18 +54,27 @@ public class ControladorVentanaInformeSalida implements Initializable {
     private TableColumn<datosSalida, LocalTime> Hora;
     @FXML
     private TableColumn<datosSalida, String> Estado;
+    @FXML
+    private DatePicker date;
 
     /**
      * Initializes the controller class.
      */
     
-    public void ActualizadorDeDatos(){
+    public void ActualizadorDeDatos(String SecondTableName){
         
         String Grado = txtGrado.getText();
         String Grupo = txtGrupo.getText();
         String NameT = TableName();
-        // Actualiza la tabla con los valores actuales de Grado y Grupo
-        MostradorDeDatos(Grado, Grupo, NameT);
+        
+       if(actualDate.isEmpty()){
+           MostradorDeDatos(NameT, Grado, Grupo);
+           System.out.println("se llama al normal");
+       }else{
+           fynalyDate = "02-" + actualDate;
+            MostradorDeDatos(SecondTableName, Grado, Grupo);
+            System.err.println("se llama al raro");
+       }
         
     }
     
@@ -128,16 +140,45 @@ public class ControladorVentanaInformeSalida implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        ActualizadorDeDatos();
+        ActualizadorDeDatos(fynalyDate);
 
         // Agrega listeners para actualizar los datos en la tabla cuando cambien los valores de los TextField
         txtGrado.textProperty().addListener((observable, oldValue, newValue) -> {
-            ActualizadorDeDatos();
+            ActualizadorDeDatos(fynalyDate);
+            System.err.println("++++: " + fynalyDate);
         });
 
         txtGrupo.textProperty().addListener((observable, oldValue, newValue) -> {
-            ActualizadorDeDatos();
+            ActualizadorDeDatos(fynalyDate);
+            System.err.println("++++: " + fynalyDate);
         });
+        
     }    
+
+    
+    String fynalyDate;
+    String actualDate = "";
+  
+  @FXML
+    private void datePress(ActionEvent event) {
+        
+        LocalDate selectedDate = date.getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+        
+        String Grado = txtGrado.getText();
+        String Grupo = txtGrupo.getText();
+        
+        String formattedDate = selectedDate.format(formatter);
+        
+        String tableNameDate = "01-" + formattedDate;
+        System.out.println("Fecha seleccionada: " + tableNameDate);
+        
+        actualDate = formattedDate;
+        System.out.println("Tal ya tiene esto: " + actualDate);
+        
+        MostradorDeDatos(tableNameDate, Grado, Grupo);
+        
+        
+    }
     
 }
